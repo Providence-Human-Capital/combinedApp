@@ -2,6 +2,7 @@ import React from "react";
 import OverviewCard from "./healh-components/OverviewCard";
 import { useQuery } from "react-query";
 import { API } from "../../../config";
+import Loading from "../../components/Loading.jsx/Loading";
 
 const HealthDashboard = () => {
   const { data, isLoading, isError } = useQuery("healthOverview", async () => {
@@ -13,7 +14,7 @@ const HealthDashboard = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError) {
