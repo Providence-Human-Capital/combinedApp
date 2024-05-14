@@ -1,0 +1,36 @@
+.form-container {
+  margin: 4.5rem !important;
+  font-size: 10px !important;
+}
+
+.logo-container {
+  padding-bottom: 6rem;
+}
+
+.underline-span {
+  display: inline-block;
+  border-bottom: 2px dotted #000;
+  border-radius: 5px;
+  text-align: start;
+  font-size: 12px;
+  font-family: "Cooper Black";
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+
+.signature-container{
+    padding-top: 3rem;
+}
+
+.underline{
+    display: inline-block;
+  border-bottom: 1px solid #000;
+  border-radius: 5px;
+  text-align: center;
+  font-family: "Cooper Black";
+  font-weight: bold; 
+}
+.middle-section p{
+  margin-bottom: 5px !important;
+}

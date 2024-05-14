@@ -1,0 +1,30 @@
+.tform-container {
+  margin: 4.5rem !important;
+  font-size: 10px !important;
+}
+
+.header-section {
+  text-align: center;
+  width: 100%;
+}
+
+.underline {
+  display: inline-block;
+  border-bottom: 1px solid #000;
+  border-radius: 5px;
+  text-align: center;
+  font-family: "Cooper Black";
+  font-weight: bold;
+}
+.leaving-reason {
+}
+
+.part-III {
+  margin-bottom: 5px !important;
+}
+
+.next-page {
+  font-size: 10px !important;
+  margin-top: 19rem !important;
+  padding-top: 4rem;
+}

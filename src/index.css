@@ -1,0 +1,810 @@
+:root {
+    --dark-color: #262727;
+    --color-fff: #ffffff;
+    --color-100: #f0f0f0;
+    --color-200: #eeeeee;
+    --color-300: #e0e0e0;
+    --color-400: #bdbdbd;
+    --color-500: #525252;
+    --color-600: #464545;
+    --color-700: #363535;
+    --color-800: #252525;
+    --color-900: #181818;
+    --color-000: #000000;
+    --border-color: #e9e6e1;
+    --card-color: #f5f5f5;
+    --body-color: #f8f6f2;
+    --white-color: #ffffff;
+    --sidebar-color: #ffffff;
+  
+    --primary-color: #e21a21;
+    --secondary-color: #00ac9a;
+  }
+  
+  .form-control,
+  .form-select {
+    border-color: var(--border-color);
+    color: var(--color-900);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 15px;
+  }
+  
+  .btn.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .card {
+    background-color: var(--card-color);
+    border: 0;
+  }
+  body {
+    font-family: "Poppins", sans-serif !important;
+  }
+  .space {
+    height: 20px;
+  }
+  .space-mini {
+    height: 10px;
+  }
+  .form-control {
+    color: #888;
+    background: #fff;
+    font-weight: 400;
+    letter-spacing: 1px;
+    height: 40px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 2.5px solid #e7e7e7;
+    box-shadow: none;
+  }
+  .illness-form {
+    margin-top: 3rem;
+  }
+  .theme-success .btn-primary {
+    background-color: #258c72 !important;
+    border-color: #258c72 !important;
+    color: #ffffff;
+  }
+  .custom-size {
+    width: 50%;
+  }
+  
+  .update-reason {
+    width: 100% !important;
+    /* border: 1px solid red; */
+    height: 90px !important;
+  }
+  
+  .sep {
+    margin-top: 2rem !important;
+  }
+  
+  /* Add this CSS in your stylesheet or style tag */
+  
+  .navigation_button {
+    background-color: #ffffff !important;
+    color: #5c607b !important;
+    border: 1px solid #ffffff;
+    padding: 8px 16px;
+  }
+  
+  .spacing {
+    padding-bottom: 2rem;
+  }
+  
+  .navigation_button:hover {
+    background-color: #ffffff !important;
+    color: #5c607b !important;
+    border-bottom: 3px solid #258c72;
+    border-radius: 1px;
+  }
+  
+  .error-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin: 10px;
+    position: relative;
+  }
+  
+  .error-message {
+    font-weight: bold;
+    color: red !important;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .nav-pills .nav-link.active,
+  .nav-pills .show > .nav-link {
+    color: #fff !important;
+    background-color: #172b4c;
+  }
+  
+  .custom-disease {
+    text-transform: uppercase;
+    color: #5c607b !important;
+  }
+  .input-group .input-group-text {
+    border-color: #e7e7e7;
+    border-radius: 5px;
+  }
+  
+  .navi-button {
+    margin-right: 10px;
+  }
+  
+  .custom-form {
+    width: 90%;
+    margin: 1rem auto;
+  }
+  
+  .active-link {
+    border-right: 3px solid #58ad46;
+    background-color: #fff;
+  }
+  
+  #aside-bar a.active {
+    border-right: 3px solid #58ad46;
+    background-color: #fff;
+  }
+  
+  #aside-bar-tree a.active {
+    border-right: 3px solid #58ad46;
+  }
+  .sidebar-menu > li > a > i {
+  }
+  
+  .sidebar-menu > li > a {
+    padding: 7px 9px;
+    display: block;
+    border-radius: 0px !important;
+    font-size: 1rem !important;
+  }
+  
+  .sidebar-menu > li > a:hover,
+  .sidebar-menu > li > a:focus,
+  .sidebar-menu > li > a:active {
+    padding: 7px 9px !important;
+  }
+  .paginate-position {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    padding: 10px;
+  }
+  
+  .table-spacing {
+    padding-bottom: 5rem;
+  }
+  
+  .pagination > li > a {
+    background-color: #ffffff;
+    color: #58ad46 !important;
+    border-color: #ffffff;
+  }
+  
+  .pagination > li > a:hover {
+    background-color: #58ad46;
+  }
+  
+  .active-paginate {
+    border-bottom: 3px solid #58ad46 !important;
+    /* border-radius: 10px; */
+  }
+  
+  .container-height {
+    overflow: hidden;
+    min-height: 60vh;
+  }
+  
+  .error-input {
+    border-color: red;
+  }
+  
+  .is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+  }
+  .invalid-feedback {
+    display: block;
+    margin-top: 5px;
+    font-size: 80%;
+    color: #dc3545;
+  }
+  
+  .fade-enter {
+    opacity: 0;
+  }
+  .fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+  .fade-exit {
+    opacity: 1;
+  }
+  .fade-exit-active {
+    opacity: 0;
+    transition: opacity 500ms ease-in;
+  }
+  
+  .alert.success {
+    padding: 20px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .closebtn:hover {
+    color: black;
+  }
+  
+  /* PButtons Style */
+  .navi-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navi-item {
+    margin-right: 10px;
+  }
+  
+  .navi-link {
+    display: block;
+    padding: 10px 15px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .navi-item a.active {
+    display: block;
+    padding: 10px 15px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 3px solid #58ad46;
+  }
+  
+  .navi-link:hover {
+    border-bottom-color: #58ad46;
+    color: #000 !important;
+  }
+  
+  .active-ac {
+    border-bottom-color: #58ad46;
+    border-bottom: 3px solid #58ad46;
+  }
+  
+  /* PButtons Style */
+  
+  .empty-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .empty-table-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .empty-table-content-title {
+    display: flex;
+    align-items: center;
+  }
+  
+  .empty-table-content-title h2 {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+  
+  .empty-table-content-icon {
+    width: 24px;
+    height: 24px;
+    fill: #ccc;
+  }
+  
+  /* .btn-circle:hover {
+      background-color: red;
+    }
+    
+    .btn-circle:hover .icon-Trash1 {
+      color: red;
+    } */
+  
+  .custom-file-label::after {
+    content: "Choose file";
+  }
+  .preview-images-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .preview-image-wrappers {
+    position: relative;
+  
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .preview-image {
+    width: auto;
+    height: 400px;
+    object-fit: cover;
+  }
+  .preview-image-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0;
+    font-size: 0.75rem;
+    line-height: 1;
+    border-radius: 50%;
+  }
+  
+  .xray-image-style {
+    height: 200px;
+    width: auto;
+  }
+  
+  .separation-div {
+    height: 20px;
+  }
+  
+  .info-background {
+    background-color: #3d4895;
+    color: #fff;
+  }
+  
+  .bp-form-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .bp-form-container.show {
+    max-height: 500px;
+  }
+  
+  .bp-form-container.hide {
+    max-height: 0;
+  }
+  
+  .cursor-style {
+    cursor: pointer;
+  }
+  
+  .step-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .step span {
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .step.active:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #007bff;
+    transform: translateY(-50%);
+  }
+  .step.active {
+    color: #007bff;
+  }
+  .step.active svg {
+    color: #007bff;
+  }
+  .step svg {
+    font-size: 24px;
+    color: #ccc;
+    margin-bottom: 5px;
+  }
+  .step-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .step-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  .step-buttons button:hover {
+    background-color: #0062cc;
+  }
+  
+  .stepper {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .step-navigation {
+    margin-bottom: 1rem;
+  }
+  
+  .step {
+    margin-bottom: 1rem;
+  }
+  
+  .step-form {
+    margin-top: 1rem;
+  }
+  
+  .step-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  button {
+    margin-left: 0.5rem;
+  }
+  
+  .my-upload {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2) !important;
+    border: none;
+    outline: none;
+    background-color: #fff !important;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 50px;
+  }
+  
+  .excel-btn {
+    text-transform: uppercase;
+  }
+  
+  .my-bgg {
+    /* background-image: url(../../../../public/assets/images/gallery/creative/img-1.jpg); */
+  }
+  
+  .label {
+    text-transform: capitalize;
+  }
+  
+  .transform-header {
+    text-transform: "uppercase" !important;
+    font-weight: bold !important;
+  }
+  
+  .medical-text {
+    color: #000;
+  }
+  
+  .modal {
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .modal.fade {
+    opacity: 0;
+  }
+  
+  .modal.fade.show {
+    opacity: 1;
+  }
+  
+  .textareaH {
+    min-height: 200px !important;
+  }
+  
+  .dnote > tbody > tr > td,
+  .table > tbody > tr > th {
+    padding: 5px !important;
+    vertical-align: middle;
+    border: 1px solid #000 !important;
+  }
+  
+  .dnote-head > tr > th {
+    padding: 5px !important;
+    vertical-align: middle;
+    border: 1px solid #000;
+  }
+  
+  .table-bordered > thead > tr > td,
+  .table-bordered > thead > tr > th {
+    border: 1px solid #000 !important;
+    /* border-bottom-width: 2px; */
+  }
+  
+  .checky-input {
+    opacity: 1 !important;
+    position: absolute;
+    left: 70px !important;
+  }
+  
+  .second-section-container {
+    margin-top: 2rem !important;
+  }
+  
+  .aside_label {
+    /* text-transform: uppercase;
+      font-weight: 700; */
+  }
+  
+  .d-none {
+    margin-right: 10px;
+  }
+  
+  .borderr {
+    border-radius: 0px 0px 10px 10px !important;
+  }
+  
+  .bor {
+    border-radius: 10px 10px 0px 0px !important;
+  }
+  
+  .calandarclock-block {
+    position: relative;
+  }
+  
+  .calandarclock-block .signboard {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    color: #fff;
+    border-radius: 10px;
+  }
+  
+  .calandarclock-block .outer {
+    position: absolute;
+    left: 30%;
+    bottom: 0px;
+    z-index: 1;
+    -webkit-transform: translateX(-40%);
+    -moz-transform: translateX(-40%);
+    -ms-transform: translateX(-40%);
+    -o-transform: translateX(-40%);
+    transform: translateX(-40%);
+    cursor: pointer;
+  }
+  
+  .calandarclock-block .signboard {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    color: #fff;
+    border-radius: 10px;
+  }
+  
+  .calandarclock-block .year {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    color: #ff726b;
+  }
+  
+  .calandarclock-block .signboard ul {
+    list-style: none;
+    padding-left: 0px;
+  }
+  
+  .calandarclock-block .month {
+    font-size: 10px;
+    line-height: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  
+  .calandarclock-block .date {
+    font-size: 40px;
+    line-height: 40px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  
+  .calandarclock-block .day {
+    font-size: 10px;
+    line-height: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  
+  .calandarclock-block .clock {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 40px;
+    line-height: 100px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .calandarclock-block .date2 {
+    color: #ff726b;
+  }
+  
+  .calandarclock-block .left {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    -webkit-transform: rotate(5deg) translate(-4px, 4px);
+    -moz-transform: rotate(5deg) translate(-4px, 4px);
+    -ms-transform: rotate(5deg) translate(-4px, 4px);
+    -o-transform: rotate(5deg) translate(-4px, 4px);
+    transform: rotate(5deg) translate(-4px, 4px);
+    background: #3498db;
+  }
+  
+  .calandarclock-block .clock {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 40px;
+    line-height: 100px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .calandarclock-block .day2 {
+    color: #3498db;
+  }
+  
+  .calandarclock-block .calendarNormal {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .calandarclock-block .right {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    -webkit-transform: rotate(5deg) translate(-4px, 4px);
+    -moz-transform: rotate(5deg) translate(-4px, 4px);
+    -ms-transform: rotate(5deg) translate(-4px, 4px);
+    -o-transform: rotate(5deg) translate(-4px, 4px);
+    transform: rotate(5deg) translate(-4px, 4px);
+    background: #3498db;
+  }
+  
+  .calandarclock-block .signboard {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    color: #fff;
+    border-radius: 10px;
+  }
+  
+  .calandarclock-block .clock {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 40px;
+    line-height: 100px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .calandarclock-block .month2 {
+    color: #efc94c;
+  }
+  
+  .calandarclock-block .front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    background: #ff726b;
+    text-align: center;
+  }
+  
+  .table.dataTable {
+    clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+  }
+  
+  .details_text {
+    font-size: 20px;
+  }
+  
+  .pointer-style {
+    cursor: pointer !important;
+  }
+  .bordered-table {
+    border-collapse: collapse;
+  }
+  
+  .bordered-table th,
+  .bordered-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .bordered-table th {
+    background-color: #f2f2f2;
+  }
+  .error {
+    color: red !important;
+    font-weight: bold;
+  }
+  
+  .text-danger {
+    font-weight: bold;
+  }
+  
