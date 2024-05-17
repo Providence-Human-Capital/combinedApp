@@ -3,6 +3,8 @@ import OverviewCard from "./healh-components/OverviewCard";
 import { useQuery } from "react-query";
 import { API } from "../../../config";
 import Loading from "../../components/Loading.jsx/Loading";
+import AttendanceGraphCard from "./healh-components/AttendanceGraphCard";
+import DiagnosisDistributionGraph from "./healh-components/DiagnosisDistributionGraph";
 
 const HealthDashboard = () => {
   const { data, isLoading, isError } = useQuery("healthOverview", async () => {
@@ -58,8 +60,19 @@ const HealthDashboard = () => {
                 Number={clinicCount || 0}
               />
             </div>
+            <div className="row">
+              <div className="col-md-12">
+                <AttendanceGraphCard />
+              </div>
+              <div className="col-md-12">
+               <DiagnosisDistributionGraph />
+              </div>
+            </div>
           </div>
-          <div className="col-xl-4 col-12"></div>
+
+          <div className="col-xl-4 col-12">
+            <h1>Hello</h1>
+          </div>
         </div>
       </section>
     </>

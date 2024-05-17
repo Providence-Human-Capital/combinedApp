@@ -111,7 +111,6 @@ function MedicalRecordForm({ closeAddMedicalRecord }) {
   };
 
   const validationSchema = yup.object().shape({
-    date_of_visit: yup.date().required("The date of visit is required"),
 
     clinic_branch: yup
       .string()
