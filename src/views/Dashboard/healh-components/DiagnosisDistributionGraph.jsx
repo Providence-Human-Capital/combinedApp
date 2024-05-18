@@ -6,8 +6,8 @@ import { API } from "../../../../config";
 
 const DiagnosisDistributionGraph = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedClinic, setSelectedClinic] = useState(null);
-  const [selectedDiagnosis, setSelectedDiagnosis] = useState(null);
+  const [selectedClinic, setSelectedClinic] = useState(1);
+  const [selectedDiagnosis, setSelectedDiagnosis] = useState("ALLERGIES");
   const [years, setYears] = useState([]);
   const [data, setData] = useState([]);
   const clinics = useSelector((state) => state.clinic.clinics);
@@ -132,10 +132,7 @@ const DiagnosisDistributionGraph = () => {
         text: "Number of Diagnoses",
       },
     },
-    title: {
-      text: `Diagnosis Distribution for ${clinicName || "All Clinics"} in ${selectedYear}`,
-      align: "center",
-    },
+   
     colors: ['#007A41'],
     fill: {
       type: 'solid',

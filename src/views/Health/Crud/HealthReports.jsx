@@ -145,7 +145,7 @@ const HealthReports = () => {
             </div>
           </div>
           {isFetching && <Loading />}
-          {isLoading && <Loading />}
+          {/* {isLoading && <Loading />} */}
           {isError && <div>Error fetching data</div>}
 
           <div className="box">

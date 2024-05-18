@@ -447,22 +447,26 @@ const AddStatsForm = () => {
                                         ></i>
                                         {"  "}ADD NEW MEMBER
                                       </a>
-                                      <Link to={`/patient/profile/${selectedPatient.id}`}>
-                                        <button
-                                          className="btn btn-secondary m-2"
-                                          style={{
-                                            borderRadius: "7px",
-                                          }}
+                                      {selectedPatient && (
+                                        <Link
+                                          to={`/patient/profile/${selectedPatient?.id}`}
                                         >
-                                          <i
-                                            className="ti-info"
+                                          <button
+                                            className="btn btn-secondary m-2"
                                             style={{
-                                              marginRight: "10px",
+                                              borderRadius: "7px",
                                             }}
-                                          ></i>
-                                          {"  "} VIEW PATIENT
-                                        </button>
-                                      </Link>
+                                          >
+                                            <i
+                                              className="ti-info"
+                                              style={{
+                                                marginRight: "10px",
+                                              }}
+                                            ></i>
+                                            {"  "} VIEW PATIENT
+                                          </button>
+                                        </Link>
+                                      )}
 
                                       <a
                                         className="btn btn-primary m-2"

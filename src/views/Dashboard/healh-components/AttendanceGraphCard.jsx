@@ -6,7 +6,7 @@ import { API } from "../../../../config";
 
 const AttendanceGraphCard = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [selectedClinic, setSelectedClinic] = useState(1);
   const [years, setYears] = useState([]);
   const [data, setData] = useState([]);
   const clinics = useSelector((state) => state.clinic.clinics);
