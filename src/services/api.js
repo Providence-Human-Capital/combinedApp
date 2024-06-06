@@ -140,3 +140,13 @@ export const getAllPatients = async () => {
   console.log("PATIENTS ",patients)
   return patients;
 }
+
+
+import axios from 'axios';
+
+export const fetchNewEmployees = async () => {
+  const response = await axios.get(`${API}/api/new-employees`);
+  console.log("New employees", response.data)
+  return response.data.data;
+};
+

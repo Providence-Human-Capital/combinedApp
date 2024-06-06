@@ -19,6 +19,7 @@ import patientsSlice from "./patients";
 import companySlice from "./company";
 import uiSlice from "./ui";
 import clinicSlice from "./clinic";
+import hrSlice from "./hr";
 
 const persistConfig = {
   key: "root",
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
   patient: patientsSlice.reducer,
   company: companySlice.reducer,
   ui: uiSlice.reducer,
-  clinic: clinicSlice.reducer
+  clinic: clinicSlice.reducer,
+  hr: hrSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

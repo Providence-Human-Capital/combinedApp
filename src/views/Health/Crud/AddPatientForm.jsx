@@ -10,7 +10,7 @@ import { patientsActions } from "../../../store/patients";
 import Loading from "../../../components/Loading.jsx/Loading";
 import { getAllPatients } from "../../../services/api";
 
-const AddPatientForm = ({ cancelAddNewPatient }) => {
+const AddPatientForm = ({ cancelAddNewPatient,  }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const AddPatientForm = ({ cancelAddNewPatient }) => {
     patient_type: yup.string().required("Patient type is required"),
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values, {resetForm}) => {
     setIsLoading(true);
     values.employee_code = values.employee_code.toUpperCase();
     values.first_name = values.first_name.toUpperCase();
@@ -86,6 +86,7 @@ const AddPatientForm = ({ cancelAddNewPatient }) => {
         );
         setIsLoading(false);
         cancelAddNewPatient();
+        resetForm();
       }
 
       if (!response.ok) {

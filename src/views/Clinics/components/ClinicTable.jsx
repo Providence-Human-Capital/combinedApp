@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ClinicItem from "./ClinicItem";
 import ReactPaginate from "react-paginate";
 
@@ -7,12 +7,27 @@ const ClinicTable = () => {
   const clinics = useSelector((state) => state.clinic.clinics);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
 
   const getCurrentPageData = () => {
     const startIndex = pageNumber * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return clinics.slice(startIndex, endIndex);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const clinics = await getAllHealthFacilities();
+      dispatch(
+        clinicActions.setClinics({
+          clinics: clinics,
+        })
+      );
+    };
+    fetchData();
+  }, []);
+
+  
   return (
     <>
       <div>

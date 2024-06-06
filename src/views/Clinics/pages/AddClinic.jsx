@@ -36,43 +36,55 @@ const AddClinic = () => {
     values.name = values.name.toUpperCase();
     values.address = values.address.toUpperCase();
     values.location = values.location.toUpperCase();
+
     try {
-      console.log("values", values);
-      const response = await fetch(`${API}/clinic`, {
+      const response = await fetch(`${API}/api/clinic`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
-      resetForm();
-      setRedirectBack(true);
-      console.log(response);
-      const responseData = await response.json();
-      if (response.ok) {
-        setIsLoading(false);
-        const clinics = await getAllHealthFacilities();
-        dispatch(
-          clinicActions.setClinics({
-            clinics: clinics,
-          })
-        );
 
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "New Clinic Successfully Registered",
-          timer: 4000,
-          confirmButtonColor: "#007a41",
-        });
-        navigate("/clinics");
+      if (!response.ok) {
+        throw new Error("Failed to register new clinic");
       }
+
+    
+
+      const responseData = await response.json();
+      const clinics = await getAllHealthFacilities();
+
+      dispatch(
+        clinicActions.setClinics({
+          clinics: clinics,
+        })
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "New Clinic Successfully Registered",
+        timer: 4000,
+        confirmButtonColor: "#007a41",
+      });
+
+      navigate("/clinics");
+      resetForm();
     } catch (error) {
-      console.error(error);
+      console.error("Error registering new clinic:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to register new clinic",
+        timer: 4000,
+        confirmButtonColor: "#e60000",
+      });
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <BreadCrumb title={"Add Clinics"} activeTab={"Clinics"} />
@@ -80,7 +92,7 @@ const AddClinic = () => {
         <div className="row">
           <div className="col-xl-12 col-12">
             <div className="card">
-              <div className="custom-form">
+              <div className="custom-form-">
                 <div className="box-body">
                   <h3
                     style={{

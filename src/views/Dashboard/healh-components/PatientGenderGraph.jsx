@@ -22,41 +22,58 @@ const PatientGenderGraph = () => {
     setSelectedCompany(companyId);
   };
 
-  useEffect(() => {
-    const fetchGenderDistribution = async () => {
-      if (selectedCompany) {
-        try {
-          const response = await axios.get(
-            `${API}/api/patient-gender-distribution/${selectedClinic || ""}/${selectedCompany}`
-          );
-          const data = response.data;
-          console.log("Data Patienets Gender", response.data)
-          setGenderData(data);
-        } catch (error) {
-          console.error("Error fetching gender distribution data", error);
-        }
+  const fetchGenderDistribution = async (clinicId, companyId) => {
+    if (companyId) {
+      try {
+        const response = await axios.get(
+          `${API}/api/patient-gender-distribution/${clinicId || ""}/${companyId}`
+        );
+        const data = response.data;
+        console.log("Data Patients Gender", response.data);
+        setGenderData(data);
+      } catch (error) {
+        console.error("Error fetching gender distribution data", error);
       }
-    };
+    }
+  };
 
-    fetchGenderDistribution();
+  useEffect(() => {
+    if (companies && companies.length > 0) {
+      const defaultCompanyId = companies[0].id;
+      setSelectedCompany(defaultCompanyId);
+      fetchGenderDistribution(selectedClinic, defaultCompanyId)
+        .then((data) => {
+          setGenderData(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching gender distribution data:", error);
+          setGenderData(null);
+        });
+    }
+  }, [companies]);
+
+  useEffect(() => {
+    fetchGenderDistribution(selectedClinic, selectedCompany);
   }, [selectedClinic, selectedCompany]);
 
   const chartOptions = {
-    labels: genderData.map((item) => item.gender),
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 200
+    labels: genderData ? genderData.map((item) => item.gender) : [],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: "bottom",
+          },
         },
-        legend: {
-          position: 'bottom'
-        }
-      }
-    }]
+      },
+    ],
   };
 
-  const chartSeries = genderData.map((item) => item.total);
+  const chartSeries = genderData ? genderData.map((item) => item.total) : [];
 
   return (
     <div className="box">
@@ -104,7 +121,7 @@ const PatientGenderGraph = () => {
         </div>
       </div>
       <div className="box-body pt-0">
-        {selectedCompany && genderData.length > 0 ? (
+        {selectedCompany && genderData && genderData.length > 0 ? (
           <Chart options={chartOptions} series={chartSeries} type="pie" width="500" />
         ) : (
           <p>Select a company to see the gender distribution.</p>

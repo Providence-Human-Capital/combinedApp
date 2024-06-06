@@ -84,7 +84,7 @@ const HealthDashboard = () => {
                 <AttendanceByClinic />
               </div>
               <div className="col-md-12">
-                <DiagnosisFrequencyChart />
+               
               </div>
               <div className="col-md-12">
                 <DiagnosisDaysOffDutyRelationship />
@@ -95,6 +95,7 @@ const HealthDashboard = () => {
           <div className="col-xl-4 col-12">
             <PatientGenderGraph />
             <AverageBloodPressureByGender />
+            <DiagnosisFrequencyChart />
           </div>
         </div>
       </section>

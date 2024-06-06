@@ -36,6 +36,17 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import HealthReports from "./views/Health/Crud/HealthReports";
 import PatientDetailedPage from "./views/Health/PatientDetailedPage";
 import MedicalsCertificates from "./views/Health/Medicals/MedicalsCertificates";
+import NewEmployeeDataForm from "./views/Hr/forms/NewEmployeeDataForm";
+import PendingEmployees from "./views/Hr/PendingEmployees";
+import EmployeeBeneficiaryForm from "./views/Hr/forms/EmployeeBeneficiaryForm";
+import EmployeeTerminationForm from "./views/Hr/forms/EmployeeTerminationForm";
+import HealthStaff from "./views/HealthStaff/HealthStaff";
+import AddStaffingEmployee from "./views/Hr/forms/AddStaffingEmployee";
+import ApplicantsDetailedPage from "./views/Hr/pages/ApplicantsDetailedPage";
+import StaffingSolutionsDeployed from "./views/Hr/pages/StaffingSolutionsDeployed";
+import UploadEmployees from "./views/Hr/forms/UploadEmployees";
+import UpdateEmployeeInformation from "./views/Hr/forms/UpdateEmployeeInformation";
+import EmployeeUpdate from "./views/Hr/forms/EmployeeUpdate";
 
 const queryClient = new QueryClient();
 function App() {
@@ -97,6 +108,7 @@ const WrapperComponent = () => {
             )
           }
         />
+        <Route path="/apply" element={<NewEmployeeDataForm />} />
         <Route path="/login" element={<Login />} />
         <Route exact path="/" element={<HomeInit />}>
           <Route element={<PrivateRoutes />}>
@@ -108,10 +120,30 @@ const WrapperComponent = () => {
             />
             <Route exact path="/visitors" element={<Visitors />} />
             <Route exact path="/orders" element={<Orders />} />
+
             <Route exact path="/employees" element={<Employees />} />
             <Route exact path="/terminations" element={<Terminations />} />
-            <Route exact path="/data/forms" element={<DataFormPrintPage />} />
-            <Route exact path="/cv/view" element={<CvViewPage />} />
+            {/* <Route exact path="/data/forms" element={<DataFormPrintPage />} /> */}
+            <Route path="/new/employees" element={<PendingEmployees />} />
+            <Route path="/hr/forms" element={<CvViewPage />}>
+              <Route path="new/employee" element={<DataFormPrintPage />} />
+
+              <Route path="beneficiary" element={<EmployeeBeneficiaryForm />} />
+              <Route path="termination" element={<EmployeeTerminationForm />} />
+            </Route>
+            <Route path="/add/employee" element={<AddStaffingEmployee />} />
+            <Route path="/employees/upload" element={<UploadEmployees />} />
+            <Route
+              path="/applicant/detail/:applicantId"
+              element={<ApplicantsDetailedPage />}
+            />
+            {/* <Route path="/employee/update/:employeeId" element={<UpdateEmployeeInformation />} /> */}
+            <Route path="/employee/update/:employeeId" element={<EmployeeUpdate />} />
+            <Route
+              path="/staffing/employees"
+              element={<StaffingSolutionsDeployed />}
+            />
+
             <Route exact path="/reports" element={<Reports />} />
             <Route exact path="/clinic" element={<AddStatsForm />} />
             {/* <Route exact path="/add/stats/" element={<AddStatsForm />} /> */}
@@ -127,8 +159,16 @@ const WrapperComponent = () => {
             <Route path="/clinic/add" element={<AddClinic />} />
             <Route path="/clinic/edit/:clinicId" element={<EditClinic />} />
             <Route path="/health/reports" element={<HealthReports />} />
-            <Route path="/patient/profile/:patientId" element={<PatientDetailedPage />} />
-            <Route path="/medicals/certificates" element={<MedicalsCertificates />} />
+            <Route path="/health/staff" element={<HealthStaff />} />
+
+            <Route
+              path="/patient/profile/:patientId"
+              element={<PatientDetailedPage />}
+            />
+            <Route
+              path="/medicals/certificates"
+              element={<MedicalsCertificates />}
+            />
           </Route>
         </Route>
       </Routes>

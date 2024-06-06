@@ -68,7 +68,7 @@ const SideBar = () => {
                         <span>Dashboard</span>
                       </NavLink>
                     </li>
-                    <li id="aside-bar">
+                    {/* <li id="aside-bar">
                       <NavLink to={"/visitors"}>
                         <i
                           className="ti-pencil-alt"
@@ -78,8 +78,8 @@ const SideBar = () => {
                         ></i>
                         <span>Visitors</span>
                       </NavLink>
-                    </li>
-                    <li id="aside-bar">
+                    </li> */}
+                    {/* <li id="aside-bar">
                       <NavLink to={"/orders"}>
                         <i
                           className="ti-package"
@@ -89,8 +89,8 @@ const SideBar = () => {
                         ></i>
                         <span>Orders</span>
                       </NavLink>
-                    </li>
-                    <li id="aside-bar">
+                    </li> */}
+                    {/* <li id="aside-bar">
                       <NavLink to={"/employees"}>
                         <i
                           className="ti-user"
@@ -100,8 +100,8 @@ const SideBar = () => {
                         ></i>
                         <span>Employees</span>
                       </NavLink>
-                    </li>
-                    <li id="aside-bar">
+                    </li> */}
+                    {/* <li id="aside-bar">
                       <NavLink to={"/reports"}>
                         <i
                           className="ti-bar-chart"
@@ -111,7 +111,81 @@ const SideBar = () => {
                         ></i>
                         <span>Reports</span>
                       </NavLink>
+                    </li> */}
+                  </>
+                )}
+                {isAdminOrHr && (
+                  <>
+                    {/* hr role access */}
+                    <div className="help-bt">
+                      <Link
+                        href="tel:+263782903276"
+                        className="d-flex align-items-center"
+                      >
+                        <div
+                          className="rounded10 h-40 w-40 l-h-40 text-center me-15"
+                          style={styles.color}
+                        >
+                          <i
+                            className="ti-heart"
+                            style={{
+                              fontSize: "20px",
+                            }}
+                          ></i>
+                        </div>
+                        <h5 className="mb-0">
+                          Human Resources
+                          <br />
+                          (Staffing Solutions)
+                        </h5>
+                      </Link>
+                    </div>
+                    <li id="aside-bar">
+                      <NavLink to={"/new/employees"}>
+                        <i
+                          className="ti-user"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>SS (New Applicants)</span>
+                      </NavLink>
                     </li>
+                    <li id="aside-bar">
+                      <NavLink to={"/staffing/employees"}>
+                        <i
+                          className="ti-user"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>SS (Deployed Employees)</span>
+                      </NavLink>
+                    </li>
+                    {/* <li id="aside-bar">
+                      <NavLink to={"/data/forms"}>
+                        <i
+                          className="ti-printer"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Data Form Print</span>
+                      </NavLink>
+                    </li> */}
+                    <li id="aside-bar">
+                      <NavLink to={"/hr/forms"}>
+                        <i
+                          className="ti-printer"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>HR Forms Print</span>
+                      </NavLink>
+                    </li>
+
+                    {/* end of hr role access */}
                   </>
                 )}
 
@@ -156,12 +230,12 @@ const SideBar = () => {
                     <li id="aside-bar">
                       <NavLink to={"/clinic"}>
                         <i
-                          className="ti-stats-up"
+                          className="ti-search"
                           style={{
                             fontSize: "20px",
                           }}
                         ></i>
-                        <span>Clinic Stats</span>
+                        <span>Search Filter</span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
@@ -208,60 +282,19 @@ const SideBar = () => {
                         <span>Medicals Certificates</span>
                       </NavLink>
                     </li>
+                    <li id="aside-bar">
+                      <NavLink to={"/health/staff"}>
+                        <i
+                          className="ti-receipt"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Health Staff</span>
+                      </NavLink>
+                    </li>
 
                     {/* end of health role access */}
-                  </>
-                )}
-                {isAdminOrHr && (
-                  <>
-                    {/* hr role access */}
-                    <div className="help-bt">
-                      <Link
-                        href="tel:+263782903276"
-                        className="d-flex align-items-center"
-                      >
-                        <div
-                          className="rounded10 h-40 w-40 l-h-40 text-center me-15"
-                          style={styles.color}
-                        >
-                          <i
-                            className="ti-heart"
-                            style={{
-                              fontSize: "20px",
-                            }}
-                          ></i>
-                        </div>
-                        <h5 className="mb-0">
-                          Human Resources
-                          <br />
-                          (Staffing Solutions)
-                        </h5>
-                      </Link>
-                    </div>
-
-                    <li id="aside-bar">
-                      <NavLink to={"/data/forms"}>
-                        <i
-                          className="ti-printer"
-                          style={{
-                            fontSize: "20px",
-                          }}
-                        ></i>
-                        <span>Data Form Print</span>
-                      </NavLink>
-                    </li>
-                    <li id="aside-bar">
-                      <NavLink to={"/cv/view"}>
-                        <i
-                          className="ti-check-box"
-                          style={{
-                            fontSize: "20px",
-                          }}
-                        ></i>
-                        <span>Job Applications</span>
-                      </NavLink>
-                    </li>
-                    {/* end of hr role access */}
                   </>
                 )}
 

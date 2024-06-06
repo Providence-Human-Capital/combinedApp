@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { API } from "../../../../config";
 import Loading from "../../../components/Loading.jsx/Loading";
+import { useSelector } from "react-redux";
 
 const HealthReports = () => {
   const [filters, setFilters] = useState({
@@ -14,6 +15,51 @@ const HealthReports = () => {
     companyName: "",
     clinicName: "",
   });
+  const companies = useSelector((state) => state.company.companies) || [];
+  const clinics = useSelector((state) => state.clinic.clinics) || [];
+
+  const diagnoses = [
+    "ABSCESS",
+    "ALLERGIES",
+    "ARTHRITIS",
+    "ASTHMA",
+    "CELLULITIS",
+    "CHEST PAINS",
+    "COVID POSITIVE",
+    "DIABETES",
+    "DIARRHOEA",
+    "DYSMENORRHOEA",
+    "EAR/NOSE/THROAT",
+    "EPILEPSY",
+    "EPISTAXIS",
+    "EYE",
+    "FRACTURES",
+    "HEADACHE",
+    "HIV RELATED",
+    "HYPERTENSION",
+    "MENTAL ILLNESS",
+    "OLD INJURY ON DUTY",
+    "ORAL",
+    "PILES",
+    "PRE-EMPLOYMENT MEDICALS",
+    "ROAD TRAFFIC ACCIDENT",
+    "SEXUALLY TRANSMITTED INFECTIONS",
+    "SKIN",
+    "SOFT TISSUE INJURY",
+    "URINARY TRACT INFECTIONS",
+    "ABDOMINAL",
+    "ASSULT",
+    "BACKACHE",
+    "DENTAL",
+    "MUSCULO-SKELETAL PAINS",
+    "NEUROLOGICAL",
+    "NEW INJURY ON DUTY",
+    "RESPIRATORY",
+    "STRESS",
+    "FIRST AID INJURY",
+    "DRESSING",
+    "EXIT MEDICALS",
+  ];
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -80,13 +126,16 @@ const HealthReports = () => {
                   </div>
                   <div className="col-md-4">
                     <div className="form-floating">
-                      <input
-                        type="text"
+                      <select
                         name="gender"
-                        className="form-control"
+                        className="form-select"
                         value={filters.gender}
                         onChange={handleChange}
-                      />
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
                       <label htmlFor="gender">Gender:</label>
                     </div>
                   </div>
@@ -95,38 +144,56 @@ const HealthReports = () => {
                 <div className="row">
                   <div className="col-md-3">
                     <div className="form-floating">
-                      <input
-                        type="text"
+                      <select
                         name="diagnosis"
-                        className="form-control"
+                        className="form-select"
                         value={filters.diagnosis}
                         onChange={handleChange}
-                      />
-                      <label htmlFor="diagnosis">Diagnosis:</label>
+                      >
+                        <option value="">Select Diagnosis</option>
+                        {diagnoses.map((diagnosis) => (
+                          <option key={diagnosis} value={diagnosis}>
+                            {diagnosis}
+                          </option>
+                        ))}
+                      </select>
+                      <label htmlFor="diagnosis">DIAGNOSIS:</label>
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div className="form-floating">
-                      <input
-                        type="text"
+                      <select
                         name="companyName"
-                        className="form-control"
+                        className="form-select"
                         value={filters.companyName}
                         onChange={handleChange}
-                      />
-                      <label htmlFor="companyName">Company Name:</label>
+                      >
+                        <option value="">Select Company</option>
+                        {companies.map((company) => (
+                          <option key={company.id} value={company.name}>
+                            {company.name}
+                          </option>
+                        ))}
+                      </select>
+                      <label htmlFor="companyName">COMPANY NAME:</label>
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div className="form-floating">
-                      <input
-                        type="text"
+                      <select
                         name="clinicName"
-                        className="form-control"
+                        className="form-select"
                         value={filters.clinicName}
                         onChange={handleChange}
-                      />
-                      <label htmlFor="clinicName">Clinic Name:</label>
+                      >
+                        <option value="">Select Clinic</option>
+                        {clinics.map((clinic) => (
+                          <option key={clinic.id} value={clinic.name}>
+                            {clinic.name}
+                          </option>
+                        ))}
+                      </select>
+                      <label htmlFor="clinicName">CLINIC NAME:</label>
                     </div>
                   </div>
                 </div>

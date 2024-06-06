@@ -39,6 +39,8 @@ const AddStatsForm = () => {
     setAddMedicalRecord(!addMedicalRecord);
   };
 
+
+
   const initialValues = {
     date_of_birth: selectedPatient ? selectedPatient.date_of_birth : "",
     employee_code: selectedPatient ? selectedPatient.employee_code : "",
@@ -523,7 +525,7 @@ const AddStatsForm = () => {
                       )}
                     </Formik>
                   ) : (
-                    <AddPatientForm cancelAddNewPatient={cancelAddNewPatient} />
+                    <AddPatientForm cancelAddNewPatient={cancelAddNewPatient}  />
                   )}
 
                   {addMedicalRecord && (

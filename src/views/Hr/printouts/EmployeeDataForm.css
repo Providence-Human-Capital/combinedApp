@@ -1,0 +1,47 @@
+.data-form-container {
+  margin: 4.5rem !important;
+  font-size: 10px !important;
+}
+
+.data-header-section {
+  text-align: center;
+  width: 100%;
+}
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tth,
+.ttd {
+  border: 1px solid black;
+  padding: 2px;
+  text-align: left;
+}
+
+.tth {
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+.underline {
+  display: inline-block;
+  border-bottom: 1px solid #000;
+  border-radius: 0px !important;
+  text-align: start !important;
+  font-family: "Cooper Black";
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.underline2 {
+  display: inline-block;
+  border-bottom: 1px solid #000;
+  border-radius: 0px !important;
+  text-align: center;
+  font-family: "Cooper Black";
+  font-weight: bold;
+  font-size: 12px;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -9,24 +9,23 @@ import { API } from "../../../config";
 import { authActions } from "../../store/auth";
 import Loading from "../../components/Loading.jsx/Loading";
 
-// https://providencehumancapital.com/backendapi/public/api/user/login
-
 const Login = () => {
 
   const styles = {
     logoStyles: {
       height: "80px",
     },
-
     pageH: {
       height: "100vh !important",
       overflow: "hidden",
     },
   };
+
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+
   const initialValues = {
     email: "",
     password: "",
@@ -39,6 +38,7 @@ const Login = () => {
 
   const onSubmit = async (formData, { setSubmitting, resetForm }) => {
     setLoading(true);
+    setError(""); // Reset error state before attempting login
     console.log(formData);
     try {
       const response = await fetch(`${API}/api/user/login`, {
@@ -61,7 +61,6 @@ const Login = () => {
           timer: 4000,
           confirmButtonColor: "#007a41",
         });
-        // Uncomment and modify as needed
         navigate("/dashboard");
         dispatch(
           authActions.setLogin({
@@ -72,11 +71,12 @@ const Login = () => {
           })
         );
       } else {
-        throw new Error("Sign in failed"); // Handle other status codes if necessary
+        throw new Error(data.message || "Sign in failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      setError(error);
+      setError(error.message || "An error occurred during sign in");
+    } finally {
       setLoading(false);
     }
   };
@@ -92,7 +92,7 @@ const Login = () => {
         <div className="col-12">
           <div className="row justify-content-center g-0">
             <div className="col-lg-5 col-md-5 col-12">
-              <div className="bg-white border  shadow-lg rounded10">
+              <div className="bg-white border shadow-lg rounded10">
                 <div className="content-top-agile p-20 pb-0">
                   <div className="logo-lg">
                     <span className="light-logo">
@@ -119,7 +119,7 @@ const Login = () => {
                       marginLeft: "3rem",
                     }}
                   >
-                    <strong> {error}</strong>
+                    <strong>{error}</strong>
                   </span>
                 )}
 

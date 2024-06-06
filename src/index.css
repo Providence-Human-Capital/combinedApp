@@ -20,7 +20,12 @@
     --primary-color: #e21a21;
     --secondary-color: #00ac9a;
   }
-  
+  .containerxxl{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+
   .form-control,
   .form-select {
     border-color: var(--border-color);
@@ -806,5 +811,14 @@
   
   .text-danger {
     font-weight: bold;
+  }
+  
+  .custom-date-picker {
+    width: 100%; /* Adjust the width as needed */
+    min-height: 60px; /* Adjust the height as needed */
+    padding: 10px; /* Adjust padding if needed */
+    font-size: 17px; /* Adjust font size if needed */
+    border-radius: 5px; /* Adjust border radius if needed */
+    border: 1px solid #ccc; /* Adjust border style if needed */
   }
   
