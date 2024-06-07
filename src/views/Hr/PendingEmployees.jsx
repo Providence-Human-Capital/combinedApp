@@ -220,7 +220,7 @@ const PendingEmployees = () => {
     });
   };
 
-  const exportData = flattenDeployedEmployeesForReport(newEmployees);
+  const exportData = flattenDeployedEmployeesForReport(currentEmployees);
   const handleExportToExcel = () => {
     exportToExcel(exportData, "JobApplications.xlsx");
   };

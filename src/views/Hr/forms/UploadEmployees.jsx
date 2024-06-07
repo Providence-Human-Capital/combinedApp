@@ -47,8 +47,8 @@ const UploadEmployees = () => {
             const [month, day, year] = dataItem[5].split("/");
             const paddedMonth = month.length === 1 ? `0${month}` : month;
             const paddedDay = day.length === 1 ? `0${day}` : day;
-            // formattedDate = `${year}-${paddedMonth}-${paddedDay}`;
-            formattedDate = `${year}-${paddedDay}-${paddedMonth}`;
+            formattedDate = `${year}-${paddedMonth}-${paddedDay}`;
+            // formattedDate = `${year}-${paddedDay}-${paddedMonth}`;
             //Cheat Fix
           } // Rearrange to yyyy-MM-dd
           return {
