@@ -19,6 +19,13 @@ const NavigationBar = () => {
     navigate("/login");
   };
 
+
+  const isAdminOrPensions = user.role === "admin" || user.role === "pensions";
+  const isAdminOrHealth = user.role === "admin" || user.role === "health";
+  const isAdminOrHr = user.role === "admin" || user.role === "hr";
+  const isAdminOrReception = user.role === "admin" || user.role === "reception";
+  const isAdminOrNurse = user.role === "admin" || user.role === "nurse";
+
   return (
     <>
       <header className="main-header">
@@ -40,13 +47,35 @@ const NavigationBar = () => {
 
             <div className="logo-lg">
               <span className="light-logo">
-                <img
-                  src="/assets/images/PROVIDENCE HEALTH LOGO.png"
+                { isAdminOrHr &&  <img
+                  src="/assets/images/ss.png"
                   alt="logo"
                   style={{
-                    height: "7rem",
+                    height: "6rem",
                   }}
-                />
+                />}
+                
+                { isAdminOrHealth && 
+                <img
+                src="/assets/images/PROVIDENCE HEALTH LOGO.png"
+                alt="logo"
+                style={{
+                  height: "6rem",
+                }}
+              />
+              
+                }
+
+                {
+                  isAdminOrPensions &&
+                  <img
+                    src="/assets/images/MINERVABC.png"
+                    alt="logo"
+                    style={{
+                      height: "6rem",
+                    }}
+                  />
+                }
               </span>
             </div>
           </Link>

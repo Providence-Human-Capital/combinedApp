@@ -9,6 +9,7 @@ import AreaOfExpertiseSelect from "../components/AreaOfExpertiseSelect";
 import UploadEmployeeCV from "../components/UploadEmployeeCv";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
+import UpdateAreasOfExpertise from "../components/UpdateAreasOfExpertise";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().nullable(),
@@ -458,7 +459,7 @@ const EmployeeUpdate = () => {
                   ) : (
                     <button
                       className="btn btn-info"
-                      style={{ width: "fit-content" }}
+                      style={{ width: "fit-content", fontWeight: 400, textTransform: "uppercase" }}
                       type="submit"
                       disabled={isSubmitting}
                     >
@@ -471,12 +472,25 @@ const EmployeeUpdate = () => {
             )}
           </Formik>
         </div>
-        <div className="col-md-6">
-          <div className="box">
-            <div className="box-body">
-              <div className="row">
-                <div className="col-12">
-                  <UploadEmployeeCV employeeId={employeeId} />
+        <div className="row">
+          <div className="col-md-6">
+            <div className="box">
+              <div className="box-body">
+                <div className="row">
+                  <div className="col-12">
+                    <UploadEmployeeCV employeeId={employeeId} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="box">
+              <div className="box-body">
+                <div className="row">
+                  <div className="col-12">
+                    <UpdateAreasOfExpertise employeeId={employeeId} specializations={formValues.area_of_expertise} />
+                  </div>
                 </div>
               </div>
             </div>

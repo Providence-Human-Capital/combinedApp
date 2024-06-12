@@ -47,6 +47,7 @@ import StaffingSolutionsDeployed from "./views/Hr/pages/StaffingSolutionsDeploye
 import UploadEmployees from "./views/Hr/forms/UploadEmployees";
 import UpdateEmployeeInformation from "./views/Hr/forms/UpdateEmployeeInformation";
 import EmployeeUpdate from "./views/Hr/forms/EmployeeUpdate";
+import Attachments from "./views/Hr/pages/Attachments";
 
 const queryClient = new QueryClient();
 function App() {
@@ -122,6 +123,7 @@ const WrapperComponent = () => {
             <Route exact path="/orders" element={<Orders />} />
 
             <Route exact path="/employees" element={<Employees />} />
+            <Route exact path="/attachees" element={<Attachments />} />
             <Route exact path="/terminations" element={<Terminations />} />
             {/* <Route exact path="/data/forms" element={<DataFormPrintPage />} /> */}
             <Route path="/new/employees" element={<PendingEmployees />} />

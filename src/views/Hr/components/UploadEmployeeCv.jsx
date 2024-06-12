@@ -47,7 +47,7 @@ const UploadEmployeeCV = ({ employeeId,  onUploadSuccess }) => {
       {success && <p style={{ color: "green" }}>File uploaded successfully!</p>} {/* Render success message */}
       <div className="space"></div>
       <button className="btn btn-primary" onClick={() => {}} disabled={loading}>
-        {loading ? "Uploading..." : "Upload"}
+        {loading ? "Uploading in Progress..." : "UPLOAD CV"}
       </button>
     </div>
   );

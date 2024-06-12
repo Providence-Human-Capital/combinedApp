@@ -10,6 +10,7 @@ const SideBar = () => {
   const isAdminOrHr = user.role === "admin" || user.role === "hr";
   const isAdminOrReception = user.role === "admin" || user.role === "reception";
   const isAdminOrNurse = user.role === "admin" || user.role === "nurse";
+  
 
   const styles = {
     pageHeight: {
@@ -55,7 +56,7 @@ const SideBar = () => {
           <div className="multinav">
             <div className="multinav-scroll" style={styles.pageHeight}>
               <ul className="sidebar-menu" data-widget="tree">
-                {isAdminOrReception && (
+                {isAdminOrHr && (
                   <>
                     <li id="aside-bar">
                       <NavLink to={"/dashboard"}>
@@ -160,6 +161,17 @@ const SideBar = () => {
                           }}
                         ></i>
                         <span>SS (Deployed Employees)</span>
+                      </NavLink>
+                    </li>
+                    <li id="aside-bar">
+                      <NavLink to={"/attachees"}>
+                        <i
+                          className="ti-user"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Attachment Students</span>
                       </NavLink>
                     </li>
                     {/* <li id="aside-bar">

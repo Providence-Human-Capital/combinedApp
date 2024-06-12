@@ -9,6 +9,7 @@ import Loading from "../../../components/Loading.jsx/Loading";
 import * as XLSX from "xlsx";
 import ReactPaginate from "react-paginate";
 import useOccupations from "../hooks/useOccupations";
+import useStaffingCompanies from "../hooks/useStaffingCompanies";
 const areaOfSpecialization = [
   "GENERAL WORK",
   "ADMIN AND OFFICE",
@@ -134,22 +135,34 @@ const fetchDeployedEmployees = async () => {
   return response.data.data;
 };
 
-const fetchFilterDeployeedEmployees = async (filters) => {
-  try {
-    const response = await axios.post(`${API}/api/deployed-records`, filters);
-    return response.data.data;
-  } catch (error) {
-    // throw new Error("Failed to fetch filtered employees");
-    console.log(error);
-  }
-};
-
 const StaffingSolutionsDeployed = () => {
+  const [isFetching, setIsFetching] = useState(false);
+  const fetchFilterDeployeedEmployees = async (filters) => {
+    try {
+      setIsFetching(true);
+      const response = await axios.post(`${API}/api/deployed-records`, filters);
+      if (response.status === 200) {
+        setIsFetching(false);
+        return response.data.data;
+      }
+      // return response.data.data;
+    } catch (error) {
+      // throw new Error("Failed to fetch filtered employees");
+      console.log(error);
+    }
+  };
+
   const {
     data: occupations,
     error: occupationsError,
     isLoading: occupationsLoading,
   } = useOccupations();
+
+  const {
+    data: companies,
+    error: companiesError,
+    isLoading: companiesLoading,
+  } = useStaffingCompanies();
 
   const [filters, setFilters] = useState({
     gender: "",
@@ -174,6 +187,7 @@ const StaffingSolutionsDeployed = () => {
     data: deployedEmployees,
     error: deployeedEmployeesError,
     isLoading: deployedEmployeesLoading,
+    refetch: refetchDeployedData,
   } = useQuery("deployedEmployees", fetchDeployedEmployees);
 
   const {
@@ -208,12 +222,14 @@ const StaffingSolutionsDeployed = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Compute age_range and update filters
-    const updatedFilters = {
-      ...filters,
-      age_range: filters.min_age + "-" + filters.max_age,
-    };
-    setFilters(updatedFilters);
+    // Compute age_range and update filters if min_age and max_age are not null
+    if (filters.min_age && filters.max_age) {
+      const updatedFilters = {
+        ...filters,
+        age_range: filters.min_age + "-" + filters.max_age,
+      };
+      setFilters(updatedFilters);
+    }
     refetchFilteredData();
   };
 
@@ -270,9 +286,30 @@ const StaffingSolutionsDeployed = () => {
     });
   };
 
-  const exportData = flattenDeployedEmployeesForReport(currentEmployees);
+  const exportData = flattenDeployedEmployeesForReport(filteredEmployees || []);
   const handleExportToExcel = () => {
-    exportToExcel(exportData, "DeployedEmployees.xlsx");
+    exportToExcel(exportData, "FilteredDeployedEmployees.xlsx");
+  };
+
+  const exportData2 = flattenDeployedEmployeesForReport(deployedEmployees);
+  const handleExportAllToExcel = () => {
+    exportToExcel(exportData2, "AllDeployedEmployees.xlsx");
+  };
+
+  const handleReset = () => {
+    setFilters({
+      gender: "",
+      marital_status: "",
+      education_level: "",
+      area_of_expertise: "",
+      name: "",
+      min_age: "",
+      max_age: "",
+    });
+
+    // Reset the current page to the first page
+    setCurrentPage(0);
+    refetchDeployedData();
   };
 
   return (
@@ -312,14 +349,36 @@ const StaffingSolutionsDeployed = () => {
                     </div>
                     <div className="col-md-4">
                       <div className="form-floating">
-                        <input
+                        {/* <input
                           type="text"
                           name="company_id"
                           className="form-control"
                           value={filters.company_id}
                           onChange={handleFilterChange}
-                        />
-                        <label htmlFor="name">COMPANY</label>
+                        /> */}
+                        <select
+                          className="form-select"
+                          id="company_id"
+                          name="company_id"
+                          value={filters.company_id}
+                          onChange={handleFilterChange}
+                        >
+                          <option value="">Select Company</option>
+                          {companiesLoading ? (
+                            <option>
+                              <Loading />
+                            </option>
+                          ) : companiesError ? (
+                            <option>Error loading companies</option>
+                          ) : (
+                            companies.map((company) => (
+                              <option key={company.id} value={company.id}>
+                                {company.name}
+                              </option>
+                            ))
+                          )}
+                        </select>
+                        <label htmlFor="company">SELECT COMPANY</label>
                       </div>
                     </div>
                   </div>
@@ -334,8 +393,8 @@ const StaffingSolutionsDeployed = () => {
                           onChange={handleFilterChange}
                         >
                           <option value="">Select Gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
+                          <option value="MALE">MALE</option>
+                          <option value="FEMALE">FEMALE</option>
                         </select>
                         <label htmlFor="gender">Gender:</label>
                       </div>
@@ -373,17 +432,16 @@ const StaffingSolutionsDeployed = () => {
                           onChange={handleFilterChange}
                         >
                           <option value="">Select Occupation</option>
-                          { occupationsLoading ? (
+                          {occupationsLoading ? (
                             <option>Loading .....</option>
-                          ): occupationsError ? (
-                            <option>Error loading companies</option>
-                          ): (
+                          ) : occupationsError ? (
+                            <option>Error loading Occupations</option>
+                          ) : (
                             occupations.map((occ, index) => (
                               <option key={index} value={occ}>
                                 {occ}
                               </option>
                             ))
-                           
                           )}
                         </select>
                         <label htmlFor="occupation">OCCUPATION</label>
@@ -488,11 +546,26 @@ const StaffingSolutionsDeployed = () => {
                     </div>
                   </div>
                   <div className="space"></div>
-                  {filteredLoading ? (
+                  {isFetching ? (
                     <Loading />
                   ) : (
-                    <button type="submit" className="btn btn-primary">
-                      Apply Filters
+                    <>
+                      <button type="submit" className="btn btn-primary">
+                        <i class="fa fa-filter" aria-hidden="true"></i>
+                        {"  "}
+                        Apply Filters
+                      </button>
+                    </>
+                  )}
+                  {!isFetching && (
+                    <button
+                      type="submit"
+                      className="btn btn-warning"
+                      onClick={handleReset}
+                    >
+                      <i class="fa fa-refresh" aria-hidden="true"></i>
+                      {"  "}
+                      Reset Filter
                     </button>
                   )}
                 </form>
@@ -506,21 +579,36 @@ const StaffingSolutionsDeployed = () => {
                   <div className="d-flex">
                     <Link to={`/add/employee`}>
                       <button className="btn btn-secondary">
-                        ADD EMPLOYEE
+                        <i class="fa fa-plus" aria-hidden="true"></i> ADD
+                        EMPLOYEE
                       </button>
                     </Link>
                     <Link to={`/employees/upload`}>
                       <button className="btn btn-primary">
+                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        {"  "}
                         UPLOAD THROUGH EXCEL
                       </button>
                     </Link>
                   </div>
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleExportToExcel}
-                  >
-                    EXPORT EXCEL
-                  </button>
+                  <div>
+                    <button
+                      className="btn btn-info"
+                      onClick={handleExportAllToExcel}
+                    >
+                      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                      {"  "}
+                      EXPORT ALL TO EXCEL
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={handleExportToExcel}
+                    >
+                      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                      {"  "}
+                      EXPORT FILTER
+                    </button>
+                  </div>
                 </div>
                 <div
                   className="table-responsive rounded card-table"
@@ -614,16 +702,19 @@ const StaffingSolutionsDeployed = () => {
                                 to={`/applicant/detail/${employee.id}`}
                                 className="waves-effect waves-light btn btn-primary-light btn-circle"
                               >
-                                <span className="icon-Settings-1 fs-18"></span>
+                                <i class="fa fa-eye" aria-hidden="true"></i>
                               </Link>
                               <Link
                                 to={`/`}
                                 className="waves-effect waves-light btn btn-primary-light btn-circle mx-5"
                               >
-                                <span className="icon-Write"></span>
+                                <i
+                                  class="fa fa-pencil-square-o"
+                                  aria-hidden="true"
+                                ></i>
                               </Link>
-                              <button className="waves-effect waves-light btn btn-primary-light btn-circle">
-                                <span className="icon-Trash1 fs-18"></span>
+                              <button className="waves-effect waves-light btn btn-danger-light btn-circle">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
                               </button>
                             </td>
                             <td>
