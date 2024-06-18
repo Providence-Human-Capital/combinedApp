@@ -19,12 +19,12 @@ const NavigationBar = () => {
     navigate("/login");
   };
 
-
-  const isAdminOrPensions = user.role === "admin" || user.role === "pensions";
-  const isAdminOrHealth = user.role === "admin" || user.role === "health";
-  const isAdminOrHr = user.role === "admin" || user.role === "hr";
-  const isAdminOrReception = user.role === "admin" || user.role === "reception";
-  const isAdminOrNurse = user.role === "admin" || user.role === "nurse";
+  const isAdminOrPensions = user?.role === "admin" || user?.role === "pensions";
+  const isAdminOrHealth = user?.role === "admin" || user?.role === "health";
+  const isAdminOrHr = user?.role === "admin" || user?.role === "hr";
+  const isAdminOrReception =
+    user?.role === "admin" || user?.role === "reception";
+  const isAdminOrNurse = user?.role === "admin" || user?.role === "nurse";
 
   return (
     <>
@@ -47,26 +47,25 @@ const NavigationBar = () => {
 
             <div className="logo-lg">
               <span className="light-logo">
-                { isAdminOrHr &&  <img
+                {/* { isAdminOrHr &&  <img
                   src="/assets/images/ss.png"
                   alt="logo"
                   style={{
                     height: "6rem",
                   }}
                 />}
-                
-                { isAdminOrHealth && 
-                <img
-                src="/assets/images/PROVIDENCE HEALTH LOGO.png"
-                alt="logo"
-                style={{
-                  height: "6rem",
-                }}
-              />
-              
-                }
+                 */}
+                {isAdminOrHealth && (
+                  <img
+                    src="/assets/images/PHC_Logo.png"
+                    alt="logo"
+                    style={{
+                      height: "5rem",
+                    }}
+                  />
+                )}
 
-                {
+                {/* {
                   isAdminOrPensions &&
                   <img
                     src="/assets/images/MINERVABC.png"
@@ -75,7 +74,7 @@ const NavigationBar = () => {
                       height: "6rem",
                     }}
                   />
-                }
+                } */}
               </span>
             </div>
           </Link>

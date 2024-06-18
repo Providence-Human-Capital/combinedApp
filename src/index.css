@@ -814,7 +814,7 @@
   }
   
   .custom-date-picker {
-    width: 100%; /* Adjust the width as needed */
+    width: fit-content; /* Adjust the width as needed */
     min-height: 60px; /* Adjust the height as needed */
     padding: 10px; /* Adjust padding if needed */
     font-size: 17px; /* Adjust font size if needed */

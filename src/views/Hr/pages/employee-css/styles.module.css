@@ -1,20 +1,14 @@
 .my-component {
-    /* background-image: url(../../../../public/assets/images/gallery/landscape14.jpg); */
-    background-image: url(../../../../public/assets/images/IMG_2184.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 400px;
-  }
+  position: relative;
+  min-height: 350px !important;
+  overflow: hidden;
+}
 
-
-
-
-  .my-component2 {
-    /* background-image: url(../../../../public/assets/images/gallery/landscape14.jpg); */
-    background-image: url(../../../../public/assets/images/landscape14.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 200px;
-  }
+.my-component img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

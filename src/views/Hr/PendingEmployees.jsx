@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import BreadCrumb from "../../components/BreadCrumb";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -6,10 +7,12 @@ import axios from "axios";
 import Error from "../../components/Error/Error";
 import { fetchNewEmployees } from "../../services/api";
 import { API } from "../../../config";
+import Swal from "sweetalert2";
 import Loading from "../../components/Loading.jsx/Loading";
 import ReactPaginate from "react-paginate";
 import * as XLSX from "xlsx";
 import EmployeeExpertise from "./components/EmployeeExpertise";
+import useStaffingCompanies from "./hooks/useStaffingCompanies";
 
 const exportToExcel = (data, filename) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
@@ -126,28 +129,54 @@ const areaOfSpecialization = [
   "WATER MANAGEMENT",
   "WEB DEVELOPMENT",
   "WRITING & EDITING",
-  "ZOOLOGY", 
+  "ZOOLOGY",
+  "SHOP ASSISTANT",
+  "BAKING",
+  "CATERING",
+  "TILL OPERATOR",
+  "ACCOUNTING",
+  "BANKING",
+  "BOOKKEEPER",
+  "CASHIER",
+  "COMPUTER OPERATOR",
+  "AEROSPACE ENGINEERING",
+  "ARTIFICIAL INTELLIGENCE",
+  "ASTROPHYSICS",
+  "BIOINFORMATICS",
+  "BLOCKCHAIN TECHNOLOGY",
+  "CHEF",
+  "COMPUTATIONAL LINGUISTICS",
+  "CYTOTECHNOLOGY",
+  "DENTISTRY",
+  "E-COMMERCE",
+  "ECONOMICS",
+  "FORENSIC SCIENCE",
+  "GENETICS",
+  "HISTORICAL RESEARCH",
+  "MARINE ENGINEERING",
+  "MICROBIOLOGY",
+  "NANOTECHNOLOGY",
+  "NEUROSCIENCE",
+  "PHOTONICS",
+  "ROBOTICS",
+  "SUSTAINABILITY MANAGEMENT",
+  "TRUCK DRIVER",
+  "WAITER",
+  "MERCHANDISER",
+  "ACCOUNTANT",
+  "LABELLING MACHINE OPERATOR",
+  "VERTERINARY",
+  "CLEANER",
+  "SHEQ",
+  "LIFEGUARD",
+  "SORTER",
+  "FITNESS TRAINER"
 ];
 
 const PendingEmployees = () => {
-  const [isFetching, setIsFetching] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
-  const fetchFilteredEmployees = async (filters) => {
-    try {
-      setIsFetching(true); // Show loading spinner when making a request
-      const response = await axios.post(`${API}/api/employee-records`, filters);
-      if (response.status === 200) {
-        setIsFetching(false); // Hide loading spinner after response
-        return response.data.data;
-      }
-      // return response.data.data;
-    } catch (error) {
-      setIsFetching(false);
-      console.log(error);
-      // throw new Error("Failed to fetch filtered employees");
-      
-    }
-  };
+  const [isFetching, setIsFetching] = useState(false);
   const [filters, setFilters] = useState({
     gender: "",
     marital_status: "",
@@ -157,16 +186,8 @@ const PendingEmployees = () => {
     min_age: "",
     max_age: "",
   });
-
   const [currentPage, setCurrentPage] = useState(0);
   const employeesPerPage = 10;
-
-  const styles = {
-    containerStyles: {
-      minHeight: "60vh",
-      overflow: "auto",
-    },
-  };
 
   const {
     data: newEmployees,
@@ -188,6 +209,26 @@ const PendingEmployees = () => {
     }
   );
 
+  const {
+    data: companies,
+    error: companiesError,
+    isLoading: companiesLoading,
+  } = useStaffingCompanies();
+
+  const fetchFilteredEmployees = async (filters) => {
+    try {
+      setIsFetching(true);
+      const response = await axios.post(`${API}/api/employee-records`, filters);
+      if (response.status === 200) {
+        setIsFetching(false);
+        return response.data.data;
+      }
+    } catch (error) {
+      setIsFetching(false);
+      console.log(error);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
@@ -198,7 +239,7 @@ const PendingEmployees = () => {
     if (filters.min_age && filters.max_age) {
       const updatedFilters = {
         ...filters,
-        age_range: filters.min_age + "-" + filters.max_age,
+        age_range: `${filters.min_age}-${filters.max_age}`,
       };
       setFilters(updatedFilters);
     }
@@ -226,24 +267,20 @@ const PendingEmployees = () => {
   if (filteredError) return <Error message={filteredError.message} />;
 
   const flattenDeployedEmployeesForReport = (deployeedEmp) => {
-    return deployeedEmp.map((emp) => {
-      const flattenedData = {
-        "FIRST NAME": emp.first_name,
-        "LAST NAME": emp.last_name,
-        "DATE OF BIRTH": emp.date_of_birth,
-        GENDER: emp.gender,
-        "NATIONAL ID": emp.national_id,
-        NATIONALITY: emp.nationality,
-        "MARITAL STATUS": emp.marital_status,
-        ADDRESS: emp.address,
-        "PHONE NUMBER": emp.phone_number,
-        "AREAS OF EXPERTISES": emp.area_of_expertise,
-        "EDUCATION LEVEL": emp.education_level,
-        EMAIL: emp.email,
-      };
-
-      return flattenedData;
-    });
+    return deployeedEmp.map((emp) => ({
+      "FIRST NAME": emp.first_name,
+      "LAST NAME": emp.last_name,
+      "DATE OF BIRTH": emp.date_of_birth,
+      GENDER: emp.gender,
+      "NATIONAL ID": emp.national_id,
+      NATIONALITY: emp.nationality,
+      "MARITAL STATUS": emp.marital_status,
+      ADDRESS: emp.address,
+      "PHONE NUMBER": emp.phone_number,
+      "AREAS OF EXPERTISES": emp.area_of_expertise,
+      "EDUCATION LEVEL": emp.education_level,
+      EMAIL: emp.email,
+    }));
   };
 
   const exportData = flattenDeployedEmployeesForReport(filteredEmployees || []);
@@ -257,24 +294,225 @@ const PendingEmployees = () => {
   };
 
   const handleReset = () => {
-    // Reset the filters to their initial state
     setFilters({
-      gender: '',
-      marital_status: '',
-      education_level: '',
-      area_of_expertise: '',
-      name: '',
-      min_age: '',
-      max_age: '',
+      gender: "",
+      marital_status: "",
+      education_level: "",
+      area_of_expertise: "",
+      name: "",
+      min_age: "",
+      max_age: "",
     });
-
-    // Reset the current page to the first page
     setCurrentPage(0);
-
-    // Refetch the new employees data
     refetchNewData();
   };
 
+  const handleDelete = async (id) => {
+
+    if (user.role !== "admin") {
+      Swal.fire({
+        title: "Administrator Rights Required",
+        text: "You are not allowed to perform this operation",
+        icon: "info",
+      });
+      return;
+    }
+
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this item!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true,
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`${API}/api/employee/${id}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200) {
+          console.log(response);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your item has been deleted.",
+            icon: "success",
+          });
+          refetchNewData();
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete the item.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete the item.",
+          icon: "error",
+        });
+      }
+    }
+  };
+
+  const updateCertificateStatus = async (employeeId) => {
+
+    if (user.role !== "admin") {
+      Swal.fire({
+        title: "Administrator Rights Required",
+        text: "You are not allowed to perform this operation",
+        icon: "info",
+      });
+      return;
+    }
+
+    if (companiesLoading) {
+      Swal.fire({
+        title: "Loading...",
+        text: "Please wait while we fetch the companies.",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+      });
+      return;
+    }
+
+    if (companiesError) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to fetch companies. Please try again later.",
+        icon: "error",
+      });
+      return;
+    }
+
+    const companyOptions = companies
+      .map(
+        (company) => `<option value="${company.id}">${company.name}</option>`
+      )
+      .join("");
+
+    Swal.fire({
+      title: "UPDATE THE EMPLOYEMENT STATUS OF EMPLOYEE",
+      width: "700px",
+      html: `
+        <div class="form-floating">
+          <select id="status-select" class="form-select">
+            <option value="New">NEW</option>
+            <option value="Pending">PENDING DEPLOYEMENT</option>
+            <option value="Attachment">ON ATTACHMENT</option>
+            <option value="Deployed">DEPLOY</option>
+            <option value="Terminated">TERMINATED</option>
+          </select>
+          <label htmlFor="status-select">STATUS</label>
+        </div>
+        <div id="company-select-container" class="form-floating sep" style="display: none;">
+          <select id="company-select" class="form-select">
+            ${companyOptions}
+          </select>
+          <label htmlFor="company-select">COMPANY SELECT</label>
+        </div>
+        <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "CHANGE STATUS",
+      cancelButtonText: "CANCEL OPERATION",
+      focusConfirm: false,
+      didOpen: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const companySelectContainer = document.getElementById(
+          "company-select-container"
+        );
+
+        statusSelectElement.addEventListener("change", () => {
+          if (statusSelectElement.value === "Deployed") {
+            companySelectContainer.style.display = "block";
+          } else {
+            companySelectContainer.style.display = "none";
+          }
+        });
+      },
+      preConfirm: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const selectedStatus = statusSelectElement.value;
+
+        const companySelectElement = document.getElementById("company-select");
+        const selectedCompany = companySelectElement
+          ? companySelectElement.value
+          : null;
+
+        return { selectedStatus, selectedCompany };
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { selectedStatus, selectedCompany } = result.value;
+
+        try {
+          await axios.post(
+            `${API}/api/employee/change/status/${employeeId}`,
+            {
+              status: selectedStatus,
+              company_id: selectedCompany,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          Swal.fire({
+            title: "Status Updated",
+            text: "The status has been updated successfully.",
+            icon: "success",
+          });
+
+          if (
+            filters.gender !== "" ||
+            filters.marital_status !== "" ||
+            filters.education_level !== "" ||
+            filters.area_of_expertise !== "" ||
+            filters.name !== "" ||
+            filters.min_age !== "" ||
+            filters.max_age !== "" ||
+            filters.company_id !== "" ||
+            filters.occupation !== ""
+          ) {
+            refetchFilteredData();
+          } else {
+            refetchNewData();
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to update the status. Please try again later.",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  const handleCancel = () => {
+    Swal.close();
+  };
+
+  const styles = {
+    containerStyles: {
+      minHeight: "60vh",
+      overflow: "auto",
+    },
+  };
   return (
     <>
       <BreadCrumb title={"New Employees"} activeTab={"Employees"} />
@@ -572,7 +810,13 @@ const PendingEmployees = () => {
                             {employee.email}
                           </td>
                           <td>
-                            <span className="badge badge-warning">
+                            <span
+                              className="badge badge-warning"
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                updateCertificateStatus(employee.id)
+                              }
+                            >
                               {employee.status}
                             </span>
                           </td>
@@ -587,10 +831,16 @@ const PendingEmployees = () => {
                               to={`/employee/update/${employee.id}`}
                               className="waves-effect waves-light btn btn-primary-light btn-circle mx-5"
                             >
-                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                              <i
+                                class="fa fa-pencil-square-o"
+                                aria-hidden="true"
+                              ></i>
                             </Link>
-                            <button className="waves-effect waves-light btn btn-danger-light btn-circle" >
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <button
+                              className="waves-effect waves-light btn btn-danger-light btn-circle"
+                              onClick={() => handleDelete(employee.id)}
+                            >
+                              <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </button>
                           </td>
                           <td>

@@ -39,7 +39,7 @@ const UploadEmployeeCV = ({ employeeId,  onUploadSuccess }) => {
   return (
     <div style={{ margin: "2rem", color: "#2C4894" }}>
       <h4 style={{ textTransform: "uppercase", fontWeight: "bold" }}>UPLOAD / UPDATE EMPLOYEE CV</h4>
-      <div {...getRootProps()} style={{ border: "2px dashed #2C4894", padding: "2rem", textAlign: "center" }}>
+      <div {...getRootProps()} style={{ border: "2px dashed #2C4894", padding: "2rem", textAlign: "center",  backgroundColor: "#f0fdf3" }}>
         <input {...getInputProps()} />
         <p>Drag 'n' drop the file here, or click to select file</p>
       </div>

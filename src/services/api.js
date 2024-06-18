@@ -110,7 +110,6 @@ export const getAllCompanies = async () => {
   return companies;
 };
 
-
 export const getAllHealthFacilities = async () => {
   const clinicsResponse = await fetch(`${API}/api/clinic`, {
     method: "GET",
@@ -123,8 +122,7 @@ export const getAllHealthFacilities = async () => {
   const responseData = await clinicsResponse.json();
   const clinics = responseData.data;
   return clinics;
-}
-
+};
 
 export const getAllPatients = async () => {
   const patientsResponse = await fetch(`${API}/api/patient`, {
@@ -137,16 +135,26 @@ export const getAllPatients = async () => {
 
   const responseData = await patientsResponse.json();
   const patients = responseData.data;
-  console.log("PATIENTS ",patients)
+  console.log("PATIENTS ", patients);
   return patients;
-}
+};
 
-
-import axios from 'axios';
+import axios from "axios";
 
 export const fetchNewEmployees = async () => {
   const response = await axios.get(`${API}/api/new-employees`);
-  console.log("New employees", response.data)
+  console.log("New employees", response.data);
   return response.data.data;
 };
 
+export const fetchTerminatedEmployees = async () => {
+  const response = await axios.get(`${API}/api/get/terminated-employees`);
+  console.log("Terminated employees", response.data);
+  return response.data.data;
+};
+
+export const fetchAttachmentEmployees = async () => {
+  const response = await axios.get(`${API}/api/get/attachment-employees`);
+  console.log("Attachment employees", response.data);
+  return response.data.data;
+};

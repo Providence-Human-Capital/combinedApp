@@ -166,7 +166,7 @@ const SideBar = () => {
                     <li id="aside-bar">
                       <NavLink to={"/attachees"}>
                         <i
-                          className="ti-user"
+                          className="ti-notepad"
                           style={{
                             fontSize: "20px",
                           }}
@@ -174,17 +174,18 @@ const SideBar = () => {
                         <span>Attachment Students</span>
                       </NavLink>
                     </li>
-                    {/* <li id="aside-bar">
-                      <NavLink to={"/data/forms"}>
+                    <li id="aside-bar">
+                      <NavLink to={"/terminated/employees"}>
                         <i
-                          className="ti-printer"
+                          className="ti-flag-alt-2"
                           style={{
                             fontSize: "20px",
                           }}
                         ></i>
-                        <span>Data Form Print</span>
+                        <span>Terminated Employees</span>
                       </NavLink>
-                    </li> */}
+                    </li>
+                   
                     <li id="aside-bar">
                       <NavLink to={"/hr/forms"}>
                         <i

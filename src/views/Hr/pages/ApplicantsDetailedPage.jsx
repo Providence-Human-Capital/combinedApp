@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../../components/BreadCrumb";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useEmployee from "../hooks/useEmployee";
 import Loading from "../../../components/Loading.jsx/Loading";
 import UploadEmployeeCV from "../components/UploadEmployeeCv";
 import { API } from "../../../../config";
 
 import styles from "./employee-css/styles.module.css";
+import Qualifications from "../components/Qualifications";
 
 export const formatDate = (dateString, options) => {
   const date = new Date(dateString);
@@ -76,7 +77,6 @@ const ApplicantsDetailedPage = () => {
     return <div>Error: {error.message}</div>;
   }
 
-
   return (
     <>
       <BreadCrumb
@@ -86,6 +86,24 @@ const ApplicantsDetailedPage = () => {
       <section className="content">
         <div className="row">
           <div className="col-xl-8 col-12">
+            <Link to={`/employee/update/${employee.id}`}>
+              <button
+                className="btn btn-secondary"
+                style={{
+                  marginRight: "10px",
+                }}
+              >
+                {" "}
+                <i
+                  className="ti-pencil-alt2"
+                  style={{
+                    marginRight: "10px",
+                  }}
+                ></i>{" "}
+                Edit Employee
+              </button>
+            </Link>
+
             {employee.file_path && (
               <>
                 <a
@@ -101,15 +119,20 @@ const ApplicantsDetailedPage = () => {
 
             <div className="box bg-bubbles-white mt-4">
               <div
-                className={`box-body text-end min-h-150 ${styles["my-component"]}`}
-              ></div>
+                className={`box-body text-end  ${styles["my-component"]}`}
+                style={{
+                  minHeight: "350px !important",
+                }}
+              >
+                <img src="https://providence-human-capital.github.io/images/6308.jpg" />
+              </div>
               <div className="box-body wed-up position-relative">
                 <div className="d-md-flex align-items-center">
                   <div className="image-container">
                     <img
-                      src={"/assets/images/user.jpg"}
+                      src="/assets/images/user.jpg"
                       className="bg-success-light rounded50 square-image"
-                      alt=""
+                      alt="https://providence-human-capital.github.io/images/6308.jpg"
                       style={{
                         width: "200px",
                         borderRadius: "50%",
@@ -202,78 +225,46 @@ const ApplicantsDetailedPage = () => {
               </div>
               <div className="box-body">
                 <div className="container">
-                  {/* <!-- Work Experience Section --> */}
                   <div className="row mb-4">
                     <div className="col-12">
                       <h4
                         className="mb-3"
                         style={{ color: "#0E9645", fontWeight: "bold" }}
                       >
-                        Work Experience
+                        QUALIFICATIONS (EDUCATION LEVEL)
+                      </h4>
+                      <ul className="list-group">
+                        <li className="list-group-item">
+                          <h5>{employee?.education_level}</h5>
+                          {/* <p className="mb-0">University of XYZ</p>
+                          <small className="text-muted">2014 - 2018</small> */}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="row mb-4">
+                    <div className="col-12">
+                      <h4
+                        className="mb-3"
+                        style={{ color: "#0E9645", fontWeight: "bold" }}
+                      >
+                        WORK EXPERIENCE
                       </h4>
                       <div
                         className="card mb-3"
                         style={{ backgroundColor: "#f0fdf3" }}
                       >
                         <div className="card-body">
-                          <h5 className="card-title">Software Engineer</h5>
-                          <h6 className="card-subtitle mb-2 text-muted">
-                            Tech Company
-                          </h6>
-                          <p className="card-text">Jan 2020 - Present</p>
                           <p className="card-text">
-                            Developing and maintaining web applications using
-                            modern frameworks.
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        className="card mb-3"
-                        style={{ backgroundColor: "#f0fdf3" }}
-                      >
-                        <div className="card-body">
-                          <h5 className="card-title">Junior Developer</h5>
-                          <h6 className="card-subtitle mb-2 text-muted">
-                            Startup Inc.
-                          </h6>
-                          <p className="card-text">Jun 2018 - Dec 2019</p>
-                          <p className="card-text">
-                            Worked on a team to build scalable web services and
-                            mobile applications.
+                          {employee?.work_experience}
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* <!-- Qualifications Section --> */}
-                  <div className="row">
-                    <div className="col-12">
-                      <h4
-                        className="mb-3"
-                        style={{ color: "#0E9645", fontWeight: "bold" }}
-                      >
-                        Qualifications
-                      </h4>
-                      <ul className="list-group">
-                        <li className="list-group-item">
-                          <h5>Bachelor of Science in Computer Science</h5>
-                          <p className="mb-0">University of XYZ</p>
-                          <small className="text-muted">2014 - 2018</small>
-                        </li>
-                        <li className="list-group-item">
-                          <h5>Certified Scrum Master</h5>
-                          <p className="mb-0">Scrum Alliance</p>
-                          <small className="text-muted">2021</small>
-                        </li>
-                        <li className="list-group-item">
-                          <h5>Full Stack Web Development Certificate</h5>
-                          <p className="mb-0">Online Coding Bootcamp</p>
-                          <small className="text-muted">2019</small>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                  <Qualifications employee={employee} />
                 </div>
               </div>
             </div>

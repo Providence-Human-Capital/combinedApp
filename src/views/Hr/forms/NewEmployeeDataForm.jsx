@@ -180,35 +180,54 @@ const NewEmployeeDataForm = () => {
         </div>
         <div className="" style={{ marginBottom: "4rem" }}>
           <div className="row">
-            <div className="col-md-4 col-12">
-              <div className="">
+            <div
+              className="col-md-4 col-12"
+              style={{
+                backgroundColor: "#fff",
+              }}
+            >
+              <div
+                className=""
+                style={{ width: "100%", height: "100%", position: "relative" }}
+              >
                 <img
-                  src="https://providence-human-capital.github.io/images/hcwelcome3.gif"
+                  src="https://providence-human-capital.github.io/images/resune.png"
                   alt="logo"
-                ></img>
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
+                />
               </div>
             </div>
             <div className="col-md-8 col-12">
               <div className="box">
                 <div className="box-header">
-                  <h4
+                  <h3
                     style={{
                       fontWeight: "bold",
-                      fontSize: "30px",
+                      fontSize: "35px",
                       textTransform: "uppercase",
                     }}
                   >
                     <span
                       style={{
                         color: "#0E9645",
+
+                        fontWeight: "bold",
                       }}
                     >
                       Providence Human Capital
                     </span>{" "}
                     <br />
+                  </h3>
+
+                  <h4>
                     <span
                       style={{
                         color: "#2C4894",
+                        fontFamily: "Playwrite NO, cursive",
                       }}
                     >
                       Staffing Solutions
@@ -646,6 +665,17 @@ const NewEmployeeDataForm = () => {
                               }}
                             >
                               BRIEFLY DESCRIBE YOUR WORK EXPERIENCE
+                              <span
+                                style={{
+                                  fontWeight: "normal",
+                                  color: "#0E9645",
+                                }}
+                              >
+                                {"  "}
+                                (NB: If your area of expertise is not available
+                                in the dropdown menu, please briefly describe it
+                                below in the work experience section.)
+                              </span>
                             </label>
                             <div className="form-floating">
                               <Field
@@ -706,8 +736,8 @@ const NewEmployeeDataForm = () => {
                               className="btn btn-primary"
                               style={{
                                 color: "#fff",
-                                backgroundColor: "#2C4894",
-                                border: "1px solid #2C4894",
+                                backgroundColor: "#0E9645",
+                                border: "1px solid #0E9645",
                               }}
                             >
                               <i
@@ -734,3 +764,5 @@ const NewEmployeeDataForm = () => {
 };
 
 export default NewEmployeeDataForm;
+
+

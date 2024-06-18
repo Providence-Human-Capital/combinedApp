@@ -10,6 +10,8 @@ import * as XLSX from "xlsx";
 import ReactPaginate from "react-paginate";
 import useOccupations from "../hooks/useOccupations";
 import useStaffingCompanies from "../hooks/useStaffingCompanies";
+import Swal from "sweetalert2";
+
 const areaOfSpecialization = [
   "GENERAL WORK",
   "ADMIN AND OFFICE",
@@ -196,7 +198,7 @@ const StaffingSolutionsDeployed = () => {
     isLoading: filteredLoading,
     refetch: refetchFilteredData,
   } = useQuery(
-    ["filteredEmployees", filters],
+    ["filteredDeployedEmployees", filters],
     () => fetchFilterDeployeedEmployees(filters),
     {
       enabled: false,
@@ -231,6 +233,200 @@ const StaffingSolutionsDeployed = () => {
       setFilters(updatedFilters);
     }
     refetchFilteredData();
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this item!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true,
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`${API}/api/employee/${id}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          console.log(response);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your item has been deleted.",
+            icon: "success",
+          });
+
+          if (
+            filters.gender !== "" ||
+            filters.marital_status !== "" ||
+            filters.education_level !== "" ||
+            filters.area_of_expertise !== "" ||
+            filters.name !== "" ||
+            filters.min_age !== "" ||
+            filters.max_age !== "" ||
+            filters.company_id !== "" ||
+            filters.occupation !== ""
+          ) {
+            console.log("Code Executing................");
+            setCurrentPage(0);
+            refetchFilteredData();
+          } else {
+            refetchDeployedData();
+          }
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete the item.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.log("This is the error", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete the item.",
+          icon: "error",
+        });
+      }
+    }
+  };
+
+  const updateCertificateStatus = async (employeeId) => {
+    if (companiesLoading) {
+      Swal.fire({
+        title: "Loading...",
+        text: "Please wait while we fetch the companies.",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+      });
+      return;
+    }
+
+    if (companiesError) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to fetch companies. Please try again later.",
+        icon: "error",
+      });
+      return;
+    }
+
+    const companyOptions = companies
+      .map(
+        (company) => `<option value="${company.id}">${company.name}</option>`
+      )
+      .join("");
+
+    Swal.fire({
+      title: "UPDATE THE EMPLOYEMENT STATUS OF EMPLOYEE",
+      width: "700px",
+      html: `
+        <div class="form-floating">
+          <select id="status-select" class="form-select">
+            <option value="New">NEW</option>
+            <option value="Pending">PENDING DEPLOYEMENT</option>
+            <option value="Attachment">ON ATTACHMENT</option>
+            <option value="Deployed">DEPLOY</option>
+            <option value="Terminated">TERMINATED</option>
+          </select>
+          <label htmlFor="status-select">STATUS</label>
+        </div>
+        <div id="company-select-container" class="form-floating sep" style="display: none;">
+          <select id="company-select" class="form-select">
+            ${companyOptions}
+          </select>
+          <label htmlFor="company-select">COMPANY SELECT</label>
+        </div>
+        <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "CHANGE STATUS",
+      cancelButtonText: "CANCEL OPERATION",
+      focusConfirm: false,
+      didOpen: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const companySelectContainer = document.getElementById(
+          "company-select-container"
+        );
+
+        statusSelectElement.addEventListener("change", () => {
+          if (statusSelectElement.value === "Deployed") {
+            companySelectContainer.style.display = "block";
+          } else {
+            companySelectContainer.style.display = "none";
+          }
+        });
+      },
+      preConfirm: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const selectedStatus = statusSelectElement.value;
+
+        const companySelectElement = document.getElementById("company-select");
+        const selectedCompany = companySelectElement
+          ? companySelectElement.value
+          : null;
+
+        return { selectedStatus, selectedCompany };
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { selectedStatus, selectedCompany } = result.value;
+
+        try {
+          await axios.post(
+            `${API}/api/employee/change/status/${employeeId}`,
+            {
+              status: selectedStatus,
+              company_id: selectedCompany,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          Swal.fire({
+            title: "Status Updated",
+            text: "The status has been updated successfully.",
+            icon: "success",
+          });
+
+          setCurrentPage(0);
+          if (
+            filters.gender !== "" ||
+            filters.marital_status !== "" ||
+            filters.education_level !== "" ||
+            filters.area_of_expertise !== "" ||
+            filters.name !== "" ||
+            filters.min_age !== "" ||
+            filters.max_age !== "" ||
+            filters.company_id !== "" ||
+            filters.occupation !== ""
+          ) {
+            refetchFilteredData();
+          } else {
+            refetchDeployedData();
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to update the status. Please try again later.",
+            icon: "error",
+          });
+        }
+      }
+    });
   };
 
   const currentEmployees = filteredEmployees
@@ -305,6 +501,7 @@ const StaffingSolutionsDeployed = () => {
       name: "",
       min_age: "",
       max_age: "",
+      company_id: "",
     });
 
     // Reset the current page to the first page
@@ -688,12 +885,21 @@ const StaffingSolutionsDeployed = () => {
                                 whiteSpace: "nowrap",
                               }}
                             >
-                              <span className="badge badge-dark">
+                              <span
+                                className="badge badge-dark"
+                                style={{ cursor: "pointer" }}
+                              >
                                 {employee.occupation}
                               </span>
                             </td>
                             <td>
-                              <span className="badge badge-success">
+                              <span
+                                className="badge badge-success"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  updateCertificateStatus(employee.id)
+                                }
+                              >
                                 {employee.status}
                               </span>
                             </td>
@@ -705,7 +911,7 @@ const StaffingSolutionsDeployed = () => {
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                               </Link>
                               <Link
-                                to={`/`}
+                                to={`/employee/update/${employee.id}`}
                                 className="waves-effect waves-light btn btn-primary-light btn-circle mx-5"
                               >
                                 <i
@@ -713,7 +919,10 @@ const StaffingSolutionsDeployed = () => {
                                   aria-hidden="true"
                                 ></i>
                               </Link>
-                              <button className="waves-effect waves-light btn btn-danger-light btn-circle">
+                              <button
+                                className="waves-effect waves-light btn btn-danger-light btn-circle"
+                                onClick={() => handleDelete(employee.id)}
+                              >
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                               </button>
                             </td>
