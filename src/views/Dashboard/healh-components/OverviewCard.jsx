@@ -9,7 +9,9 @@ const OverviewCard = ({ svgLink, Label, Number }) => {
             <div className="bg-primary-light rounded10 p-20 mx-auto w-100 h-100">
               <img src={svgLink} className="" alt="" />
             </div>
-            <p className="text-fade mt-15 mb-5">{Label}</p>
+            <p className="text-fade mt-15 mb-5" style={{
+              fontWeight: "bold",
+            }}>{Label}</p>
             <h2 className="mt-0">{Number}</h2>
           </div>
         </div>

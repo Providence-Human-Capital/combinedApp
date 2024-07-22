@@ -10,7 +10,7 @@ import Loading from "../../../components/Loading.jsx/Loading";
 import AreaOfExpertiseSelect from "../components/AreaOfExpertiseSelect";
 import { useNavigate } from "react-router-dom";
 
-import { API } from "../../../../config"
+import { API } from "../../../../config";
 
 const CustomDatePicker = ({ field, form, ...props }) => {
   const handleChange = (date) => {
@@ -55,6 +55,10 @@ const AddStaffingEmployee = () => {
     work_experience: "",
     area_of_expertise: "",
     occupation: "",
+    ref_name: "",
+    ref_contact: "",
+    ref_emp: "",
+    ref_relation: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -76,6 +80,18 @@ const AddStaffingEmployee = () => {
     occupation: Yup.string().nullable(),
     area_of_expertise: Yup.string().nullable(),
     work_experience: Yup.string().nullable(),
+
+    ref_name: Yup.string().required(
+      "Enter the full name of the person you referred this employee to Providence Human Capital"
+    ),
+    ref_contact: Yup.string().required("Enter the Referrer Contact Number"),
+    ref_emp: Yup.string().required(
+      "Enter the Referrer Place Of Employment (Where he/she works or Worked)"
+    ),
+    ref_relation: Yup.string().required(
+      "Whats How Are You Related To the person Who Referred you to the Job"
+    ),
+
     file: Yup.mixed().nullable(),
   });
 
@@ -179,9 +195,9 @@ const AddStaffingEmployee = () => {
 
   return (
     <>
-      <BreadCrumb title={"Add Staffing Employee"} activeTab={"Staffing"} />
+      <BreadCrumb title={"Add Staffing Applicant"} activeTab={"Staffing"} />
       <section className="content">
-        <div className="row col-md-8">
+        <div className="row col-md-12">
           <div className="card">
             <div className="card-header">
               <h4
@@ -196,7 +212,7 @@ const AddStaffingEmployee = () => {
                     color: "#0E9645",
                   }}
                 >
-                  ADD NEW EMPLOYEE
+                  ADD NEW APPLICANT
                 </span>{" "}
                 <br />
               </h4>
@@ -520,6 +536,7 @@ const AddStaffingEmployee = () => {
                         </div>
                       </div>
                     </div>
+
                     <div style={{ marginTop: "2rem" }}>
                       <h6 style={{ fontWeight: "bold", color: "#2C4894" }}>
                         EDUCATION AND WORK HISTORY INFORMATION
@@ -610,6 +627,161 @@ const AddStaffingEmployee = () => {
                             className="form-control"
                             style={{ minHeight: "150px", minWidth: "100%" }}
                           />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="card card-body"
+                      style={{
+                        backgroundColor: "#ACE1AF",
+                      }}
+                    >
+                      <div className="space"></div>
+                      <div className="row">
+                        <h6 style={{ fontWeight: "bold", color: "#2C4894" }}>
+                          PROVIDE REFFERER INFORMATION (Who Referred this
+                          Applicant)
+                        </h6>
+                        <div className="col-md-4 col-12 mb-4">
+                          <div className="form-floating">
+                            <Field
+                              type="text"
+                              id="ref_name"
+                              name="ref_name"
+                              className={`form-control ${
+                                touched.ref_name && errors.ref_name
+                                  ? "error-input"
+                                  : ""
+                              }`}
+                            />
+                            <label
+                              htmlFor="ref_name"
+                              style={{
+                                color: "#2C4894",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              REFFERER FULL NAME
+                            </label>
+                            <ErrorMessage
+                              name="ref_name"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-4 col-12 mb-4">
+                          <div className="form-floating">
+                            <Field
+                              type="text"
+                              id="ref_contact"
+                              name="ref_contact"
+                              className={`form-control ${
+                                touched.ref_contact && errors.ref_contact
+                                  ? "error-input"
+                                  : ""
+                              }`}
+                            />
+                            <label
+                              htmlFor="ref_contact"
+                              style={{
+                                color: "#2C4894",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              REFFERER CONTACT DETAILS
+                            </label>
+                            <ErrorMessage
+                              name="ref_contact"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-4 col-12 mb-4">
+                          <div className="form-floating">
+                            <Field
+                              type="text"
+                              id="ref_emp"
+                              name="ref_emp"
+                              className={`form-control ${
+                                touched.ref_emp && errors.ref_emp
+                                  ? "error-input"
+                                  : ""
+                              }`}
+                            />
+                            <label
+                              htmlFor="ref_emp"
+                              style={{
+                                color: "#2C4894",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              REFFERER PLACE OF EMPLOYEMENT
+                            </label>
+                            <ErrorMessage
+                              name="ref_emp"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space"></div>
+
+                      <div className="row ">
+                        <div className="col-md-4 col-12 mb-4">
+                          <label
+                            htmlFor="ref_relation"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            SELECT RELATIONSHIP TO REFERRER
+                          </label>
+                          <div className="form-floating">
+                            <Field
+                              as="select"
+                              className={`form-select ${
+                                touched.ref_relation && errors.ref_relation
+                                  ? "error-input"
+                                  : ""
+                              }`}
+                              id="ref_relation"
+                              name="ref_relation"
+                            >
+                              <option></option>
+                              <option value="FATHER">FATHER</option>
+                              <option value="MOTHER">MOTHER</option>
+                              <option value="SON">SON</option>
+                              <option value="DAUGHTER">DAUGHTER</option>
+                              <option value="WIFE">WIFE</option>
+                              <option value="HUSBAND">HUSBAND</option>
+                              <option value="SISTER">SISTER</option>
+                              <option value="FRIEND">FRIEND</option>
+                              <option value="EXTENDED FAMILY">
+                                EXTENDED FAMILY
+                              </option>
+                              <option value="OTHER">OTHER</option>
+                            </Field>
+                            <label
+                              htmlFor="education_level"
+                              style={{
+                                color: "#2C4894",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              RELATIONSHIP
+                            </label>
+
+                            <ErrorMessage
+                              name="ref_relation"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

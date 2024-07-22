@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import NavigationBar from "./components/NavigationBar";
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  HashRouter,
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import HomeInit from "./HomeInit";
 import Login from "./views/Auth/Login";
 import Dashboard from "./views/Dashboard/Dashboard";
@@ -49,6 +55,11 @@ import UpdateEmployeeInformation from "./views/Hr/forms/UpdateEmployeeInformatio
 import EmployeeUpdate from "./views/Hr/forms/EmployeeUpdate";
 import Attachments from "./views/Hr/pages/Attachments";
 import TerminatedEmployees from "./views/Hr/pages/TerminatedEmployees";
+import Drugs from "./views/Drugs/Drugs";
+import OrderForm from "./views/Drugs/forms/OrderForm";
+import LeaveManagement from "./views/LeaveManagement/LeaveManagement";
+import HrReports from "./views/HrReports/HrReports";
+import TrainedEmployees from "./views/Hr/TrainedEmployees";
 
 const queryClient = new QueryClient();
 function App() {
@@ -126,9 +137,14 @@ const WrapperComponent = () => {
             <Route exact path="/employees" element={<Employees />} />
             <Route exact path="/attachees" element={<Attachments />} />
             <Route exact path="/terminations" element={<Terminations />} />
-            <Route exact path="/terminated/employees" element={<TerminatedEmployees />} />
+            <Route
+              exact
+              path="/terminated/employees"
+              element={<TerminatedEmployees />}
+            />
             {/* <Route exact path="/data/forms" element={<DataFormPrintPage />} /> */}
             <Route path="/new/employees" element={<PendingEmployees />} />
+            <Route path="/trained/applicants" element={<TrainedEmployees />} />
             <Route path="/hr/forms" element={<CvViewPage />}>
               <Route path="new/employee" element={<DataFormPrintPage />} />
 
@@ -142,13 +158,18 @@ const WrapperComponent = () => {
               element={<ApplicantsDetailedPage />}
             />
             {/* <Route path="/employee/update/:employeeId" element={<UpdateEmployeeInformation />} /> */}
-            <Route path="/employee/update/:employeeId" element={<EmployeeUpdate />} />
+            <Route
+              path="/employee/update/:employeeId"
+              element={<EmployeeUpdate />}
+            />
             <Route
               path="/staffing/employees"
               element={<StaffingSolutionsDeployed />}
             />
 
             <Route exact path="/reports" element={<Reports />} />
+            <Route exact path="/providence/drugs" element={<Drugs />} />
+            <Route exact path="/order/drugs" element={<OrderForm />} />
             <Route exact path="/clinic" element={<AddStatsForm />} />
             {/* <Route exact path="/add/stats/" element={<AddStatsForm />} /> */}
             <Route
@@ -164,6 +185,8 @@ const WrapperComponent = () => {
             <Route path="/clinic/edit/:clinicId" element={<EditClinic />} />
             <Route path="/health/reports" element={<HealthReports />} />
             <Route path="/health/staff" element={<HealthStaff />} />
+            <Route path="/leave/management" element={<LeaveManagement />} />
+            <Route path="/hr/reports" element={<HrReports />} />
 
             <Route
               path="/patient/profile/:patientId"

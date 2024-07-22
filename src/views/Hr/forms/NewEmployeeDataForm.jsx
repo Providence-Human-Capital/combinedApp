@@ -52,6 +52,11 @@ const NewEmployeeDataForm = () => {
     work_experience: "",
     area_of_expertise: "",
     occupation: "",
+
+    ref_name: "",
+    ref_contact: "",
+    ref_emp: "",
+    ref_relation: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -73,6 +78,18 @@ const NewEmployeeDataForm = () => {
     occupation: Yup.string().nullable(),
     area_of_expertise: Yup.string().nullable(),
     work_experience: Yup.string().nullable(),
+
+    ref_name: Yup.string().required(
+      "Enter the full name of the person you referred this employee to Providence Human Capital"
+    ),
+    ref_contact: Yup.string().required("Enter the Referrer Contact Number"),
+    ref_emp: Yup.string().required(
+      "Enter the Referrer Place Of Employment (Where he/she works or Worked)"
+    ),
+    ref_relation: Yup.string().required(
+      "Whats How Are You Related To the person Who Referred you to the Job"
+    ),
+
     file: Yup.mixed().nullable(),
   });
 
@@ -174,11 +191,8 @@ const NewEmployeeDataForm = () => {
 
   return (
     <div className="containerxxl">
-      <section className="content" style={{ marginTop: "5rem" }}>
-        <div ref={targetRef} style={{ display: "none" }}>
-          <h1>Hello Hello</h1>
-        </div>
-        <div className="" style={{ marginBottom: "4rem" }}>
+      <section className="content">
+        <div className="">
           <div className="row">
             <div
               className="col-md-4 col-12"
@@ -191,7 +205,7 @@ const NewEmployeeDataForm = () => {
                 style={{ width: "100%", height: "100%", position: "relative" }}
               >
                 <img
-                  src="https://providence-human-capital.github.io/images/resune.png"
+                  src="https://providence-human-capital.github.io/images/im4.png"
                   alt="logo"
                   style={{
                     width: "100%",
@@ -204,10 +218,10 @@ const NewEmployeeDataForm = () => {
             <div className="col-md-8 col-12">
               <div className="box">
                 <div className="box-header">
-                  <h3
+                  <h2
                     style={{
                       fontWeight: "bold",
-                      fontSize: "35px",
+                      fontSize: "55px",
                       textTransform: "uppercase",
                     }}
                   >
@@ -221,7 +235,7 @@ const NewEmployeeDataForm = () => {
                       Providence Human Capital
                     </span>{" "}
                     <br />
-                  </h3>
+                  </h2>
 
                   <h4>
                     <span
@@ -583,6 +597,7 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                         </div>
+
                         <div style={{ marginTop: "2rem" }}>
                           <h6 style={{ fontWeight: "bold", color: "#2C4894" }}>
                             EDUCATION AND WORK HISTORY INFORMATION
@@ -688,6 +703,167 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                         </div>
+                        <div className="card card-body" style={{
+                          backgroundColor: "#ACE1AF"
+                        }}>
+                          <div className="space"></div>
+                          <div className="row">
+                            <h6
+                              style={{ fontWeight: "bold", color: "#2C4894" }}
+                            >
+                              PROVIDE REFFERER INFORMATION (Who Referred you to
+                              Providence Human Capital )
+                            </h6>
+                            <p
+                              style={{
+                                color: "#0E9645",
+                                fontWeight: "bold"
+                              }}
+                            >
+                              NB: Add information of the person who referred you
+                              Providence Human Capital
+                            </p>
+                            <div className="col-md-4 col-12 mb-4">
+                              <div className="form-floating">
+                                <Field
+                                  type="text"
+                                  id="ref_name"
+                                  name="ref_name"
+                                  className={`form-control ${
+                                    touched.ref_name && errors.ref_name
+                                      ? "error-input"
+                                      : ""
+                                  }`}
+                                />
+                                <label
+                                  htmlFor="ref_name"
+                                  style={{
+                                    color: "#2C4894",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  REFFERER FULL NAME
+                                </label>
+                                <ErrorMessage
+                                  name="ref_name"
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4 col-12 mb-4">
+                              <div className="form-floating">
+                                <Field
+                                  type="text"
+                                  id="ref_contact"
+                                  name="ref_contact"
+                                  className={`form-control ${
+                                    touched.ref_contact && errors.ref_contact
+                                      ? "error-input"
+                                      : ""
+                                  }`}
+                                />
+                                <label
+                                  htmlFor="ref_contact"
+                                  style={{
+                                    color: "#2C4894",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  REFFERER CONTACT DETAILS
+                                </label>
+                                <ErrorMessage
+                                  name="ref_contact"
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4 col-12 mb-4">
+                              <div className="form-floating">
+                                <Field
+                                  type="text"
+                                  id="ref_emp"
+                                  name="ref_emp"
+                                  className={`form-control ${
+                                    touched.ref_emp && errors.ref_emp
+                                      ? "error-input"
+                                      : ""
+                                  }`}
+                                />
+                                <label
+                                  htmlFor="ref_emp"
+                                  style={{
+                                    color: "#2C4894",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  REFFERER PLACE OF EMPLOYEMENT
+                                </label>
+                                <ErrorMessage
+                                  name="ref_emp"
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space"></div>
+                          <div className="row">
+                            <div className="col-md-4 col-12 mb-4">
+                              <label
+                                htmlFor="education_level"
+                                style={{
+                                  color: "#2C4894",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                SELECT RELATIONSHIP TO REFERRER
+                              </label>
+                              <div className="form-floating">
+                                <Field
+                                  as="select"
+                                  className={`form-select ${
+                                    touched.ref_relation && errors.ref_relation
+                                      ? "error-input"
+                                      : ""
+                                  }`}
+                                  id="ref_relation"
+                                  name="ref_relation"
+                                >
+                                  <option></option>
+                                  <option value="FATHER">FATHER</option>
+                                  <option value="MOTHER">MOTHER</option>
+                                  <option value="SON">SON</option>
+                                  <option value="DAUGHTER">DAUGHTER</option>
+                                  <option value="WIFE">WIFE</option>
+                                  <option value="HUSBAND">HUSBAND</option>
+                                  <option value="SISTER">SISTER</option>
+                                  <option value="FRIEND">FRIEND</option>
+                                  <option value="EXTENDED FAMILY">
+                                    EXTENDED FAMILY
+                                  </option>
+                                  <option value="OTHER">OTHER</option>
+                                </Field>
+                                <label
+                                  htmlFor="education_level"
+                                  style={{
+                                    color: "#2C4894",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  RELATIONSHIP
+                                </label>
+
+                                <ErrorMessage
+                                  name="ref_relation"
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         <div className="space"></div>
                         <div className="row">
@@ -709,7 +885,7 @@ const NewEmployeeDataForm = () => {
                                 ) : (
                                   <p>
                                     Drag & drop a CV here, or click to select a
-                                    CV (PDF or Word document)
+                                    CV (PDF Only)
                                   </p>
                                 )}
                               </div>
@@ -764,5 +940,3 @@ const NewEmployeeDataForm = () => {
 };
 
 export default NewEmployeeDataForm;
-
-

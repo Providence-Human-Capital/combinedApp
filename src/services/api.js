@@ -147,6 +147,13 @@ export const fetchNewEmployees = async () => {
   return response.data.data;
 };
 
+
+export const fetchTrainedEmployees = async () => {
+  const response = await axios.get(`${API}/api/get/pending-employees`);
+  console.log("New employees", response.data);
+  return response.data.data;
+};
+
 export const fetchTerminatedEmployees = async () => {
   const response = await axios.get(`${API}/api/get/terminated-employees`);
   console.log("Terminated employees", response.data);

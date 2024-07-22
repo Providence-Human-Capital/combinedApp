@@ -149,7 +149,18 @@ const SideBar = () => {
                             fontSize: "20px",
                           }}
                         ></i>
-                        <span>SS (New Applicants)</span>
+                        <span>SS (Applicants)</span>
+                      </NavLink>
+                    </li>
+                    <li id="aside-bar">
+                      <NavLink to={"/trained/applicants"}>
+                        <i
+                          className="ti-user"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Trained Applicants</span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
@@ -198,13 +209,39 @@ const SideBar = () => {
                       </NavLink>
                     </li>
 
+                    <li id="aside-bar">
+                      <NavLink to={"/leave/management"}>
+                        <i
+                          className="ti-home"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Leave Management</span>
+                      </NavLink>
+                    </li>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/hr/reports"}>
+                        <i
+                          className="ti-stats-up"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Reports Analysis</span>
+                      </NavLink>
+                    </li>
+
+
+
                     {/* end of hr role access */}
                   </>
                 )}
 
-                {isAdminOrHealth && (
+                {/* {isAdminOrHealth && (
                   <>
-                    {/* health role access */}
+                 
                     <div className="help-bt">
                       <Link
                         href="tel:+263782903276"
@@ -274,6 +311,17 @@ const SideBar = () => {
                       </NavLink>
                     </li>
                     <li id="aside-bar">
+                      <NavLink to={"/providence/drugs"}>
+                        <i
+                          className="ti-support"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Drug Management</span>
+                      </NavLink>
+                    </li>
+                    <li id="aside-bar">
                       <NavLink to={"/health/reports"}>
                         <i
                           className="ti-bar-chart-alt"
@@ -307,13 +355,13 @@ const SideBar = () => {
                       </NavLink>
                     </li>
 
-                    {/* end of health role access */}
+                   
                   </>
-                )}
+                )}  */}
 
-                {isAdminOrPensions && (
+                {/* {isAdminOrPensions && (
                   <>
-                    {/* pension role access */}
+                   
                     <div className="help-bt">
                       <Link
                         href="tel:+263782903276"
@@ -348,9 +396,9 @@ const SideBar = () => {
                         <span>Terminations Print</span>
                       </NavLink>
                     </li>
-                    {/* end of pension role access */}
+                   
                   </>
-                )}
+                )} */}
               </ul>
             </div>
           </div>

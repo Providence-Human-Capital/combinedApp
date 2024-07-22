@@ -9,6 +9,8 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { API } from "../../../config";
 import EmployeeAgeDistribution from "./components/EmployeeAgeDistribution";
+import WeeklyEmployeeCountChart from "./components/WeeklyEmployeeCountChart ";
+import AreaOfExpertiseAnalysis from "./components/AreaOfExpertiseAnalysis";
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -36,39 +38,45 @@ const Dashboard = () => {
             <div className="row">
               <OverviewCard
                 svgLink={
-                  "https://rhythm-admin-template.multipurposethemes.com/images/svg-icon/medical/icon-3.svg"
+                  "https://providence-human-capital.github.io/images/office-building.png"
                 }
                 Label={"Total Staffing Companies"}
                 Number={overviewData?.staffingCompaniesCount || 0}
               />
               <OverviewCard
                 svgLink={
-                  "https://rhythm-admin-template.multipurposethemes.com/images/svg-icon/medical/icon-3.svg"
+                  "https://providence-human-capital.github.io/images/code.png"
                 }
                 Label={"Deployed Staffing Employees"}
                 Number={overviewData?.deployedEmployeesCount || 0}
               />
               <OverviewCard
                 svgLink={
-                  "https://rhythm-admin-template.multipurposethemes.com/images/svg-icon/medical/icon-3.svg"
+                  "https://providence-human-capital.github.io/images/clock.png"
                 }
-                Label={"Pending Deployment"}
+                Label={"Trained (Verified) Applicants"}
                 Number={overviewData?.pendingEmployeesCount || 0}
               />
+              
               <OverviewCard
                 svgLink={
-                  "https://rhythm-admin-template.multipurposethemes.com/images/svg-icon/medical/icon-3.svg"
+                  "https://providence-human-capital.github.io/images/new-employee.png"
                 }
-                Label={"New Applicants"}
+                Label={"Applicants"}
                 Number={overviewData?.newEmployeesCount || 0}
               />
+              
+              {/* new-employee */}
             </div>
+            <WeeklyEmployeeCountChart />
             <StaffingEmployeesChart />
             <EmployeeAgeDistribution />
+            
           </div>
           <div className="col-xl-4 col-12">
             <EmployeeGenderChart />
             <EmployeeMaritalStatusChart />
+            <AreaOfExpertiseAnalysis />
           </div>
         </div>
         <div className="row">

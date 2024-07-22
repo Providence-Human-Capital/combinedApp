@@ -515,7 +515,7 @@ const PendingEmployees = () => {
   };
   return (
     <>
-      <BreadCrumb title={"New Employees"} activeTab={"Employees"} />
+      <BreadCrumb title={"Applicants"} activeTab={"Job Applications"} />
       <section className="content">
         <div className="row">
           <div className="col-md-12">
@@ -527,7 +527,7 @@ const PendingEmployees = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  FILTER OUT EMPLOYEES INFORMATION
+                  FILTER OUT APPLICANTS INFORMATION
                 </h4>
                 <form onSubmit={handleSubmit}>
                   <div className="row">
@@ -712,7 +712,7 @@ const PendingEmployees = () => {
                     <Link to={`/add/employee`}>
                       <button className="btn btn-secondary">
                         <i class="fa fa-plus" aria-hidden="true"></i> ADD
-                        EMPLOYEE
+                        APPLICANT
                       </button>
                     </Link>
                     <Link to={`/employees/upload`}>

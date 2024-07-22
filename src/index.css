@@ -822,3 +822,34 @@
     border: 1px solid #ccc; /* Adjust border style if needed */
   }
   
+
+
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .pagination li {
+    margin: 0 7px;
+    cursor: pointer;
+  }
+  
+  .pagination li a {
+    text-decoration: none;
+    color: #0f942e;
+    padding: 7px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .pagination li a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination .active a {
+    background-color: #0f942e;
+    color: #fff !important;
+    font-weight: bold;
+    border-color: #0f942e;
+  }
