@@ -60,6 +60,8 @@ import OrderForm from "./views/Drugs/forms/OrderForm";
 import LeaveManagement from "./views/LeaveManagement/LeaveManagement";
 import HrReports from "./views/HrReports/HrReports";
 import TrainedEmployees from "./views/Hr/TrainedEmployees";
+import ApplicationSuccess from "./views/Hr/success/ApplicationSuccess";
+import DocumentUpload from "./views/Hr/components/DocumentUpload";
 
 const queryClient = new QueryClient();
 function App() {
@@ -121,8 +123,13 @@ const WrapperComponent = () => {
             )
           }
         />
+        <Route
+          path="/application/submmitted"
+          element={<ApplicationSuccess />}
+        />
         <Route path="/apply" element={<NewEmployeeDataForm />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/documents" element={<DocumentUpload />} />
         <Route exact path="/" element={<HomeInit />}>
           <Route element={<PrivateRoutes />}>
             <Route exact path="/dashboard" element={<Dashboard />} />
@@ -196,6 +203,8 @@ const WrapperComponent = () => {
               path="/medicals/certificates"
               element={<MedicalsCertificates />}
             />
+
+            <Route path="*" element={<Navigate to={"/dashboard"} />} />
           </Route>
         </Route>
       </Routes>

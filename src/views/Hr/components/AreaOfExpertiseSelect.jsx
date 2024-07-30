@@ -138,7 +138,15 @@ const areaOfSpecialization = [
   "SHEQ",
   "LIFEGUARD",
   "SORTER",
-  "FITNESS TRAINER"
+  "FITNESS TRAINER",
+  "FORKLIFT OPERATOR",
+  "PATTY BOY",
+  "REFRIDGERATION",
+  "AIR-CONDITIONING",
+  "SORTER",
+  "PACKER",
+  "CROP SCIENCE",
+  "WELDER"
 ];
 
 const customStyles = {

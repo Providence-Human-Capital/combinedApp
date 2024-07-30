@@ -10,7 +10,6 @@ const SideBar = () => {
   const isAdminOrHr = user.role === "admin" || user.role === "hr";
   const isAdminOrReception = user.role === "admin" || user.role === "reception";
   const isAdminOrNurse = user.role === "admin" || user.role === "nurse";
-  
 
   const styles = {
     pageHeight: {
@@ -53,6 +52,37 @@ const SideBar = () => {
               </h5>
             </Link>
           </div>
+
+          <div className="help-bt">
+            <Link to={"/add/employee"} className="d-flex align-items-center">
+              <div
+                className="rounded10 h-50 w-50 l-h-50 text-center me-15"
+                style={styles.color}
+              >
+                <i
+                  className="fa fa-user"
+                  aria-hidden="true"
+                  style={{
+                    fontSize: "20px",
+                  }}
+                ></i>
+              </div>
+              <h4
+                className="mb-0"
+                style={{
+                  textTransform: "uppercase",
+                  transition: "color 0.3s", // Adding transition for a smooth effect
+                  ":hover": {
+                    color: "green",
+                  },
+                }}
+              >
+                Add Applicant
+              </h4>
+            </Link>
+          </div>
+
+
           <div className="multinav">
             <div className="multinav-scroll" style={styles.pageHeight}>
               <ul className="sidebar-menu" data-widget="tree">
@@ -196,7 +226,7 @@ const SideBar = () => {
                         <span>Terminated Employees</span>
                       </NavLink>
                     </li>
-                   
+
                     <li id="aside-bar">
                       <NavLink to={"/hr/forms"}>
                         <i
@@ -206,6 +236,18 @@ const SideBar = () => {
                           }}
                         ></i>
                         <span>HR Forms Print</span>
+                      </NavLink>
+                    </li>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/companies"}>
+                        <i
+                          className="ti-files"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Companies</span>
                       </NavLink>
                     </li>
 
@@ -232,8 +274,6 @@ const SideBar = () => {
                         <span>Reports Analysis</span>
                       </NavLink>
                     </li>
-
-
 
                     {/* end of hr role access */}
                   </>

@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const CvViewPage = () => {
-
   const location = useLocation();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/hr/forms/new/employee");
+  }, []);
 
   return (
     <section className="content">
@@ -26,19 +31,40 @@ const CvViewPage = () => {
               <ul class="nav nav-pills mb-20">
                 <li class=" nav-item">
                   {" "}
-                  <Link to={"new/employee"}  className={`nav-link ${location.pathname === '/hr/forms/new/employee' ? 'active' : ''}`}>
+                  <Link
+                    to={"new/employee"}
+                    className={`nav-link ${
+                      location.pathname === "/hr/forms/new/employee"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
                     NEW EMPLOYEE DATA FORM
                   </Link>{" "}
                 </li>
                 <li class="nav-item">
                   {" "}
-                  <Link to={"termination"} className={`nav-link ${location.pathname === '/hr/forms/termination' ? 'active' : ''}`}>
+                  <Link
+                    to={"termination"}
+                    className={`nav-link ${
+                      location.pathname === "/hr/forms/termination"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
                     EMPLOYEE TERMINATION FORM
                   </Link>{" "}
                 </li>
                 <li class="nav-item">
                   {" "}
-                  <Link to={"beneficiary"} className={`nav-link ${location.pathname === '/hr/forms/beneficiary' ? 'active' : ''}`}>
+                  <Link
+                    to={"beneficiary"}
+                    className={`nav-link ${
+                      location.pathname === "/hr/forms/beneficiary"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
                     BENEFICIARY FORM
                   </Link>{" "}
                 </li>

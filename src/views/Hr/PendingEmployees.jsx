@@ -170,7 +170,15 @@ const areaOfSpecialization = [
   "SHEQ",
   "LIFEGUARD",
   "SORTER",
-  "FITNESS TRAINER"
+  "FITNESS TRAINER",
+  "FORKLIFT OPERATOR",
+  "PATTY BOY",
+  "REFRIDGERATION",
+  "AIR-CONDITIONING",
+  "SORTER",
+  "PACKER", 
+  "CROP SCIENCE",
+  "WELDER"
 ];
 
 const PendingEmployees = () => {
@@ -308,7 +316,6 @@ const PendingEmployees = () => {
   };
 
   const handleDelete = async (id) => {
-
     if (user.role !== "admin") {
       Swal.fire({
         title: "Administrator Rights Required",
@@ -317,7 +324,6 @@ const PendingEmployees = () => {
       });
       return;
     }
-
 
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -366,7 +372,6 @@ const PendingEmployees = () => {
   };
 
   const updateCertificateStatus = async (employeeId) => {
-
     if (user.role !== "admin") {
       Swal.fire({
         title: "Administrator Rights Required",
@@ -755,7 +760,7 @@ const PendingEmployees = () => {
                         <th className="bb-2">AREAS OF SPECIALIZATIONS</th>
                         <th className="bb-2">DATE OF BIRTH</th>
                         <th className="bb-2">NATIONALITY</th>
-                        <th className="bb-2">MARITAL STATUS</th>
+                        <th className="bb-2">REFERENCE TYPE</th>
                         <th className="bb-2">ADDRESS</th>
                         <th className="bb-2">PHONE NUMBER</th>
                         <th className="bb-2">EMAIL</th>
@@ -787,6 +792,15 @@ const PendingEmployees = () => {
                           <EmployeeExpertise employee={employee} />
                           <td>{employee.date_of_birth}</td>
                           <td>{employee.nationality}</td>
+                          <td>
+                            {employee.ref_type ? (
+                              <span  className="badge badge-primary" style={{
+                                textTransform: "uppercase",
+                              }}>{employee.ref_type}</span>
+                            ) : (
+                              <span className="badge badge-danger">SELF</span>
+                            )}
+                          </td>
                           <td>{employee.marital_status}</td>
                           <td
                             style={{

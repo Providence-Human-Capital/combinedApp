@@ -194,7 +194,7 @@ const TrainedEmployees = () => {
     error: newEmployeesError,
     isLoading: newEmployeesLoading,
     refetch: refetchNewData,
-  } = useQuery("newEmployees", fetchTrainedEmployees);
+  } = useQuery("trainedEmployees", fetchTrainedEmployees);
 
   const {
     data: filteredEmployees,
@@ -202,7 +202,7 @@ const TrainedEmployees = () => {
     isLoading: filteredLoading,
     refetch: refetchFilteredData,
   } = useQuery(
-    ["filteredEmployees", filters],
+    ["filteredTrainedEmployees", filters],
     () => fetchFilteredEmployees(filters),
     {
       enabled: false,
@@ -515,7 +515,7 @@ const TrainedEmployees = () => {
   };
   return (
     <>
-      <BreadCrumb title={"Trained Applicants"} activeTab={"Trained Applications"} />
+      <BreadCrumb title={"Trained Applicants"} activeTab={"Trained (Pending Deployment) Applications"} />
       <section className="content">
         <div className="row">
           <div className="col-md-12">

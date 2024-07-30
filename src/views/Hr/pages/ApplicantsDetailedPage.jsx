@@ -205,6 +205,14 @@ const ApplicantsDetailedPage = () => {
                 </div>
               </div>
             </div>
+
+            <div className="box">
+              <div className="box-body">
+
+              </div>
+            </div>
+
+            
           </div>
           <div className="col-xl-4 col-12">
             <div className="box">
@@ -212,6 +220,82 @@ const ApplicantsDetailedPage = () => {
                 employeeId={applicantId}
                 onUploadSuccess={handleEmployeeRefetch}
               />
+            </div>
+            <div class="container mt-5">
+              <h2
+                style={{
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                Reference Information
+              </h2>
+              <div
+                class="card"
+                style={{
+                  textTransform: "uppercase",
+                  backgroundColor: "#96FABC",
+                }}
+              >
+                <div class="card-body">
+                  <h5 class="card-title">Reference Details</h5>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>From Company:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.from_company}</div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>From Position:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.from_position}</div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>Reference Type:</strong>
+                    </div>
+                    <div
+                      class="col-sm-8"
+                      style={{
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {employee.ref_type ? (
+                        <span className="badge badge-primary">
+                          {employee.ref_type}
+                        </span>
+                      ) : (
+                        <span className="badge badge-primary">SELF</span>
+                      )}
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>REFERRER FULL NAME:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.ref_name}</div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>REFERRER Contact:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.ref_contact}</div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>REFERRER PLACE OF EMPLOYMENT:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.ref_emp}</div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-4">
+                      <strong>REFERRER Relation:</strong>
+                    </div>
+                    <div class="col-sm-8">{employee.ref_relation}</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="box">
               <div className="box-header no-border">
@@ -257,7 +341,7 @@ const ApplicantsDetailedPage = () => {
                       >
                         <div className="card-body">
                           <p className="card-text">
-                          {employee?.work_experience}
+                            {employee?.work_experience}
                           </p>
                         </div>
                       </div>

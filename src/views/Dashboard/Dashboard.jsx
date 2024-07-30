@@ -37,6 +37,7 @@ const Dashboard = () => {
           <div className="col-xl-8 col-12">
             <div className="row">
               <OverviewCard
+                to={"/companies"}
                 svgLink={
                   "https://providence-human-capital.github.io/images/office-building.png"
                 }
@@ -44,6 +45,7 @@ const Dashboard = () => {
                 Number={overviewData?.staffingCompaniesCount || 0}
               />
               <OverviewCard
+                to={"/staffing/employees"}
                 svgLink={
                   "https://providence-human-capital.github.io/images/code.png"
                 }
@@ -51,27 +53,28 @@ const Dashboard = () => {
                 Number={overviewData?.deployedEmployeesCount || 0}
               />
               <OverviewCard
+                to={"/trained/applicants"}
                 svgLink={
                   "https://providence-human-capital.github.io/images/clock.png"
                 }
                 Label={"Trained (Verified) Applicants"}
                 Number={overviewData?.pendingEmployeesCount || 0}
               />
-              
+
               <OverviewCard
+                to={"/new/employees"}
                 svgLink={
                   "https://providence-human-capital.github.io/images/new-employee.png"
                 }
                 Label={"Applicants"}
                 Number={overviewData?.newEmployeesCount || 0}
               />
-              
+
               {/* new-employee */}
             </div>
             <WeeklyEmployeeCountChart />
             <StaffingEmployeesChart />
             <EmployeeAgeDistribution />
-            
           </div>
           <div className="col-xl-4 col-12">
             <EmployeeGenderChart />

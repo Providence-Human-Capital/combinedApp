@@ -40,7 +40,6 @@ const Drugs = () => {
           <h4
             style={{
               fontWeight: "bold",
-              fontWeight: "500",
               textTransform: "uppercase",
             }}
           >

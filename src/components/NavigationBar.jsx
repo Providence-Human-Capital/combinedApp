@@ -99,7 +99,7 @@ const NavigationBar = () => {
               </li>
               <li className="btn-group d-lg-inline-flex d-none">
                 <div className="app-menu">
-                  <div className="search-bx mx-5">
+                  {/* <div className="search-bx mx-5">
                     <form>
                       <div className="input-group">
                         <input
@@ -126,7 +126,7 @@ const NavigationBar = () => {
                         </div>
                       </div>
                     </form>
-                  </div>
+                  </div> */}
                 </div>
               </li>
             </ul>
@@ -183,8 +183,8 @@ const NavigationBar = () => {
                     <ul className="menu sm-scrol">
                       <li>
                         <a href="#">
-                          <i className="fa fa-users text-info"></i> Curabitur id
-                          eros quis nunc suscipit blandit.
+                          <i className="fa fa-users text-info"></i>
+                          Providence Human Capital Database
                         </a>
                       </li>
                     </ul>
