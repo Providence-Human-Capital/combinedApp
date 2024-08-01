@@ -208,12 +208,53 @@ const ApplicantsDetailedPage = () => {
 
             <div className="box">
               <div className="box-body">
-
+                <div className="row">
+                  {employee.documents.length > 0 && (
+                    <>
+                      {employee.documents.map((doc) => (
+                        <>
+                          <div class="col-md-4">
+                            <div
+                              class="card"
+                              style={{
+                                backgroundColor: "#96FABC",
+                              }}
+                            >
+                              <div class="card-body">
+                                <h5
+                                  class="card-title"
+                                  style={{
+                                    textTransform: "uppercase",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {doc?.type}
+                                </h5>
+                                <a
+                                  href={`${API}/api/storage/${doc?.file_path}`}
+                                  class="btn btn-primary"
+                                  target="_blank"
+                                >
+                                  <i
+                                    className="ti-eye"
+                                    style={{
+                                      marginRight: "10px",
+                                    }}
+                                  ></i>
+                                  View {doc?.type}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ))}
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-
-            
           </div>
+
           <div className="col-xl-4 col-12">
             <div className="box">
               <UploadEmployeeCV

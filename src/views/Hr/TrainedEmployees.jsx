@@ -170,7 +170,26 @@ const areaOfSpecialization = [
   "SHEQ",
   "LIFEGUARD",
   "SORTER",
-  "FITNESS TRAINER"
+  "FITNESS TRAINER",
+  "FORKLIFT OPERATOR",
+  "PATTY BOY",
+  "REFRIDGERATION",
+  "AIR-CONDITIONING",
+  "SORTER",
+  "PACKER",
+  "CROP SCIENCE",
+  "WELDER",
+  "WELDING",
+  "CARPENTER",
+  "TIPPER TRUCK",
+  "PLANT ASSISTANT",
+  "PRODUCTION CLERK",
+  "CRIMINOLOGY & SOCIETY",
+  "HOME CARE",
+  "DOCUMENT FILING",
+  "BIOLOGICAL SCIENCE",
+  "COSMETOLOGY",
+  "MACHINE OPERATOR",
 ];
 
 const TrainedEmployees = () => {
@@ -308,7 +327,6 @@ const TrainedEmployees = () => {
   };
 
   const handleDelete = async (id) => {
-
     if (user.role !== "admin") {
       Swal.fire({
         title: "Administrator Rights Required",
@@ -317,7 +335,6 @@ const TrainedEmployees = () => {
       });
       return;
     }
-
 
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -366,7 +383,6 @@ const TrainedEmployees = () => {
   };
 
   const updateCertificateStatus = async (employeeId) => {
-
     if (user.role !== "admin") {
       Swal.fire({
         title: "Administrator Rights Required",
@@ -515,7 +531,10 @@ const TrainedEmployees = () => {
   };
   return (
     <>
-      <BreadCrumb title={"Trained Applicants"} activeTab={"Trained (Pending Deployment) Applications"} />
+      <BreadCrumb
+        title={"Trained Applicants"}
+        activeTab={"Trained (Pending Deployment) Applications"}
+      />
       <section className="content">
         <div className="row">
           <div className="col-md-12">
@@ -755,6 +774,7 @@ const TrainedEmployees = () => {
                         <th className="bb-2">AREAS OF SPECIALIZATIONS</th>
                         <th className="bb-2">DATE OF BIRTH</th>
                         <th className="bb-2">NATIONALITY</th>
+                        <th className="bb-2">REFERENCE TYPE</th>
                         <th className="bb-2">MARITAL STATUS</th>
                         <th className="bb-2">ADDRESS</th>
                         <th className="bb-2">PHONE NUMBER</th>
@@ -787,6 +807,20 @@ const TrainedEmployees = () => {
                           <EmployeeExpertise employee={employee} />
                           <td>{employee.date_of_birth}</td>
                           <td>{employee.nationality}</td>
+                          <td>
+                            {employee.ref_type ? (
+                              <span
+                                className="badge badge-primary"
+                                style={{
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                {employee.ref_type}
+                              </span>
+                            ) : (
+                              <span className="badge badge-danger">SELF</span>
+                            )}
+                          </td>
                           <td>{employee.marital_status}</td>
                           <td
                             style={{

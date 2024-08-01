@@ -53,6 +53,7 @@ const areaOfSpecialization = [
   "CIVIL ENGINEERING",
   "CUSTOMER SERVICE",
   "DATA ANALYSIS",
+  "DATA CAPTURING",
   "DATA SCIENCE",
   "ELECTRICAL ENGINEERING",
   "ELECTRONICS",
@@ -73,7 +74,9 @@ const areaOfSpecialization = [
   "MARINE BIOLOGY",
   "MATERIALS SCIENCE",
   "MECHANICAL ENGINEERING",
-  "MEDICAL RESEARCH",
+  "MECHANIC",
+  "ASSISTANT MECHANIC",
+  "MEDICAL RESEARCH",                             
   "MUSIC & PERFORMING ARTS",
   "OCEANOGRAPHY",
   "OPERATIONS MANAGEMENT",
@@ -146,7 +149,19 @@ const areaOfSpecialization = [
   "SORTER",
   "PACKER",
   "CROP SCIENCE",
-  "WELDER"
+  "WELDER",
+  "WELDING",
+  "CARPENTER",
+  "TIPPER TRUCK",
+  "PLANT ASSISTANT",
+  "PRODUCTION CLERK",
+  "CRIMINOLOGY & SOCIETY",
+  "HOME CARE",
+  "DOCUMENT FILING",
+  "BIOLOGICAL SCIENCE",
+  "COSMETOLOGY",
+  "CUSTOMER CARE",
+  "CATERER"
 ];
 
 const customStyles = {
@@ -187,7 +202,9 @@ const AreaOfExpertiseSelect = () => {
   const [selectHeight, setSelectHeight] = useState("56px");
 
   const handleChange = (selectedOptions) => {
-    const values = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    const values = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
     const formattedValues = values.join(", ");
     setFieldValue("area_of_expertise", formattedValues);
 
@@ -226,7 +243,9 @@ const AreaOfExpertiseSelect = () => {
               minHeight: "56px",
               height: selectHeight,
               borderRadius: "0.25rem",
-              boxShadow: state.isFocused ? "0 0 0 0.2rem rgba(0,123,255,.25)" : null,
+              boxShadow: state.isFocused
+                ? "0 0 0 0.2rem rgba(0,123,255,.25)"
+                : null,
               borderColor: state.isFocused ? "#80bdff" : provided.borderColor,
             }),
           }}

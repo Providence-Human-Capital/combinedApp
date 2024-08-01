@@ -176,9 +176,20 @@ const areaOfSpecialization = [
   "REFRIDGERATION",
   "AIR-CONDITIONING",
   "SORTER",
-  "PACKER", 
+  "PACKER",
   "CROP SCIENCE",
-  "WELDER"
+  "WELDER",
+  "WELDING",
+  "CARPENTER",
+  "TIPPER TRUCK",
+  "PLANT ASSISTANT",
+  "PRODUCTION CLERK",
+  "CRIMINOLOGY & SOCIETY",
+  "HOME CARE",
+  "DOCUMENT FILING",
+  "BIOLOGICAL SCIENCE",
+  "COSMETOLOGY",
+  "MACHINE OPERATOR"
 ];
 
 const PendingEmployees = () => {
@@ -761,6 +772,7 @@ const PendingEmployees = () => {
                         <th className="bb-2">DATE OF BIRTH</th>
                         <th className="bb-2">NATIONALITY</th>
                         <th className="bb-2">REFERENCE TYPE</th>
+                        <th className="bb-2">MARITAL STATUS</th>
                         <th className="bb-2">ADDRESS</th>
                         <th className="bb-2">PHONE NUMBER</th>
                         <th className="bb-2">EMAIL</th>
@@ -794,9 +806,14 @@ const PendingEmployees = () => {
                           <td>{employee.nationality}</td>
                           <td>
                             {employee.ref_type ? (
-                              <span  className="badge badge-primary" style={{
-                                textTransform: "uppercase",
-                              }}>{employee.ref_type}</span>
+                              <span
+                                className="badge badge-primary"
+                                style={{
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                {employee.ref_type}
+                              </span>
                             ) : (
                               <span className="badge badge-danger">SELF</span>
                             )}
