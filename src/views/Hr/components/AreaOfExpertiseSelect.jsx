@@ -76,7 +76,7 @@ const areaOfSpecialization = [
   "MECHANICAL ENGINEERING",
   "MECHANIC",
   "ASSISTANT MECHANIC",
-  "MEDICAL RESEARCH",                             
+  "MEDICAL RESEARCH",
   "MUSIC & PERFORMING ARTS",
   "OCEANOGRAPHY",
   "OPERATIONS MANAGEMENT",
@@ -161,7 +161,10 @@ const areaOfSpecialization = [
   "BIOLOGICAL SCIENCE",
   "COSMETOLOGY",
   "CUSTOMER CARE",
-  "CATERER"
+  "CATERER",
+  "MACHINE OPERATOR",
+  "PRODUCTION",
+  "RECEPTIONIST"
 ];
 
 const customStyles = {

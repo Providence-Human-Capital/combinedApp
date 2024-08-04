@@ -207,6 +207,23 @@ const ApplicantsDetailedPage = () => {
             </div>
 
             <div className="box">
+              <div className="box-header">
+                <h4
+                  className="box-title"
+                  style={{
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {employee.status === "New" ||
+                  employee.status === "Pending" ? (
+                    <span>Applicant</span>
+                  ) : (
+                    <span>Employee</span>
+                  )}{" "}
+                  Documentation
+                </h4>
+              </div>
               <div className="box-body">
                 <div className="row">
                   {employee.documents.length > 0 && (

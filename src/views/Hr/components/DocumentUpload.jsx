@@ -11,9 +11,12 @@ const fileTypes = [
   "National ID",
   "Educational Qualifications",
   "Medical Certificates",
-  "Affidavit",
   "Birth Certificate",
   "Driver's Licenses",
+  "Miscellaneous Documents",
+  "Police Clearance",
+  "Finger Prints",
+  "Affidavit",
 ];
 
 const FileUploadField = ({

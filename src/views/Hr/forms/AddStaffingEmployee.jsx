@@ -11,6 +11,7 @@ import AreaOfExpertiseSelect from "../components/AreaOfExpertiseSelect";
 import { useNavigate } from "react-router-dom";
 
 import { API } from "../../../../config";
+import DocumentUpload from "../components/DocumentUpload";
 
 const CustomDatePicker = ({ field, form, ...props }) => {
   const handleChange = (date) => {
@@ -37,6 +38,11 @@ const AddStaffingEmployee = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
   const targetRef = useRef();
+  const [fileUploads, setFileUploads] = useState([]);
+
+  const handleFilesChange = (uploads) => {
+    setFileUploads(uploads);
+  };
 
   const initialValues = {
     first_name: "",
@@ -145,6 +151,12 @@ const AddStaffingEmployee = () => {
         formData.append(key, values[key]);
       }
       formData.append("file", file);
+
+      // Include document uploads in the form data
+      fileUploads.forEach((upload, index) => {
+        formData.append(`documents[${index}][type]`, upload.type);
+        formData.append(`documents[${index}][file]`, upload.file);
+      });
 
       const response = await fetch(`${API}/api/employee`, {
         method: "POST",
@@ -631,7 +643,6 @@ const AddStaffingEmployee = () => {
                       </div>
                     </div>
 
-               
                     <div
                       className="card card-body"
                       style={{
@@ -947,6 +958,36 @@ const AddStaffingEmployee = () => {
                             className="text-danger"
                           />
                         </div>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: "2rem" }}>
+                      <h6 style={{ fontWeight: "bold", color: "#2C4894" }}>
+                        ADD THE DOCUMENTS THAT YOU HAVE
+                      </h6>
+                      <label
+                        style={{
+                          color: "#2C4894",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        {" "}
+                        <strong>NB:</strong> Accepted document types{" "}
+                        <strong
+                          style={{
+                            color: "#0E9645",
+                          }}
+                        >
+                          National ID, Educational Qualifications, Drivers
+                          License, Affidavit, Birth Certificates, Medical
+                          Certificate
+                        </strong>{" "}
+                        and they must all be <strong>PDF</strong> files
+                      </label>
+                    </div>
+                    <div className="space"></div>
+                    <div className="row">
+                      <div className="col-md-6 col-12 mb-4">
+                        <DocumentUpload onFilesChange={handleFilesChange} />
                       </div>
                     </div>
                     <div className="space"></div>

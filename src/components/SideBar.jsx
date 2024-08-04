@@ -179,7 +179,7 @@ const SideBar = () => {
                             fontSize: "20px",
                           }}
                         ></i>
-                        <span>SS (Applicants)</span>
+                        <span> Applicants </span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
@@ -190,7 +190,7 @@ const SideBar = () => {
                             fontSize: "20px",
                           }}
                         ></i>
-                        <span>Trained Applicants</span>
+                        <span>Verified Applicants</span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
@@ -224,6 +224,18 @@ const SideBar = () => {
                           }}
                         ></i>
                         <span>Terminated Employees</span>
+                      </NavLink>
+                    </li>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/phc/employees"}>
+                        <i
+                          className="ti-flag-alt-2"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>PHC Employees</span>
                       </NavLink>
                     </li>
 

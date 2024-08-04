@@ -963,7 +963,7 @@ const NewEmployeeDataForm = () => {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      WHICH COMPANY ARE YOU TRANSFERRING FROM
+                                      WHICH COMPANY ARE YOU TRANSFERRING TO
                                     </label>
                                     <ErrorMessage
                                       name="from_position"
@@ -1185,6 +1185,7 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                         </div>
+
                         <div style={{ marginTop: "2rem" }}>
                           <h6 style={{ fontWeight: "bold", color: "#2C4894" }}>
                             ADD THE DOCUMENTS THAT YOU HAVE
@@ -1210,12 +1211,15 @@ const NewEmployeeDataForm = () => {
                             and they must all be <strong>PDF</strong> files
                           </label>
                         </div>
+
                         <div className="space"></div>
                         <div className="row">
                           <div className="col-md-6 col-12 mb-4">
                             <DocumentUpload onFilesChange={handleFilesChange} />
                           </div>
                         </div>
+
+                        
                         <div className="space"></div>
                         <div>
                           {isLoading ? (

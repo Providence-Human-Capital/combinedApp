@@ -189,7 +189,11 @@ const areaOfSpecialization = [
   "DOCUMENT FILING",
   "BIOLOGICAL SCIENCE",
   "COSMETOLOGY",
-  "MACHINE OPERATOR"
+   "CUSTOMER CARE",
+  "CATERER",
+  "MACHINE OPERATOR",
+  "PRODUCTION",
+  "RECEPTIONIST"
 ];
 
 const PendingEmployees = () => {
