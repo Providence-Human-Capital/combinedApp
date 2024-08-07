@@ -154,6 +154,14 @@ export const fetchTrainedEmployees = async () => {
   return response.data.data;
 };
 
+export const fetchDeployedEmployees = async () => {
+  const response = await axios.get(`${API}/api/deployed-employees`);
+  console.log("Active Employees", response.data);
+  return response.data.data;
+};
+
+
+
 export const fetchTerminatedEmployees = async () => {
   const response = await axios.get(`${API}/api/get/terminated-employees`);
   console.log("Terminated employees", response.data);

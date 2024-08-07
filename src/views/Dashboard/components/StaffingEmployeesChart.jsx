@@ -9,7 +9,7 @@ const StaffingEmployeesChart = () => {
   const { data, error, isLoading } = useStaffingEmployeesCount();
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (error) {
@@ -17,7 +17,7 @@ const StaffingEmployeesChart = () => {
   }
 
   const companyNames = data.map((company) => company.name);
-  const employeeCounts = data.map((company) => company.employees_count);
+  const employeeCounts = data.map((company) => company.staffing_employees_count);
 
   const chartOptions = {
     chart: {
@@ -59,6 +59,7 @@ const StaffingEmployeesChart = () => {
   return (
     <>
       <div className="box">
+        {/* {JSON.stringify(data)} */}
         <div className="box-header no-border">
           <div className="row">
             <h4

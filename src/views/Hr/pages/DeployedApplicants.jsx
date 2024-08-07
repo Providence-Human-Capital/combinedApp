@@ -1,16 +1,38 @@
+import Swal from "sweetalert2";
 import React, { useState } from "react";
 import BreadCrumb from "../../../components/BreadCrumb";
+import ReactPaginate from "react-paginate";
+import * as XLSX from "xlsx";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
-import axios from "axios";
-import Error from "../../../components/Error/Error";
-import { API } from "../../../../config";
-import Loading from "../../../components/Loading.jsx/Loading";
-import * as XLSX from "xlsx";
-import ReactPaginate from "react-paginate";
-import useOccupations from "../hooks/useOccupations";
+import { useSelector } from "react-redux";
+import { fetchDeployedEmployees } from "../../../services/api";
 import useStaffingCompanies from "../hooks/useStaffingCompanies";
-import Swal from "sweetalert2";
+import { API } from "../../../../config";
+import EmployeeExpertise from "../components/EmployeeExpertise";
+import Loading from "../../../components/Loading.jsx/Loading";
+import axios from "axios";
+import useOccupations from "../hooks/useOccupations";
+
+const exportToExcel = (data, filename) => {
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // Define column widths
+  const columnWidths = [];
+  Object.keys(data[0]).forEach((key) => {
+    columnWidths.push({ wch: 20 }); // You can adjust the width as needed
+  });
+  worksheet["!cols"] = columnWidths;
+
+  const workbook = XLSX.utils.book_new();
+  const headerStyle = {
+    font: { bold: true },
+    fill: { fgColor: { rgb: "FFFF00" } }, // Yellow background color
+  };
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  XLSX.writeFile(workbook, filename);
+};
 
 const areaOfSpecialization = [
   "GENERAL WORK",
@@ -108,66 +130,71 @@ const areaOfSpecialization = [
   "WEB DEVELOPMENT",
   "WRITING & EDITING",
   "ZOOLOGY",
+  "SHOP ASSISTANT",
+  "BAKING",
+  "CATERING",
+  "TILL OPERATOR",
+  "ACCOUNTING",
+  "BANKING",
+  "BOOKKEEPER",
+  "CASHIER",
+  "COMPUTER OPERATOR",
+  "AEROSPACE ENGINEERING",
+  "ARTIFICIAL INTELLIGENCE",
+  "ASTROPHYSICS",
+  "BIOINFORMATICS",
+  "BLOCKCHAIN TECHNOLOGY",
+  "CHEF",
+  "COMPUTATIONAL LINGUISTICS",
+  "CYTOTECHNOLOGY",
+  "DENTISTRY",
+  "E-COMMERCE",
+  "ECONOMICS",
+  "FORENSIC SCIENCE",
+  "GENETICS",
+  "HISTORICAL RESEARCH",
+  "MARINE ENGINEERING",
+  "MICROBIOLOGY",
+  "NANOTECHNOLOGY",
+  "NEUROSCIENCE",
+  "PHOTONICS",
+  "ROBOTICS",
+  "SUSTAINABILITY MANAGEMENT",
+  "TRUCK DRIVER",
+  "WAITER",
+  "MERCHANDISER",
+  "ACCOUNTANT",
+  "LABELLING MACHINE OPERATOR",
+  "VERTERINARY",
+  "CLEANER",
+  "SHEQ",
+  "LIFEGUARD",
+  "SORTER",
+  "FITNESS TRAINER",
+  "FORKLIFT OPERATOR",
+  "PATTY BOY",
+  "REFRIDGERATION",
+  "AIR-CONDITIONING",
+  "SORTER",
+  "PACKER",
+  "CROP SCIENCE",
+  "WELDER",
+  "WELDING",
+  "CARPENTER",
+  "TIPPER TRUCK",
+  "PLANT ASSISTANT",
+  "PRODUCTION CLERK",
+  "CRIMINOLOGY & SOCIETY",
+  "HOME CARE",
+  "DOCUMENT FILING",
+  "BIOLOGICAL SCIENCE",
+  "COSMETOLOGY",
+  "MACHINE OPERATOR",
 ];
 
-const exportToExcel = (data, filename) => {
-  const worksheet = XLSX.utils.json_to_sheet(data);
-
-  // Define column widths
-  const columnWidths = [];
-  Object.keys(data[0]).forEach((key) => {
-    columnWidths.push({ wch: 20 }); // You can adjust the width as needed
-  });
-  worksheet["!cols"] = columnWidths;
-
-  const workbook = XLSX.utils.book_new();
-  const headerStyle = {
-    font: { bold: true },
-    fill: { fgColor: { rgb: "FFFF00" } }, // Yellow background color
-  };
-
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  XLSX.writeFile(workbook, filename);
-};
-// deployed-records
-
-const fetchDeployedEmployees = async () => {
-  const response = await axios.get(`${API}/api/deployed/employees/staffing`);
-  console.log("Deployed Employees", response.data.data);
-  return response.data.data;
-};
-
-const StaffingSolutionsDeployed = () => {
+const DeployedApplicants = () => {
+  const user = useSelector((state) => state.auth.user);
   const [isFetching, setIsFetching] = useState(false);
-  const fetchFilterDeployeedEmployees = async (filters) => {
-    try {
-      setIsFetching(true);
-      const response = await axios.post(
-        `${API}/api/deployed/records/staffing`,
-        filters
-      );
-      if (response.status === 200) {
-        setIsFetching(false);
-        return response.data.data;
-      }
-      // return response.data.data;
-    } catch (error) {
-      // throw new Error("Failed to fetch filtered employees");
-      console.log(error);
-    }
-  };
-
-  const {
-    data: occupations,
-    error: occupationsError,
-    isLoading: occupationsLoading,
-  } = useOccupations();
-
-  const {
-    data: companies,
-    error: companiesError,
-    isLoading: companiesLoading,
-  } = useStaffingCompanies();
 
   const [filters, setFilters] = useState({
     gender: "",
@@ -181,19 +208,15 @@ const StaffingSolutionsDeployed = () => {
     max_age: "",
   });
 
-  const styles = {
-    containerStyles: {
-      minHeight: "60vh",
-      overflow: "auto",
-    },
-  };
+  const [currentPage, setCurrentPage] = useState(0);
+  const employeesPerPage = 10;
 
   const {
-    data: deployedEmployees,
-    error: deployeedEmployeesError,
+    data: deployedEmployee,
+    error: deployedEmployeesError,
     isLoading: deployedEmployeesLoading,
-    refetch: refetchDeployedData,
-  } = useQuery("deployedEmployees", fetchDeployedEmployees);
+    refetch: refetchNewData,
+  } = useQuery("deployedEmployee", fetchDeployedEmployees);
 
   const {
     data: filteredEmployees,
@@ -201,44 +224,131 @@ const StaffingSolutionsDeployed = () => {
     isLoading: filteredLoading,
     refetch: refetchFilteredData,
   } = useQuery(
-    ["filteredDeployedEmployees", filters],
-    () => fetchFilterDeployeedEmployees(filters),
+    ["filteredEmployees", filters],
+    () => fetchFilteredEmployees(filters),
     {
       enabled: false,
     }
   );
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const employeesPerPage = 10;
 
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
+  const {
+    data: occupations,
+    error: occupationsError,
+    isLoading: occupationsLoading,
+  } = useOccupations();
+
+
+
+  const {
+    data: companies,
+    error: companiesError,
+    isLoading: companiesLoading,
+  } = useStaffingCompanies();
+
+  const fetchFilteredEmployees = async (filters) => {
+    try {
+      setIsFetching(true);
+      const response = await axios.post(`${API}/api/deployed-records`, filters);
+      if (response.status === 200) {
+        setIsFetching(false);
+        return response.data.data;
+      }
+    } catch (error) {
+      setIsFetching(false);
+      console.log(error);
+    }
   };
 
-  const offset = currentPage * employeesPerPage;
-  // const currentEmployees = deployedEmployees
-  //   ? deployedEmployees.slice(offset, offset + employeesPerPage)
-  //   : [];
-
-  const handleFilterChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Compute age_range and update filters if min_age and max_age are not null
     if (filters.min_age && filters.max_age) {
       const updatedFilters = {
         ...filters,
-        age_range: filters.min_age + "-" + filters.max_age,
+        age_range: `${filters.min_age}-${filters.max_age}`,
       };
       setFilters(updatedFilters);
     }
     refetchFilteredData();
   };
 
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const currentEmployees = filteredEmployees
+    ? filteredEmployees.slice(
+        currentPage * employeesPerPage,
+        (currentPage + 1) * employeesPerPage
+      )
+    : deployedEmployee
+    ? deployedEmployee.slice(
+        currentPage * employeesPerPage,
+        (currentPage + 1) * employeesPerPage
+      )
+    : [];
+
+  if (deployedEmployeesLoading) return <Loading />;
+  if (deployedEmployeesError)
+    return <Error message={deployedEmployeesError.message} />;
+  if (filteredError) return <Error message={filteredError.message} />;
+
+  const flattenDeployedEmployeesForReport = (deployeedEmp) => {
+    return deployeedEmp.map((emp) => ({
+      "FIRST NAME": emp.first_name,
+      "LAST NAME": emp.last_name,
+      "DATE OF BIRTH": emp.date_of_birth,
+      GENDER: emp.gender,
+      "NATIONAL ID": emp.national_id,
+      NATIONALITY: emp.nationality,
+      "MARITAL STATUS": emp.marital_status,
+      ADDRESS: emp.address,
+      "PHONE NUMBER": emp.phone_number,
+      "AREAS OF EXPERTISES": emp.area_of_expertise,
+      "EDUCATION LEVEL": emp.education_level,
+      EMAIL: emp.email,
+    }));
+  };
+
+  const exportData = flattenDeployedEmployeesForReport(filteredEmployees || []);
+  const handleExportToExcel = () => {
+    exportToExcel(exportData, "JobApplications.xlsx");
+  };
+
+  const exportData2 = flattenDeployedEmployeesForReport(deployedEmployee);
+  const handleExportAllToExcel = () => {
+    exportToExcel(exportData2, "ALLJobApplications.xlsx");
+  };
+
+  const handleReset = () => {
+    setFilters({
+      gender: "",
+      marital_status: "",
+      education_level: "",
+      area_of_expertise: "",
+      name: "",
+      min_age: "",
+      max_age: "",
+    });
+    setCurrentPage(0);
+    refetchNewData();
+  };
+
   const handleDelete = async (id) => {
+    if (user.role !== "admin") {
+      Swal.fire({
+        title: "Administrator Rights Required",
+        text: "You are not allowed to perform this operation",
+        icon: "info",
+      });
+      return;
+    }
+
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this item!",
@@ -260,31 +370,14 @@ const StaffingSolutionsDeployed = () => {
           },
         });
 
-        if (response.ok) {
+        if (response.status === 200) {
           console.log(response);
           Swal.fire({
             title: "Deleted!",
             text: "Your item has been deleted.",
             icon: "success",
           });
-
-          if (
-            filters.gender !== "" ||
-            filters.marital_status !== "" ||
-            filters.education_level !== "" ||
-            filters.area_of_expertise !== "" ||
-            filters.name !== "" ||
-            filters.min_age !== "" ||
-            filters.max_age !== "" ||
-            filters.company_id !== "" ||
-            filters.occupation !== ""
-          ) {
-            console.log("Code Executing................");
-            setCurrentPage(0);
-            refetchFilteredData();
-          } else {
-            refetchDeployedData();
-          }
+          refetchNewData();
         } else {
           Swal.fire({
             title: "Error!",
@@ -293,7 +386,6 @@ const StaffingSolutionsDeployed = () => {
           });
         }
       } catch (error) {
-        console.log("This is the error", error);
         Swal.fire({
           title: "Error!",
           text: "Failed to delete the item.",
@@ -304,6 +396,15 @@ const StaffingSolutionsDeployed = () => {
   };
 
   const updateCertificateStatus = async (employeeId) => {
+    if (user.role !== "admin") {
+      Swal.fire({
+        title: "Administrator Rights Required",
+        text: "You are not allowed to perform this operation",
+        icon: "info",
+      });
+      return;
+    }
+
     if (companiesLoading) {
       Swal.fire({
         title: "Loading...",
@@ -405,7 +506,6 @@ const StaffingSolutionsDeployed = () => {
             icon: "success",
           });
 
-          setCurrentPage(0);
           if (
             filters.gender !== "" ||
             filters.marital_status !== "" ||
@@ -419,7 +519,7 @@ const StaffingSolutionsDeployed = () => {
           ) {
             refetchFilteredData();
           } else {
-            refetchDeployedData();
+            refetchNewData();
           }
         } catch (error) {
           Swal.fire({
@@ -432,91 +532,22 @@ const StaffingSolutionsDeployed = () => {
     });
   };
 
-  const currentEmployees = filteredEmployees
-    ? filteredEmployees.slice(
-        currentPage * employeesPerPage,
-        (currentPage + 1) * employeesPerPage
-      )
-    : deployedEmployees
-    ? deployedEmployees.slice(
-        currentPage * employeesPerPage,
-        (currentPage + 1) * employeesPerPage
-      )
-    : [];
-
-  if (deployedEmployeesLoading) return <Loading />;
-  if (deployeedEmployeesError)
-    return <Error message={deployeedEmployeesError.message} />;
-  if (filteredError) return <Error message={filteredError.message} />;
-
-  if (deployedEmployeesLoading)
-    return (
-      <>
-        <div className="content">
-          <div className="row">
-            <Loading />
-          </div>
-        </div>
-      </>
-    );
-  // if (error) return <Error message={error.message} />;
-
-  const flattenDeployedEmployeesForReport = (deployeedEmp) => {
-    return deployeedEmp.map((emp) => {
-      const flattenedData = {
-        "EMPLOYEE NUMBER": emp.employee_code,
-        "FIRST NAME": emp.first_name,
-        "LAST NAME": emp.last_name,
-        "DATE OF BIRTH": emp.date_of_birth,
-        GENDER: emp.gender,
-        "NATIONAL ID": emp.national_id,
-        NATIONALITY: emp.nationality,
-        "MARITAL STATUS": emp.marital_status,
-        OCCUPATION: emp.occupation,
-        COMPANY: emp.company?.name,
-        ADDRESS: emp.address,
-        "PHONE NUMBER": emp.phone_number,
-        "AREA OF EXPERTISE": emp.area_of_expertise,
-        "EDUCATION LEVEL": emp.education_level,
-        EMAIL: emp.email,
-      };
-
-      return flattenedData;
-    });
+  const handleCancel = () => {
+    Swal.close();
   };
 
-  const exportData = flattenDeployedEmployeesForReport(filteredEmployees || []);
-  const handleExportToExcel = () => {
-    exportToExcel(exportData, "FilteredDeployedEmployees.xlsx");
-  };
-
-  const exportData2 = flattenDeployedEmployeesForReport(deployedEmployees);
-  const handleExportAllToExcel = () => {
-    exportToExcel(exportData2, "AllDeployedEmployees.xlsx");
-  };
-
-  const handleReset = () => {
-    setFilters({
-      gender: "",
-      marital_status: "",
-      education_level: "",
-      area_of_expertise: "",
-      name: "",
-      min_age: "",
-      max_age: "",
-      company_id: "",
-    });
-
-    // Reset the current page to the first page
-    setCurrentPage(0);
-    refetchDeployedData();
+  const styles = {
+    containerStyles: {
+      minHeight: "60vh",
+      overflow: "auto",
+    },
   };
 
   return (
     <>
       <BreadCrumb
-        title={"Deployed Employees"}
-        activeTab={"Staffing Solutions"}
+        title={"Applicants Employees"}
+        activeTab={"Employee Deployments"}
       />
       <section className="content">
         <div className="row">
@@ -531,7 +562,8 @@ const StaffingSolutionsDeployed = () => {
                 >
                   FILTER OUT EMPLOYEES INFORMATION
                 </h4>
-                <form onSubmit={handleSubmit}>
+
+                 <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-floating">
@@ -540,7 +572,7 @@ const StaffingSolutionsDeployed = () => {
                           name="name"
                           className="form-control"
                           value={filters.name}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         />
                         <label htmlFor="name">
                           SEARCH BY FIRST NAME / LAST NAME
@@ -554,14 +586,14 @@ const StaffingSolutionsDeployed = () => {
                           name="company_id"
                           className="form-control"
                           value={filters.company_id}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         /> */}
                         <select
                           className="form-select"
                           id="company_id"
                           name="company_id"
                           value={filters.company_id}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">Select Company</option>
                           {companiesLoading ? (
@@ -590,7 +622,7 @@ const StaffingSolutionsDeployed = () => {
                           name="gender"
                           className="form-select"
                           value={filters.gender}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">Select Gender</option>
                           <option value="MALE">MALE</option>
@@ -605,7 +637,7 @@ const StaffingSolutionsDeployed = () => {
                           name="marital_status"
                           className="form-select"
                           value={filters.marital_status}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">SELECT MARITAL STATUS</option>
                           <option value="SINGLE">SINGLE</option>
@@ -623,13 +655,13 @@ const StaffingSolutionsDeployed = () => {
                           name="occupation"
                           className="form-control"
                           value={filters.occupation}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         /> */}
                         <select
                           name="occupation"
                           className="form-select"
                           value={filters.occupation}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">Select Occupation</option>
                           {occupationsLoading ? (
@@ -656,7 +688,7 @@ const StaffingSolutionsDeployed = () => {
                           name="education_level"
                           className="form-select"
                           value={filters.education_level}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">EDUCATION LEVEL</option>
                           <option value="Grade 7">Grade 7</option>
@@ -701,7 +733,7 @@ const StaffingSolutionsDeployed = () => {
                           name="area_of_expertise"
                           className="form-select"
                           value={filters.area_of_expertise}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         >
                           <option value="">SELECT AREA OF EXPERTISE</option>
                           {areaOfSpecialization.map((aos) => (
@@ -726,7 +758,7 @@ const StaffingSolutionsDeployed = () => {
                           id="minAge"
                           name="min_age"
                           value={filters.min_age}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         />
                         <label htmlFor="minAge">MINIMUM AGE:</label>
                       </div>
@@ -739,7 +771,7 @@ const StaffingSolutionsDeployed = () => {
                           id="maxAge"
                           name="max_age"
                           value={filters.max_age}
-                          onChange={handleFilterChange}
+                          onChange={handleChange}
                         />
                         <label htmlFor="maxAge">MAXIMUM AGE:</label>
                       </div>
@@ -772,6 +804,7 @@ const StaffingSolutionsDeployed = () => {
               </div>
             </div>
           </div>
+
           <div className="col-12">
             <div className="box">
               <div className="box-body">
@@ -780,7 +813,7 @@ const StaffingSolutionsDeployed = () => {
                     <Link to={`/add/employee`}>
                       <button className="btn btn-secondary">
                         <i class="fa fa-plus" aria-hidden="true"></i> ADD
-                        EMPLOYEE
+                        APPLICANT
                       </button>
                     </Link>
                     <Link to={`/employees/upload`}>
@@ -820,141 +853,138 @@ const StaffingSolutionsDeployed = () => {
                         <th className="bb-2">FIRST NAME</th>
                         <th className="bb-2">LAST NAME</th>
                         <th className="bb-2">GENDER</th>
-                        <th className="bb-2">NATIONAL ID</th>
-                        <th className="bb-2">COMPANY</th>
+                        <th className="bb-2">AREAS OF SPECIALIZATIONS</th>
+                        <th className="bb-2">DATE OF BIRTH</th>
                         <th className="bb-2">NATIONALITY</th>
+                        <th className="bb-2">REFERENCE TYPE</th>
                         <th className="bb-2">MARITAL STATUS</th>
-                        <th className="bb-2">ADDRESS</th>
+                        <th className="bb-2">COMPANY</th>
                         <th className="bb-2">PHONE NUMBER</th>
-                        <th className="bb-2">OCCUPATION</th>
+                        <th className="bb-2">EMAIL</th>
                         <th className="bb-2">STATUS</th>
                         <th className="bb-2"></th>
                         <th className="bb-2"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {currentEmployees &&
-                        currentEmployees.map((employee) => (
-                          <tr key={employee.id}>
-                            <td
-                              style={{
-                                maxWidth: "150px",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                cursor: "pointer",
-                              }}
+                      {currentEmployees.map((employee) => (
+                        <tr key={employee.id}>
+                          <td style={{ cursor: "pointer" }}>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              style={{ color: "black", fontWeight: "bold" }}
                             >
-                              <Link
-                                to={`/applicant/detail/${employee.id}`}
-                                style={{ color: "black", fontWeight: "bold" }}
-                              >
-                                {employee.first_name}
-                              </Link>
-                            </td>
-                            <td style={{ cursor: "pointer" }}>
-                              <Link
-                                to={`/applicant/detail/${employee.id}`}
-                                style={{ color: "black", fontWeight: "bold" }}
-                              >
-                                {employee.last_name}
-                              </Link>
-                            </td>
-                            <td>{employee.gender}</td>
-                            <td>{employee.national_id}</td>
-                            <td>
-                              <span className="badge badge-primary">
-                                {employee.company?.name}
-                              </span>
-                            </td>
-                            <td>{employee.nationality}</td>
-                            <td>{employee.marital_status}</td>
-                            <td
-                              style={{
-                                maxWidth: "120px",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
+                              {employee.first_name}
+                            </Link>
+                          </td>
+                          <td style={{ cursor: "pointer" }}>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              style={{ color: "black", fontWeight: "bold" }}
                             >
-                              {employee.address}
-                            </td>
-                            <td>{employee.phone_number}</td>
-                            <td
-                              style={{
-                                maxWidth: "150px",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
-                            >
+                              {employee.last_name}
+                            </Link>
+                          </td>
+                          <td>{employee.gender}</td>
+                          <EmployeeExpertise employee={employee} />
+                          <td>{employee.date_of_birth}</td>
+                          <td>{employee.nationality}</td>
+                          <td>
+                            {employee.ref_type ? (
                               <span
-                                className="badge badge-dark"
-                                style={{ cursor: "pointer" }}
+                                className="badge badge-primary"
+                                style={{
+                                  textTransform: "uppercase",
+                                }}
                               >
-                                {employee.occupation}
+                                {employee.ref_type}
                               </span>
-                            </td>
-                            <td>
-                              <span
-                                className="badge badge-success"
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                  updateCertificateStatus(employee.id)
-                                }
-                              >
-                                {employee.status}
-                              </span>
-                            </td>
-                            <td>
-                              <Link
-                                to={`/applicant/detail/${employee.id}`}
-                                className="waves-effect waves-light btn btn-primary-light btn-circle"
-                              >
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                              </Link>
-                              <Link
-                                to={`/employee/update/${employee.id}`}
-                                className="waves-effect waves-light btn btn-primary-light btn-circle mx-5"
-                              >
-                                <i
-                                  class="fa fa-pencil-square-o"
-                                  aria-hidden="true"
-                                ></i>
-                              </Link>
-                              <button
-                                className="waves-effect waves-light btn btn-danger-light btn-circle"
-                                onClick={() => handleDelete(employee.id)}
-                              >
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                              </button>
-                            </td>
-                            <td>
-                              <button className="waves-effect waves-light btn btn-primary-light btn-circle mx-5">
-                                <i className="ti-printer"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
+                            ) : (
+                              <span className="badge badge-danger">SELF</span>
+                            )}
+                          </td>
+                          <td>{employee.marital_status}</td>
+                          <td>
+                            <span
+                              className="badge badge-info"
+                              style={{
+                                textTransform: "uppercase",
+                                fontWeight: "bold"
+                              }}
+                            >
+                              {employee.company?.name}
+                            </span>
+                          </td>
+                          <td>{employee.phone_number}</td>
+                          <td
+                            style={{
+                              maxWidth: "150px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {employee.email}
+                          </td>
+                          <td>
+                            <span
+                              className="badge badge-warning"
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                updateCertificateStatus(employee.id)
+                              }
+                            >
+                              {employee.status}
+                            </span>
+                          </td>
+                          <td>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              className="waves-effect waves-light btn btn-primary-light btn-circle"
+                            >
+                              <i class="fa fa-eye" aria-hidden="true"></i>
+                            </Link>
+                            <Link
+                              to={`/employee/update/${employee.id}`}
+                              className="waves-effect waves-light btn btn-primary-light btn-circle mx-5"
+                            >
+                              <i
+                                class="fa fa-pencil-square-o"
+                                aria-hidden="true"
+                              ></i>
+                            </Link>
+                            <button
+                              className="waves-effect waves-light btn btn-danger-light btn-circle"
+                              onClick={() => handleDelete(employee.id)}
+                            >
+                              <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <button className="waves-effect waves-light btn btn-primary-light btn-circle mx-5">
+                              <i className="ti-printer"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
                 <ReactPaginate
-                  previousLabel={"Previous"}
-                  nextLabel={"Next"}
+                  previousLabel={"previous"}
+                  nextLabel={"next"}
                   breakLabel={"..."}
-                  // pageCount={Math.ceil(
-                  //   deployedEmployees.length / employeesPerPage
-                  // )}
+                  breakClassName={"break-me"}
                   pageCount={
                     filteredEmployees
                       ? Math.ceil(filteredEmployees.length / employeesPerPage)
-                      : Math.ceil(deployedEmployees.length / employeesPerPage)
+                      : Math.ceil(deployedEmployee.length / employeesPerPage)
                   }
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}
                   containerClassName={"pagination"}
+                  subContainerClassName={"pages pagination"}
                   activeClassName={"active"}
                 />
               </div>
@@ -966,4 +996,4 @@ const StaffingSolutionsDeployed = () => {
   );
 };
 
-export default StaffingSolutionsDeployed;
+export default DeployedApplicants;

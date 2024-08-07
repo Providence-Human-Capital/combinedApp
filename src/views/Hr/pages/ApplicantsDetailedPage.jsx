@@ -5,9 +5,16 @@ import useEmployee from "../hooks/useEmployee";
 import Loading from "../../../components/Loading.jsx/Loading";
 import UploadEmployeeCV from "../components/UploadEmployeeCv";
 import { API } from "../../../../config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+
+import "./css/ImageContainer.css";
 
 import styles from "./employee-css/styles.module.css";
 import Qualifications from "../components/Qualifications";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export const formatDate = (dateString, options) => {
   const date = new Date(dateString);
@@ -30,6 +37,17 @@ const ApplicantsDetailedPage = () => {
   const { applicantId } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
   const { data: employee, error, isLoading } = useEmployee(applicantId);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const companies = useSelector((state) => state.company.companies) || [];
+
+  
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(URL.createObjectURL(file));
+    alert("Image Chnaged");
+  };
 
   useEffect(() => {
     setEmployeeData(employee);
@@ -51,10 +69,10 @@ const ApplicantsDetailedPage = () => {
     refetchEmployee();
   };
 
-  const fetchEmployeeData = async (employeeId) => {
+  const fetchEmployeeData = async (applicantId) => {
     try {
       // Perform API call or any other logic to fetch updated employee data
-      const response = await fetch(`${API}/api/employee/${employeeId}`);
+      const response = await fetch(`${API}/api/employee/${applicantId}`);
       const data = await response.json();
       return data.data;
     } catch (error) {
@@ -77,6 +95,102 @@ const ApplicantsDetailedPage = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  const handleDeployToWork = () => {
+    const companyOptions = companies
+      .map(
+        (company) => `<option value="${company.id}">${company.name}</option>`
+      )
+      .join("");
+
+    Swal.fire({
+      title: `UPDATE THE EMPLOYMENT STATUS `,
+      width: "700px",
+      html: `
+        <div class="form-floating">
+          <select id="status-select" class="form-select">
+            <option value="New">NEW</option>
+            <option value="Pending">PENDING DEPLOYMENT</option>
+            <option value="Attachment">ON ATTACHMENT</option>
+            <option value="Active">DEPLOY</option>
+            <option value="Terminated">TERMINATED</option>
+          </select>
+          <label for="status-select">STATUS</label>
+        </div>
+        <div id="company-select-container" class="form-floating sep" style="display: none;">
+          <select id="company-select" class="form-select">
+            ${companyOptions}
+          </select>
+          <label for="company-select">COMPANY SELECT</label>
+        </div>
+        <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "CHANGE STATUS",
+      cancelButtonText: "CANCEL OPERATION",
+      focusConfirm: false,
+      didOpen: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const companySelectContainer = document.getElementById(
+          "company-select-container"
+        );
+
+        statusSelectElement.addEventListener("change", () => {
+          if (statusSelectElement.value === "Active") {
+            companySelectContainer.style.display = "block";
+          } else {
+            companySelectContainer.style.display = "none";
+          }
+        });
+      },
+      preConfirm: () => {
+        const statusSelectElement = document.getElementById("status-select");
+        const selectedStatus = statusSelectElement.value;
+
+        const companySelectElement = document.getElementById("company-select");
+        const selectedCompany = companySelectElement
+          ? companySelectElement.value
+          : null;
+
+        return { selectedStatus, selectedCompany };
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { selectedStatus, selectedCompany } = result.value;
+
+        try {
+          await axios.post(
+            `${API}/api/employee/change/status/${applicantId}`,
+            {
+              status: selectedStatus,
+              company_id: selectedCompany,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          Swal.fire({
+            title: "Status Updated",
+            text: "The status has been updated successfully.",
+            icon: "success",
+          });
+
+          refetchEmployee();
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to update the status. Please try again later.",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+
   return (
     <>
       <BreadCrumb
@@ -86,36 +200,91 @@ const ApplicantsDetailedPage = () => {
       <section className="content">
         <div className="row">
           <div className="col-xl-8 col-12">
-            <Link to={`/employee/update/${employee.id}`}>
-              <button
-                className="btn btn-secondary"
-                style={{
-                  marginRight: "10px",
-                }}
-              >
-                {" "}
-                <i
-                  className="ti-pencil-alt2"
-                  style={{
-                    marginRight: "10px",
-                  }}
-                ></i>{" "}
-                Edit Employee
-              </button>
-            </Link>
+            <div className="d-md-flex align-items-center justify-content-between mb-20">
+              <div>
+                <Link to={`/employee/update/${employee.id}`}>
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      marginRight: "10px",
+                    }}
+                  >
+                    {" "}
+                    <i
+                      className="ti-pencil-alt2"
+                      style={{
+                        marginRight: "10px",
+                      }}
+                    ></i>{" "}
+                    Edit Employee
+                  </button>
+                </Link>
 
-            {employee.file_path && (
-              <>
-                <a
-                  className="btn btn-primary"
-                  href={`${API}/api/storage/${employee.file_path}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View and Download CV PDF
-                </a>
-              </>
-            )}
+                {employee.file_path && (
+                  <>
+                    <a
+                      className="btn btn-primary"
+                      href={`${API}/api/storage/${employee.file_path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View and Download CV PDF
+                    </a>
+                  </>
+                )}
+              </div>
+
+              <div className="d-flex">
+                <Link to={`/employee/info/${employee.id}`}>
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      marginRight: "10px",
+                    }}
+                  >
+                    <i
+                      className="ti-write"
+                      style={{
+                        marginRight: "10px",
+                      }}
+                    ></i>{" "}
+                    UPDATE INFORMATION
+                  </button>
+                </Link>
+                {employee.status !== "Active" && (
+                  <div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleDeployToWork()}
+                    >
+                      <i
+                        className="ti-envelope"
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      ></i>{" "}
+                      DEPLOY TO WORK
+                    </button>
+                  </div>
+                )}
+                {employee.status === "Active" && (
+                  <div>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDeployToWork()}
+                    >
+                      <i
+                        className="ti-envelope"
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      ></i>{" "}
+                      TERMINATE EMPLOYEE
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
 
             <div className="box bg-bubbles-white mt-4">
               <div
@@ -128,8 +297,14 @@ const ApplicantsDetailedPage = () => {
               </div>
               <div className="box-body wed-up position-relative">
                 <div className="d-md-flex align-items-center">
-                  <div className="image-container">
-                    <img
+                  <div>
+                    <div
+                      className="image-container"
+                      style={{
+                        margin: "2rem",
+                      }}
+                    >
+                      {/* <img
                       src="/assets/images/user.jpg"
                       className="bg-success-light rounded50 square-image"
                       alt="https://providence-human-capital.github.io/images/6308.jpg"
@@ -137,6 +312,37 @@ const ApplicantsDetailedPage = () => {
                         width: "200px",
                         borderRadius: "50%",
                       }}
+                    /> */}
+                      <img
+                        src={selectedImage || "/assets/images/user.jpg"}
+                        // src={selectedImage || "/assets/images/avatar/2.jpg"}
+                        className="bg-success-light rounded50 square-image"
+                        alt="https://providence-human-capital.github.io/images/6308.jpg"
+                        style={{
+                          width: "200px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                      <label
+                        htmlFor="image-upload"
+                        className="upload-button"
+                        style={{
+                          width: "200px",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faUpload}
+                          className="upload-icon"
+                        />
+                      </label>
+                    </div>
+                    <input
+                      type="file"
+                      id="image-upload"
+                      className="image-upload-input hide-input"
+                      accept="image/*"
+                      onChange={handleImageUpload}
                     />
                     <div className="text-center my-10">
                       <p className="mb-0">EMPLOYEMENT STATUS</p>
@@ -145,6 +351,7 @@ const ApplicantsDetailedPage = () => {
                       </h4>
                     </div>
                   </div>
+
                   <div className="mt-40">
                     <h4 className="fw-600 mb-5">
                       {employee.first_name} {employee.last_name}
@@ -206,70 +413,72 @@ const ApplicantsDetailedPage = () => {
               </div>
             </div>
 
-            <div className="box">
-              <div className="box-header">
-                <h4
-                  className="box-title"
-                  style={{
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {employee.status === "New" ||
-                  employee.status === "Pending" ? (
-                    <span>Applicant</span>
-                  ) : (
-                    <span>Employee</span>
-                  )}{" "}
-                  Documentation
-                </h4>
-              </div>
-              <div className="box-body">
-                <div className="row">
-                  {employee.documents.length > 0 && (
-                    <>
-                      {employee.documents.map((doc) => (
-                        <>
-                          <div class="col-md-4">
-                            <div
-                              class="card"
-                              style={{
-                                backgroundColor: "#96FABC",
-                              }}
-                            >
-                              <div class="card-body">
-                                <h5
-                                  class="card-title"
-                                  style={{
-                                    textTransform: "uppercase",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {doc?.type}
-                                </h5>
-                                <a
-                                  href={`${API}/api/storage/${doc?.file_path}`}
-                                  class="btn btn-primary"
-                                  target="_blank"
-                                >
-                                  <i
-                                    className="ti-eye"
+            {employee.documents && (
+              <div className="box">
+                <div className="box-header no-border">
+                  <h4
+                    className="box-title"
+                    style={{
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {employee.status === "New" ||
+                    employee.status === "Pending" ? (
+                      <span>Applicant</span>
+                    ) : (
+                      <span>Employee</span>
+                    )}{" "}
+                    Documentation
+                  </h4>
+                </div>
+                <div className="box-body">
+                  <div className="row">
+                    {employee.documents.length > 0 && (
+                      <>
+                        {employee.documents.map((doc) => (
+                          <>
+                            <div class="col-md-4">
+                              <div
+                                class="card"
+                                style={{
+                                  backgroundColor: "#96FABC",
+                                }}
+                              >
+                                <div class="card-body">
+                                  <h5
+                                    class="card-title"
                                     style={{
-                                      marginRight: "10px",
+                                      textTransform: "uppercase",
+                                      fontWeight: "bold",
                                     }}
-                                  ></i>
-                                  View {doc?.type}
-                                </a>
+                                  >
+                                    {doc?.type}
+                                  </h5>
+                                  <a
+                                    href={`${API}/api/storage/${doc?.file_path}`}
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                  >
+                                    <i
+                                      className="ti-eye"
+                                      style={{
+                                        marginRight: "10px",
+                                      }}
+                                    ></i>
+                                    View {doc?.type}
+                                  </a>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      ))}
-                    </>
-                  )}
+                          </>
+                        ))}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="col-xl-4 col-12">
@@ -305,7 +514,7 @@ const ApplicantsDetailedPage = () => {
                   </div>
                   <div class="row mb-2">
                     <div class="col-sm-4">
-                      <strong>From Position:</strong>
+                      <strong>Position Worked:</strong>
                     </div>
                     <div class="col-sm-8">{employee.from_position}</div>
                   </div>

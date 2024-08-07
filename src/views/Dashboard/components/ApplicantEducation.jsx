@@ -64,7 +64,7 @@ const ApplicantEducation = () => {
           }}
           series={chartData.series}
           type="donut"
-          height={400}
+          height={800}
         />
       </div>
     </div>

@@ -17,7 +17,7 @@ const EmployeeExpertise = ({ employee }) => {
   console.log("Area of Expertise Array:", areaOfExpertiseArray); // Debugging line
 
   return (
-    <td>
+    <td >
       <div className="tooltip">
         <span
           className="badge badge-info"

@@ -129,7 +129,7 @@ const Dashboard = () => {
                   <ApplicantsAgeDistribution />
                   <div className="row">
                     <ApplicantsMonthly />
-                    <div className="col-xl-6 col-12">
+                    <div className="col-xl-12 col-12">
                       <ApplicantEducation />
                     </div>
                     <div className="col-xl-6 col-12"></div>

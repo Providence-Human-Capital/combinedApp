@@ -62,6 +62,10 @@ import HrReports from "./views/HrReports/HrReports";
 import TrainedEmployees from "./views/Hr/TrainedEmployees";
 import ApplicationSuccess from "./views/Hr/success/ApplicationSuccess";
 import DocumentUpload from "./views/Hr/components/DocumentUpload";
+import AdminOps from "./views/Admin/AdminOps";
+import StaffingEmployeeUpload from "./views/Staffing/StaffingEmployeeUpload";
+import DeployedApplicants from "./views/Hr/pages/DeployedApplicants";
+import UpdateEmpDetails from "./views/Hr/pages/Employee/UpdateEmpDetails";
 
 const queryClient = new QueryClient();
 function App() {
@@ -161,6 +165,10 @@ const WrapperComponent = () => {
             <Route path="/add/employee" element={<AddStaffingEmployee />} />
             <Route path="/employees/upload" element={<UploadEmployees />} />
             <Route
+              path="/staffing/upload"
+              element={<StaffingEmployeeUpload />}
+            />
+            <Route
               path="/applicant/detail/:applicantId"
               element={<ApplicantsDetailedPage />}
             />
@@ -194,10 +202,19 @@ const WrapperComponent = () => {
             <Route path="/health/staff" element={<HealthStaff />} />
             <Route path="/leave/management" element={<LeaveManagement />} />
             <Route path="/hr/reports" element={<HrReports />} />
+            <Route path="/admin/ops" element={<AdminOps />} />
+            <Route
+              path="/deployed/applicants"
+              element={<DeployedApplicants />}
+            />
 
             <Route
               path="/patient/profile/:patientId"
               element={<PatientDetailedPage />}
+            />
+            <Route
+              path="/employee/info/:employeeId"
+              element={<UpdateEmpDetails />}
             />
             <Route
               path="/medicals/certificates"

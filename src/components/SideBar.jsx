@@ -82,7 +82,6 @@ const SideBar = () => {
             </Link>
           </div>
 
-
           <div className="multinav">
             <div className="multinav-scroll" style={styles.pageHeight}>
               <ul className="sidebar-menu" data-widget="tree">
@@ -193,17 +192,7 @@ const SideBar = () => {
                         <span>Verified Applicants</span>
                       </NavLink>
                     </li>
-                    <li id="aside-bar">
-                      <NavLink to={"/staffing/employees"}>
-                        <i
-                          className="ti-user"
-                          style={{
-                            fontSize: "20px",
-                          }}
-                        ></i>
-                        <span>SS (Deployed Employees)</span>
-                      </NavLink>
-                    </li>
+
                     <li id="aside-bar">
                       <NavLink to={"/attachees"}>
                         <i
@@ -236,6 +225,62 @@ const SideBar = () => {
                           }}
                         ></i>
                         <span>PHC Employees</span>
+                      </NavLink>
+                    </li>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/deployed/applicants"}>
+                        <i
+                          className="ti-agenda"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Deployed Applicants</span>
+                      </NavLink>
+                    </li>
+
+                    <div className="help-bt">
+                      <Link
+                        to={"/staffing/upload"}
+                        className="d-flex align-items-center"
+                      >
+                        <div
+                          className="rounded10 h-50 w-50 l-h-50 text-center me-15"
+                          style={styles.color}
+                        >
+                          <i
+                            class="fa fa-plus"
+                            aria-hidden="true"
+                            style={{
+                              fontSize: "20px",
+                            }}
+                          ></i>
+                        </div>
+                        <h4
+                          className="mb-0"
+                          style={{
+                            textTransform: "uppercase",
+                            transition: "color 0.3s", // Adding transition for a smooth effect
+                            ":hover": {
+                              color: "green",
+                            },
+                          }}
+                        >
+                          STAFFING UPLOAD
+                        </h4>
+                      </Link>
+                    </div>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/staffing/employees"}>
+                        <i
+                          className="ti-user"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>SS (Deployed Employees)</span>
                       </NavLink>
                     </li>
 
@@ -284,6 +329,18 @@ const SideBar = () => {
                           }}
                         ></i>
                         <span>Reports Analysis</span>
+                      </NavLink>
+                    </li>
+
+                    <li id="aside-bar">
+                      <NavLink to={"/admin/ops"}>
+                        <i
+                          className="ti-flag"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Admin Operations</span>
                       </NavLink>
                     </li>
 

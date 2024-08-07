@@ -4,7 +4,7 @@ import { API } from '../../../../config';
 
 const fetchStaffingCompanies = async () => {
     const { data } = await axios.get(`${API}/api/staffing-companies`);
-    return data.data;
+    return data;
 };
 
 const useStaffingCompanies = () => {
