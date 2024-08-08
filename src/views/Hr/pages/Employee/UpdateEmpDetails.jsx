@@ -19,6 +19,8 @@ const UpdateEmpDetails = () => {
   const { employeeId } = useParams();
   const [currentStep, setCurrentStep] = useState(1);
 
+  const [refetchTrigger, setRefetchTrigger] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,11 +32,17 @@ const UpdateEmpDetails = () => {
     setCurrentStep(currentStep - 1);
   };
 
+  const triggerRefetch = () => {
+    setRefetchTrigger((prev) => !prev); // Toggle refetch trigger
+  };
+
   let employeeInfoForms;
 
   switch (currentStep) {
     case 1:
-      employeeInfoForms = <NextOfKinForm employeeId={employeeId} />;
+      employeeInfoForms = (
+        <NextOfKinForm employeeId={employeeId} onSuccess={triggerRefetch} />
+      );
       break;
     case 2:
       employeeInfoForms = <PreviousEmploymentForm employeeId={employeeId} />;
@@ -93,7 +101,10 @@ const UpdateEmpDetails = () => {
               overflowX: "hidden",
             }}
           >
-            <NextOfKinCard employeeId={employeeId} />
+            <NextOfKinCard
+              employeeId={employeeId}
+              refetchTrigger={refetchTrigger}
+            />
             <EmpHistoryCard employeeId={employeeId} />
             <BankInfoCard employeeId={employeeId} />
             {/* <MiscCard employeeId={employeeId} /> */}

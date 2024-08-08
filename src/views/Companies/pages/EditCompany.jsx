@@ -48,7 +48,7 @@ const EditCompany = ({}) => {
     setLoading(true);
     console.log("Values", values);
     try {
-      const response = await fetch(`${API}/company/update/${companyId}`, {
+      const response = await fetch(`${API}/api/company/update/${companyId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

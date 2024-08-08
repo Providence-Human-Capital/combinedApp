@@ -176,9 +176,15 @@ const SideBar = () => {
                           className="ti-user"
                           style={{
                             fontSize: "20px",
+                            color: "#007a41",
+                            fontWeight: "bold",
                           }}
                         ></i>
-                        <span> Applicants </span>
+                        <span  style={{
+                            textTransform: "uppercase",
+                            color: "#007a41",
+                            fontWeight: "bold",
+                          }}> Applicants </span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
@@ -222,9 +228,19 @@ const SideBar = () => {
                           className="ti-flag-alt-2"
                           style={{
                             fontSize: "20px",
+                            color: "#007a41",
+                            fontWeight: "bold",
                           }}
                         ></i>
-                        <span>PHC Employees</span>
+                        <span
+                          style={{
+                            textTransform: "uppercase",
+                            color: "#007a41",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          PHC EMPLOYEES
+                        </span>
                       </NavLink>
                     </li>
 
@@ -234,9 +250,19 @@ const SideBar = () => {
                           className="ti-agenda"
                           style={{
                             fontSize: "20px",
+                            color: "#007a41",
+                            fontWeight: "bold",
                           }}
                         ></i>
-                        <span>Deployed Applicants</span>
+                        <span
+                          style={{
+                            textTransform: "uppercase",
+                            color: "#007a41",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Active Employees
+                        </span>
                       </NavLink>
                     </li>
 

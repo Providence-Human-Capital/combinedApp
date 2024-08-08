@@ -16,7 +16,7 @@ const validationSchema = Yup.object({
   relation: Yup.string().nullable(),
 });
 
-const NextOfKinForm = ({ employeeId }) => {
+const NextOfKinForm = ({ employeeId, onSuccess }) => {
   const mutation = useMutation((newData) =>
     axios.post(`${API}/api/next-of-kin`, newData)
   );
@@ -37,7 +37,7 @@ const NextOfKinForm = ({ employeeId }) => {
                 color: "#0E9645",
               }}
             >
-              ADD NEW APPLICANT
+              ADD EMPLOYEE NEXT OF KIN
             </span>{" "}
             <br />
           </h4>
@@ -57,6 +57,9 @@ const NextOfKinForm = ({ employeeId }) => {
             onSubmit={(values, { setSubmitting }) => {
               mutation.mutate(values, {
                 onSettled: () => setSubmitting(false),
+                onSuccess: () => {
+                  onSuccess(); // Trigger refetch
+                },
               });
             }}
           >

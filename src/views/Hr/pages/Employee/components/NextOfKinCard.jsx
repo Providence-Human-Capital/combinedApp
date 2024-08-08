@@ -16,7 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const NextOfKinCard = ({ employeeId }) => {
+const NextOfKinCard = ({ employeeId, refetchTrigger }) => {
   const fetchNextOfKin = async () => {
     const { data } = await axios.get(
       `${API}/api/employees/${employeeId}/next-of-kin`

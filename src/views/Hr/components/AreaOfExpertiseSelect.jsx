@@ -32,7 +32,7 @@ const areaOfSpecialization = [
   "PROCUREMENT, PURCHASING & SUPPLY CHAIN MANAGEMENT",
   "REAL ESTATE",
   "RETAIL",
-  "SALE & MARKETING",
+  "SALES & MARKETING",
   "SECURITY",
   "SPORTS & RECREATION",
   "STORES & WAREHOUSE",
@@ -164,7 +164,13 @@ const areaOfSpecialization = [
   "CATERER",
   "MACHINE OPERATOR",
   "PRODUCTION",
-  "RECEPTIONIST"
+  "RECEPTIONIST",
+  "ASSEMBLER",
+  "MACHINE OPERATOR",
+  "LAW",
+  "SAMPLER",
+  "CALL CENTRE",
+  "MUSIC"
 ];
 
 const customStyles = {

@@ -8,7 +8,6 @@ import { API, IMAGE_URL } from "../../../../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQueryClient } from "react-query";
-
 import "./css/ImageContainer.css";
 
 import styles from "./employee-css/styles.module.css";
@@ -154,9 +153,9 @@ const ApplicantsDetailedPage = () => {
         (company) => `<option value="${company.id}">${company.name}</option>`
       )
       .join("");
-
+  
     Swal.fire({
-      title: `UPDATE THE EMPLOYMENT STATUS `,
+      title: `UPDATE THE EMPLOYMENT STATUS`,
       width: "700px",
       html: `
         <div class="form-floating">
@@ -169,24 +168,22 @@ const ApplicantsDetailedPage = () => {
           </select>
           <label for="status-select">STATUS</label>
         </div>
-        <div id="company-select-container"  style="display: none;">
-         <div class="form-floating sep">
+        <div id="company-select-container" style="display: none;">
+          <div class="form-floating sep">
             <select id="company-select" class="form-select">
               ${companyOptions}
             </select>
             <label for="company-select">COMPANY SELECT</label>
-         </div>
-         <div class="form-floating mt-4">
-          <input type="text" id="occupation" class="form-control" required>
-          <label for="occupation">DEPLOYMENT POSITION</label>
-         </div>
-         <div class="form-floating mt-4">
-          <input type="text" id="department" class="form-control" required>
-          <label for="occupation">DEPARTMENT</label>
-         </div>
-          
+          </div>
+          <div class="form-floating mt-4">
+            <input type="text" id="occupation" class="form-control" required>
+            <label for="occupation">DEPLOYMENT POSITION</label>
+          </div>
+          <div class="form-floating mt-4">
+            <input type="text" id="department" class="form-control" required>
+            <label for="department">DEPARTMENT</label>
+          </div>
         </div>
-        
         <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
       `,
       showCancelButton: true,
@@ -198,7 +195,7 @@ const ApplicantsDetailedPage = () => {
         const companySelectContainer = document.getElementById(
           "company-select-container"
         );
-
+  
         statusSelectElement.addEventListener("change", () => {
           if (statusSelectElement.value === "Active") {
             companySelectContainer.style.display = "block";
@@ -210,24 +207,53 @@ const ApplicantsDetailedPage = () => {
       preConfirm: () => {
         const statusSelectElement = document.getElementById("status-select");
         const selectedStatus = statusSelectElement.value;
-
+  
+        const occupationSelect = document.getElementById("occupation");
+        const occupationDeploy = occupationSelect.value;
+  
+        const departmentSelect = document.getElementById("department");
+        const departmentDeploy = departmentSelect.value;
+  
         const companySelectElement = document.getElementById("company-select");
         const selectedCompany = companySelectElement
           ? companySelectElement.value
           : null;
-
-        return { selectedStatus, selectedCompany };
+  
+        // Validation
+        if (
+          selectedStatus === "Active" &&
+          (!selectedCompany || !occupationDeploy || !departmentDeploy)
+        ) {
+          Swal.showValidationMessage(
+            "Please fill in all required fields for deployment."
+          );
+          return false;
+        }
+  
+        return {
+          selectedStatus,
+          selectedCompany,
+          occupationDeploy,
+          departmentDeploy,
+        };
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const { selectedStatus, selectedCompany } = result.value;
-
+        const {
+          selectedStatus,
+          selectedCompany,
+          occupationDeploy,
+          departmentDeploy,
+        } = result.value;
+  
         try {
           await axios.post(
             `${API}/api/employee/change/status/${applicantId}`,
             {
               status: selectedStatus,
               company_id: selectedCompany,
+              department: departmentDeploy,
+              occupation: occupationDeploy,
             },
             {
               headers: {
@@ -236,30 +262,57 @@ const ApplicantsDetailedPage = () => {
               },
             }
           );
-
+  
           Swal.fire({
             title: "Status Updated",
             text: "The status has been updated successfully.",
             icon: "success",
           });
-
+  
           refetchEmployee();
         } catch (error) {
           Swal.fire({
             title: "Error",
-            text: "Failed to update the status. Please try again later.",
+            text: `Failed to update the status. Error: ${error.message}`,
             icon: "error",
           });
         }
       }
     });
   };
+  
 
-  // useEffect(() => {
-  //   fetchEmployeeProfile(applicantId);
-  // }, []);
+  const handleViewProfileImage = () => {
+    Swal.fire({
+      width: "800px",
+      showConfirmButton: false,
+      imageUrl:
+        `${IMAGE_URL}${profileImage?.image}` || "/assets/images/user.jpg",
+      imageAlt: "Employee Profile Image",
+      // Apply custom class to image
+      customClass: {
+        image: "custom-swal-image",
+      },
+    });
 
-  // const profileImage = IMAGE_URL + employee.profile_image.image;
+    // Add custom CSS for the image to fill the container
+    Swal.update({
+      html: `
+        <style>
+          .custom-swal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the entire area */
+          }
+          .swal2-image {
+            width: 100% !important; /* Forces the image to take up 100% of the container */
+            height: 100% !important;
+            object-fit: cover; /* Ensures the image covers the entire area */
+          }
+        </style>
+      `,
+    });
+  };
 
   return (
     <>
@@ -453,6 +506,18 @@ const ApplicantsDetailedPage = () => {
                   </div>
 
                   <div className="mt-40">
+                    <button
+                      className="btn btn-primary mb-3"
+                      onClick={() => handleViewProfileImage()}
+                    >
+                      <i
+                        className="ti-eye"
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      ></i>{" "}
+                      VIEW PROFILE
+                    </button>
                     <h4 className="fw-600 mb-5">
                       {employee.first_name} {employee.last_name}
                     </h4>
@@ -622,7 +687,7 @@ const ApplicantsDetailedPage = () => {
                   </div>
                   <div class="row mb-2">
                     <div class="col-sm-4">
-                      <strong>Position Worked:</strong>
+                      <strong>TRANSFERING TO</strong>
                     </div>
                     <div class="col-sm-8">{employee.from_position}</div>
                   </div>

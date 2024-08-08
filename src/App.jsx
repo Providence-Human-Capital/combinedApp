@@ -66,6 +66,7 @@ import AdminOps from "./views/Admin/AdminOps";
 import StaffingEmployeeUpload from "./views/Staffing/StaffingEmployeeUpload";
 import DeployedApplicants from "./views/Hr/pages/DeployedApplicants";
 import UpdateEmpDetails from "./views/Hr/pages/Employee/UpdateEmpDetails";
+import PHCEmployees from "./views/Hr/pages/PHCEmployees";
 
 const queryClient = new QueryClient();
 function App() {
@@ -203,10 +204,13 @@ const WrapperComponent = () => {
             <Route path="/leave/management" element={<LeaveManagement />} />
             <Route path="/hr/reports" element={<HrReports />} />
             <Route path="/admin/ops" element={<AdminOps />} />
+
             <Route
               path="/deployed/applicants"
               element={<DeployedApplicants />}
             />
+
+            <Route path="/phc/employees" element={<PHCEmployees />} />
 
             <Route
               path="/patient/profile/:patientId"

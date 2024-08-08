@@ -909,7 +909,8 @@ const DeployedApplicants = () => {
                               className="badge badge-info"
                               style={{
                                 textTransform: "uppercase",
-                                fontWeight: "bold"
+                                fontWeight: "bold",
+                                backgroundColor: "#0E9645"
                               }}
                             >
                               {employee.company?.name}
