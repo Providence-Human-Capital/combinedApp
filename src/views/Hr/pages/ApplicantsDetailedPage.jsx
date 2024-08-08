@@ -4,9 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import useEmployee from "../hooks/useEmployee";
 import Loading from "../../../components/Loading.jsx/Loading";
 import UploadEmployeeCV from "../components/UploadEmployeeCv";
-import { API } from "../../../../config";
+import { API, IMAGE_URL } from "../../../../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useMutation, useQueryClient } from "react-query";
 
 import "./css/ImageContainer.css";
 
@@ -15,6 +16,9 @@ import Qualifications from "../components/Qualifications";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import axios from "axios";
+import NextOfKinCard from "./Employee/components/NextOfKinCard";
+import EmpHistoryCard from "./Employee/components/EmpHistoryCard";
+import BankInfoCard from "./Employee/components/BankInfoCard";
 
 export const formatDate = (dateString, options) => {
   const date = new Date(dateString);
@@ -33,24 +37,73 @@ export const options = {
 };
 
 const workerVersion = "3.12.0";
+
 const ApplicantsDetailedPage = () => {
   const { applicantId } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
   const { data: employee, error, isLoading } = useEmployee(applicantId);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const [profileImage, setProfileImage] = useState(null);
+
   const companies = useSelector((state) => state.company.companies) || [];
 
-  
+  const uploadProfileImage = async ({ applicantId, formData }) => {
+    const { data } = await axios.post(
+      `${API}/api/employee/${applicantId}/profile/image`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return data;
+  };
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(uploadProfileImage, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["employee", applicantId]);
+    },
+    onError: (error) => {
+      alert(`Failed to upload image: ${error.message}`);
+    },
+  });
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setSelectedImage(URL.createObjectURL(file));
-    alert("Image Chnaged");
+
+    // Prepare form data
+    const formData = new FormData();
+    formData.append("image", file);
+
+    // Call mutation
+    mutation.mutate({ applicantId, formData });
+  };
+  const fetchEmployeeProfile = async (applicantId) => {
+    try {
+      // Perform API call or any other logic to fetch updated employee data
+      const response = await fetch(
+        `${API}/api/employee/${applicantId}/profile`
+      );
+      const data = await response.json();
+      console.log("Employee Profile", data.data);
+      setProfileImage(data.data);
+      return data.data;
+    } catch (error) {
+      console.error("Error occurred while fetching employee data:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {
     setEmployeeData(employee);
+
+    fetchEmployeeProfile(applicantId);
   }, [employee]);
 
   const refetchEmployee = async () => {
@@ -116,12 +169,24 @@ const ApplicantsDetailedPage = () => {
           </select>
           <label for="status-select">STATUS</label>
         </div>
-        <div id="company-select-container" class="form-floating sep" style="display: none;">
-          <select id="company-select" class="form-select">
-            ${companyOptions}
-          </select>
-          <label for="company-select">COMPANY SELECT</label>
+        <div id="company-select-container"  style="display: none;">
+         <div class="form-floating sep">
+            <select id="company-select" class="form-select">
+              ${companyOptions}
+            </select>
+            <label for="company-select">COMPANY SELECT</label>
+         </div>
+         <div class="form-floating mt-4">
+          <input type="text" id="occupation" class="form-control" required>
+          <label for="occupation">DEPLOYMENT POSITION</label>
+         </div>
+         <div class="form-floating mt-4">
+          <input type="text" id="department" class="form-control" required>
+          <label for="occupation">DEPARTMENT</label>
+         </div>
+          
         </div>
+        
         <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
       `,
       showCancelButton: true,
@@ -190,6 +255,11 @@ const ApplicantsDetailedPage = () => {
     });
   };
 
+  // useEffect(() => {
+  //   fetchEmployeeProfile(applicantId);
+  // }, []);
+
+  // const profileImage = IMAGE_URL + employee.profile_image.image;
 
   return (
     <>
@@ -197,6 +267,7 @@ const ApplicantsDetailedPage = () => {
         title={"Deployed Employees"}
         activeTab={"Staffing Solutions"}
       />
+
       <section className="content">
         <div className="row">
           <div className="col-xl-8 col-12">
@@ -313,21 +384,50 @@ const ApplicantsDetailedPage = () => {
                         borderRadius: "50%",
                       }}
                     /> */}
-                      <img
-                        src={selectedImage || "/assets/images/user.jpg"}
+                      {/* <img
+                        src={`${IMAGE_URL}${employee.profile_image?.image}` || "/assets/images/user.jpg"}
                         // src={selectedImage || "/assets/images/avatar/2.jpg"}
                         className="bg-success-light rounded50 square-image"
-                        alt="https://providence-human-capital.github.io/images/6308.jpg"
+                        alt="/assets/images/user.jpg"
                         style={{
-                          width: "200px",
+                          width: "300px",
+                          height: "300px",
                           borderRadius: "50%",
+                          border: "3px solid #58AB46"
                         }}
-                      />
+                      /> */}
+
+                      {profileImage ? (
+                        <img
+                          src={`${IMAGE_URL}${profileImage?.image}`}
+                          className="bg-success-light rounded50 square-image"
+                          alt="/assets/images/user.jpg"
+                          style={{
+                            width: "300px",
+                            height: "300px",
+                            borderRadius: "50%",
+                            border: "3px solid #58AB46",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={selectedImage || "/assets/images/user.jpg"}
+                          className="bg-success-light rounded50 square-image"
+                          alt="/assets/images/user.jpg"
+                          style={{
+                            width: "300px",
+                            height: "300px",
+                            borderRadius: "50%",
+                            border: "3px solid #58AB46",
+                          }}
+                        />
+                      )}
+
                       <label
                         htmlFor="image-upload"
                         className="upload-button"
                         style={{
-                          width: "200px",
+                          width: "300px",
                           borderRadius: "50%",
                         }}
                       >
@@ -372,6 +472,7 @@ const ApplicantsDetailedPage = () => {
                     </h5>
                   </div>
                 </div>
+
                 <div className="p-3">
                   <h5 className="fw-bold mb-3">
                     Gender:
@@ -481,7 +582,14 @@ const ApplicantsDetailedPage = () => {
             )}
           </div>
 
-          <div className="col-xl-4 col-12">
+          <div
+            className="col-xl-4 col-12"
+            style={{
+              overflowY: "scroll",
+              height: "120vh",
+              overflowX: "hidden",
+            }}
+          >
             <div className="box">
               <UploadEmployeeCV
                 employeeId={applicantId}
@@ -616,9 +724,14 @@ const ApplicantsDetailedPage = () => {
                   </div>
 
                   <Qualifications employee={employee} />
+
+                  {/* applicantId */}
                 </div>
               </div>
             </div>
+            <NextOfKinCard employeeId={applicantId} />
+            <EmpHistoryCard employeeId={applicantId} />
+            <BankInfoCard employeeId={applicantId} />
           </div>
         </div>
       </section>

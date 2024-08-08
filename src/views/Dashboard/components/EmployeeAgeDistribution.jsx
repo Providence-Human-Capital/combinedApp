@@ -13,14 +13,14 @@ const EmployeeAgeDistribution = () => {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [ageDistribution, setAgeDistribution] = useState([]);
   const {
-    data: companies,
+    data: companies = [], // Default to an empty array
     error: companiesError,
     isLoading: companiesLoading,
   } = useStaffingCompanies();
 
   useEffect(() => {
-    if (companies && companies.length > 0) {
-      const defaultCompanyId = companies[6].id;
+    if (companies.length > 0) {
+      const defaultCompanyId = companies[0].id; // Use the first company as default
       setSelectedCompany(defaultCompanyId);
       fetchEmployeeAgeDistribution(defaultCompanyId)
         .then((data) => setAgeDistribution(data))

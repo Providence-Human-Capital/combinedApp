@@ -146,7 +146,7 @@ const Dashboard = () => {
               <div class="row">
                 <div className="col-xl-8 col-12">
                   <StaffingEmployeesChart />
-                  <EmployeeAgeDistribution />
+                  {/* <EmployeeAgeDistribution /> */}
                 </div>
                 <div className="col-xl-4 col-12">
                   <EmployeeGenderChart />

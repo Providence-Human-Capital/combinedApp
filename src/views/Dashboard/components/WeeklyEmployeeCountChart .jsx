@@ -2,27 +2,52 @@ import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useQuery } from "react-query";
 import { API } from "../../../../config";
+import Loading from "../../../components/Loading.jsx/Loading";
+
+const fetchWeeklyEmployeeData = async () => {
+  const { data } = await axios.get(`${API}/api/weekly-employees`);
+  return data;
+};
 
 const WeeklyEmployeeCountChart = () => {
+  const { data, error, isLoading } = useQuery(
+    "weeklyEmployees",
+    fetchWeeklyEmployeeData
+  );
   const [series, setSeries] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${API}/api/weekly-employees`)
-      .then((response) => {
-        const data = response.data;
-        const dates = data.map((item) => dayjs(item.date).format("ddd DD MMM YYYY"));
-        const counts = data.map((item) => item.count);
+    if (data) {
+      const dates = data.map((item) =>
+        dayjs(item.date).format("ddd DD MMM YYYY")
+      );
+      const counts = data.map((item) => item.count);
 
-        setCategories(dates);
-        setSeries([{ name: "New Employees", data: counts }]);
-      })
-      .catch((error) => {
-        console.error("Error fetching employee count data:", error);
-      });
-  }, []);
+      setCategories(dates);
+      setSeries([{ name: "New Employees", data: counts }]);
+    }
+  }, [data]);
+
+  if (isLoading)
+    return (
+      <div className="box">
+        <div className="box-body pt-4">
+          <Loading />
+        </div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="box">
+        <div className="box-body pt-4">
+          <p className="text-danger">Error loading data</p>
+        </div>
+      </div>
+    );
 
   const chartOptions = {
     chart: {
@@ -46,18 +71,18 @@ const WeeklyEmployeeCountChart = () => {
       },
     },
     title: {
-      text: 'Weekly New Employees Count',
-      align: 'center',
+      text: "Weekly New Employees Count",
+      align: "center",
     },
     dataLabels: {
       enabled: false,
     },
     stroke: {
-      curve: 'smooth',
+      curve: "smooth",
       width: 2,
     },
     fill: {
-      type: 'gradient',
+      type: "gradient",
       gradient: {
         shadeIntensity: 1,
         opacityFrom: 0.7,
@@ -67,9 +92,8 @@ const WeeklyEmployeeCountChart = () => {
     tooltip: {
       enabled: true,
     },
-    colors: ['#007A41'],
+    colors: ["#007A41"],
   };
-
 
   return (
     <div className="box">

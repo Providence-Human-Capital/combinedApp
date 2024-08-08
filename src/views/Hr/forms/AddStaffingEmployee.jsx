@@ -744,7 +744,7 @@ const AddStaffingEmployee = () => {
                                     fontWeight: "bold",
                                   }}
                                 >
-                                  WHICH COMPANY ARE YOU TRANSFERRING FROM
+                                  WHICH COMPANY ARE YOU TRANSFERRING TO
                                 </label>
                                 <ErrorMessage
                                   name="from_position"

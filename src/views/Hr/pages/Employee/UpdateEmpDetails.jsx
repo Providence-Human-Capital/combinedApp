@@ -96,7 +96,7 @@ const UpdateEmpDetails = () => {
             <NextOfKinCard employeeId={employeeId} />
             <EmpHistoryCard employeeId={employeeId} />
             <BankInfoCard employeeId={employeeId} />
-            <MiscCard employeeId={employeeId} />
+            {/* <MiscCard employeeId={employeeId} /> */}
           </div>
         </div>
       </section>
