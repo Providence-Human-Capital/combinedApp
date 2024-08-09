@@ -166,7 +166,6 @@ const areaOfSpecialization = [
   "PRODUCTION",
   "RECEPTIONIST",
   "ASSEMBLER",
-  "MACHINE OPERATOR",
   "LAW",
   "SAMPLER",
   "CALL CENTRE",

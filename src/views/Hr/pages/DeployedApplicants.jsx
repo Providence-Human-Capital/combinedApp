@@ -6,7 +6,7 @@ import * as XLSX from "xlsx";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { fetchDeployedEmployees } from "../../../services/api";
+import { areaOfSpecialization, fetchDeployedEmployees } from "../../../services/api";
 import useStaffingCompanies from "../hooks/useStaffingCompanies";
 import { API } from "../../../../config";
 import EmployeeExpertise from "../components/EmployeeExpertise";
@@ -34,163 +34,7 @@ const exportToExcel = (data, filename) => {
   XLSX.writeFile(workbook, filename);
 };
 
-const areaOfSpecialization = [
-  "GENERAL WORK",
-  "ADMIN AND OFFICE",
-  "AGRICULTURE, FARMING",
-  "APPRENTICESHIP",
-  "ATTACHMENT & INTERNSHIP",
-  "BANKING",
-  "CARPENTRY, DESIGN & TEXTILE",
-  "NURSING",
-  "CONSTRUCTION",
-  "CONSULTANCY, RESEARCH",
-  "DRIVING & LOGISTICS",
-  "EDUCATION & TEACHING",
-  "ENGINEERING",
-  "ENVIRONMENTAL, FORESTRY",
-  "HEALTHCARE",
-  "PHARMACY",
-  "ICT & COMPUTERS",
-  "INSURANCE",
-  "LEGAL & COMPLIANCE",
-  "LIBRARY & RECORD MANAGEMENT",
-  "MANUFACTURING",
-  "MEDIA",
-  "PUBLIC RELATIONS",
-  "GRAPHIC DESIGN",
-  "MINING",
-  "NGO & SOCIAL SERVICES",
-  "PROCUREMENT, PURCHASING & SUPPLY CHAIN MANAGEMENT",
-  "REAL ESTATE",
-  "RETAIL",
-  "SALE & MARKETING",
-  "SECURITY",
-  "SPORTS & RECREATION",
-  "STORES & WAREHOUSE",
-  "STRATEGIC MANAGEMENT",
-  "STUDENT LOANS",
-  "TENDERS",
-  "TOURISM",
-  "HOSPITALITY",
-  "NURSE AID",
-  "PAINTING",
-  "SOFTWARE DEVELOPER",
-  "CYBER SECURITY",
-  "ARCHITECTURE",
-  "ART & DESIGN",
-  "AVIATION",
-  "BIOTECHNOLOGY",
-  "CHEMICAL ENGINEERING",
-  "CIVIL ENGINEERING",
-  "CUSTOMER SERVICE",
-  "DATA ANALYSIS",
-  "DATA SCIENCE",
-  "ELECTRICAL ENGINEERING",
-  "ELECTRONICS",
-  "EMERGENCY SERVICES",
-  "ENERGY SECTOR",
-  "EVENT MANAGEMENT",
-  "FASHION & BEAUTY",
-  "FINANCE",
-  "FOOD & BEVERAGE",
-  "GAMING",
-  "GEOLOGY",
-  "HEALTH & SAFETY",
-  "HUMAN RESOURCES",
-  "INTERIOR DESIGN",
-  "JOURNALISM",
-  "LANGUAGE & LINGUISTICS",
-  "MANAGEMENT CONSULTING",
-  "MARINE BIOLOGY",
-  "MATERIALS SCIENCE",
-  "MECHANICAL ENGINEERING",
-  "MEDICAL RESEARCH",
-  "MUSIC & PERFORMING ARTS",
-  "OCEANOGRAPHY",
-  "OPERATIONS MANAGEMENT",
-  "PHOTOGRAPHY",
-  "PHYSICAL THERAPY",
-  "POLITICAL SCIENCE",
-  "PROJECT MANAGEMENT",
-  "PSYCHOLOGY",
-  "QUALITY ASSURANCE",
-  "QUANTITY SURVEYING",
-  "RENEWABLE ENERGY",
-  "RESEARCH & DEVELOPMENT",
-  "SCIENCE & TECHNOLOGY",
-  "SOCIAL MEDIA MANAGEMENT",
-  "SOCIOLOGY",
-  "TELECOMMUNICATIONS",
-  "TRANSPORTATION",
-  "URBAN PLANNING",
-  "VETERINARY SCIENCE",
-  "VIDEO PRODUCTION",
-  "WATER MANAGEMENT",
-  "WEB DEVELOPMENT",
-  "WRITING & EDITING",
-  "ZOOLOGY",
-  "SHOP ASSISTANT",
-  "BAKING",
-  "CATERING",
-  "TILL OPERATOR",
-  "ACCOUNTING",
-  "BANKING",
-  "BOOKKEEPER",
-  "CASHIER",
-  "COMPUTER OPERATOR",
-  "AEROSPACE ENGINEERING",
-  "ARTIFICIAL INTELLIGENCE",
-  "ASTROPHYSICS",
-  "BIOINFORMATICS",
-  "BLOCKCHAIN TECHNOLOGY",
-  "CHEF",
-  "COMPUTATIONAL LINGUISTICS",
-  "CYTOTECHNOLOGY",
-  "DENTISTRY",
-  "E-COMMERCE",
-  "ECONOMICS",
-  "FORENSIC SCIENCE",
-  "GENETICS",
-  "HISTORICAL RESEARCH",
-  "MARINE ENGINEERING",
-  "MICROBIOLOGY",
-  "NANOTECHNOLOGY",
-  "NEUROSCIENCE",
-  "PHOTONICS",
-  "ROBOTICS",
-  "SUSTAINABILITY MANAGEMENT",
-  "TRUCK DRIVER",
-  "WAITER",
-  "MERCHANDISER",
-  "ACCOUNTANT",
-  "LABELLING MACHINE OPERATOR",
-  "VERTERINARY",
-  "CLEANER",
-  "SHEQ",
-  "LIFEGUARD",
-  "SORTER",
-  "FITNESS TRAINER",
-  "FORKLIFT OPERATOR",
-  "PATTY BOY",
-  "REFRIDGERATION",
-  "AIR-CONDITIONING",
-  "SORTER",
-  "PACKER",
-  "CROP SCIENCE",
-  "WELDER",
-  "WELDING",
-  "CARPENTER",
-  "TIPPER TRUCK",
-  "PLANT ASSISTANT",
-  "PRODUCTION CLERK",
-  "CRIMINOLOGY & SOCIETY",
-  "HOME CARE",
-  "DOCUMENT FILING",
-  "BIOLOGICAL SCIENCE",
-  "COSMETOLOGY",
-  "MACHINE OPERATOR",
-];
+
 
 const DeployedApplicants = () => {
   const user = useSelector((state) => state.auth.user);
@@ -231,14 +75,11 @@ const DeployedApplicants = () => {
     }
   );
 
-
   const {
     data: occupations,
     error: occupationsError,
     isLoading: occupationsLoading,
   } = useOccupations();
-
-
 
   const {
     data: companies,
@@ -563,7 +404,7 @@ const DeployedApplicants = () => {
                   FILTER OUT EMPLOYEES INFORMATION
                 </h4>
 
-                 <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-floating">
@@ -910,7 +751,7 @@ const DeployedApplicants = () => {
                               style={{
                                 textTransform: "uppercase",
                                 fontWeight: "bold",
-                                backgroundColor: "#0E9645"
+                                backgroundColor: "#0E9645",
                               }}
                             >
                               {employee.company?.name}
