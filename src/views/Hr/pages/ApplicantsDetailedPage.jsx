@@ -303,6 +303,7 @@ const ApplicantsDetailedPage = () => {
             width: 100%;
             height: 100%;
             object-fit: cover; /* Ensures the image covers the entire area */
+            margin: "20px";
           }
           .swal2-image {
             width: 100% !important; /* Forces the image to take up 100% of the container */

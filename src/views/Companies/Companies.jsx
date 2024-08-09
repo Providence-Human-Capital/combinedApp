@@ -26,11 +26,28 @@ const Companies = () => {
                 <div className="d-md-flex align-items-center justify-content-between mb-20">
                   <div className="d-flex">
                     <Link to={`/company/add`}>
-                      <button className="btn btn-secondary">ADD COMPANY</button>
+                      <button className="btn btn-secondary">
+                        <i
+                          className="ti-plus"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        {"  "}
+                        ADD COMPANY
+                      </button>
                     </Link>
                   </div>
 
-                  <button className="btn btn-primary">EXPORT EXCEL</button>
+                  <button className="btn btn-primary">
+                    <i
+                      className="ti-printer"
+                      style={{
+                        fontSize: "20px",
+                      }}
+                    ></i>{"  "}
+                    EXPORT EXCEL
+                  </button>
                 </div>
                 <div
                   className="table-responsive rounded card-table"

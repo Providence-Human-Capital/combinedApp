@@ -10,6 +10,7 @@ import axios from "axios";
 const fileTypes = [
   "National ID",
   "Educational Qualifications",
+  "Passport",
   "Medical Certificates",
   "Birth Certificate",
   "Driver's Licenses",
@@ -17,6 +18,7 @@ const fileTypes = [
   "Police Clearance",
   "Finger Prints",
   "Affidavit",
+  "Job Description",
 ];
 
 const FileUploadField = ({

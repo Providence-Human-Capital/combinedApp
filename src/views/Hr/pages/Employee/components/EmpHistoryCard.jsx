@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import Loading from "../../../../../components/Loading.jsx/Loading";
 import { API } from "../../../../../../config";
 
 const EmpHistoryCard = ({ employeeId }) => {
+  const currentStep = localStorage.getItem("currentStep");
+
   const fetchEmploymentHistory = async () => {
     const { data } = await axios.get(
       `${API}/api/employees/${employeeId}/employment-history`
     );
-
-    console.log("eMPLOYEMENT HIS", data);
+    console.log("EMPLOYMENT HISTORY", data);
     return data.data;
   };
-  const { data, error, isLoading } = useQuery(
+
+  const { data, error, isLoading, refetch } = useQuery(
     "employmentHistory",
     fetchEmploymentHistory
   );
+
+  // Refetch data when `currentStep` changes
+  useEffect(() => {
+    refetch();
+  }, [currentStep, refetch]);
 
   if (isLoading)
     return (
@@ -26,14 +33,40 @@ const EmpHistoryCard = ({ employeeId }) => {
         </div>
       </div>
     );
+
   if (error)
     return (
       <div className="box">
         <div className="box-body">
-          <p className="text-danger"> Error loading data</p>
+          <p className="text-danger">Error loading data</p>
         </div>
       </div>
     );
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="box">
+        <div className="box-header no-border">
+          <h3
+            className="box-title"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "bold",
+              borderBottom: "2px solid #343a40",
+              paddingBottom: "1px",
+              marginBottom: "1px",
+              color: "#343a40",
+            }}
+          >
+            Employment History
+          </h3>
+        </div>
+        <div className="box-body">
+          <p className="text-muted">No Previous Employment History</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="box">

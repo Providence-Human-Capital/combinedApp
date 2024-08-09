@@ -170,7 +170,8 @@ const areaOfSpecialization = [
   "LAW",
   "SAMPLER",
   "CALL CENTRE",
-  "MUSIC"
+  "MUSIC",
+  "COMPUTER SCIENCE"
 ];
 
 const customStyles = {
