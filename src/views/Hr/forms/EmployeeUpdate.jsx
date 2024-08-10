@@ -26,6 +26,7 @@ const validationSchema = Yup.object({
   education_level: Yup.string().nullable(),
   work_experience: Yup.string().nullable(),
   status: Yup.string().nullable(),
+  department: Yup.string().nullable(),
 });
 
 const initialValues = {
@@ -43,6 +44,7 @@ const initialValues = {
   education_level: "",
   work_experience: "",
   status: "",
+  department: "",
 };
 const EmployeeUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -452,14 +454,44 @@ const EmployeeUpdate = () => {
                     </div>
                   </div>
                   <div className="space"></div>
+                  <div className="row">
+                    <div className="col-lg-4 col-md-12">
+                      <div className="form-floating">
+                        <Field
+                          type="text"
+                          className="form-control"
+                          id="department"
+                          name="department"
+                        />
+                        <label htmlFor="department">DEPARTMENT</label>
+                        <ErrorMessage name="department" component="div" />
+                      </div>
+                    </div>
+                    <div className="col-lg-4 col-md-12">
+                      <div className="form-floating">
+                        <Field
+                          type="text"
+                          className="form-control"
+                          id="occupation"
+                          name="occupation"
+                        />
+                        <label htmlFor="occupation">POSITION</label>
+                        <ErrorMessage name="occupation" component="div" />
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="space"></div>
                   {loading ? (
                     <Loading />
                   ) : (
                     <button
-                      className="btn btn-info"
-                      style={{ width: "fit-content", fontWeight: 400, textTransform: "uppercase" }}
+                      className="btn btn-primary"
+                      style={{
+                        width: "fit-content",
+                        fontWeight: 400,
+                        textTransform: "uppercase",
+                      }}
                       type="submit"
                       disabled={isSubmitting}
                     >
@@ -478,6 +510,10 @@ const EmployeeUpdate = () => {
               <div className="box-body">
                 <div className="row">
                   <div className="col-12">
+                    <UpdateAreasOfExpertise
+                      employeeId={employeeId}
+                      specializations={formValues.area_of_expertise}
+                    />
                     <UploadEmployeeCV employeeId={employeeId} />
                   </div>
                 </div>
@@ -488,9 +524,7 @@ const EmployeeUpdate = () => {
             <div className="box">
               <div className="box-body">
                 <div className="row">
-                  <div className="col-12">
-                    <UpdateAreasOfExpertise employeeId={employeeId} specializations={formValues.area_of_expertise} />
-                  </div>
+                  <div className="col-12"></div>
                 </div>
               </div>
             </div>

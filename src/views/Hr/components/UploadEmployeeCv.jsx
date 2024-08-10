@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { API } from "../../../../config";
 
-const UploadEmployeeCV = ({ employeeId,  onUploadSuccess }) => {
+const UploadEmployeeCV = ({ employeeId, onUploadSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false); // State for success status
@@ -18,11 +18,15 @@ const UploadEmployeeCV = ({ employeeId,  onUploadSuccess }) => {
       setLoading(true);
       setError(null);
 
-      await axios.post(`${API}/api/employee/${employeeId}/upload-cv`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.post(
+        `${API}/api/employee/${employeeId}/upload-cv`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       onUploadSuccess();
 
       // Optionally, you can update the UI or show a success message
@@ -38,15 +42,34 @@ const UploadEmployeeCV = ({ employeeId,  onUploadSuccess }) => {
 
   return (
     <div style={{ margin: "2rem", color: "#2C4894" }}>
-      <h4 style={{ textTransform: "uppercase", fontWeight: "bold" }}>UPLOAD / UPDATE EMPLOYEE CV</h4>
-      <div {...getRootProps()} style={{ border: "2px dashed #2C4894", padding: "2rem", textAlign: "center",  backgroundColor: "#f0fdf3" }}>
+      <h4 style={{ textTransform: "uppercase", fontWeight: "bold" }}>
+        UPLOAD / UPDATE EMPLOYEE CV
+      </h4>
+      <div
+        {...getRootProps()}
+        style={{
+          border: "2px dashed #2C4894",
+          padding: "2rem",
+          textAlign: "center",
+          backgroundColor: "#f0fdf3",
+        }}
+      >
         <input {...getInputProps()} />
         <p>Drag 'n' drop the file here, or click to select file</p>
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>File uploaded successfully!</p>} {/* Render success message */}
+      {success && (
+        <p style={{ color: "green" }}>File uploaded successfully!</p>
+      )}{" "}
+      {/* Render success message */}
       <div className="space"></div>
       <button className="btn btn-primary" onClick={() => {}} disabled={loading}>
+        <i
+          className="ti-check"
+          style={{
+            fontSize: "20px",
+          }}
+        ></i>{" "}
         {loading ? "Uploading in Progress..." : "UPLOAD CV"}
       </button>
     </div>

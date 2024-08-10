@@ -5,6 +5,31 @@ import Swal from "sweetalert2";
 import { API } from "../../../../config";
 import { useQuery } from "react-query";
 import { fetchPHCEmployees } from "../../../services/api";
+import ReactPaginate from "react-paginate";
+import * as XLSX from "xlsx";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import Loading from "../../../components/Loading.jsx/Loading";
+
+const exportToExcel = (data, filename) => {
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // Define column widths
+  const columnWidths = [];
+  Object.keys(data[0]).forEach((key) => {
+    columnWidths.push({ wch: 20 }); // You can adjust the width as needed
+  });
+  worksheet["!cols"] = columnWidths;
+
+  const workbook = XLSX.utils.book_new();
+  const headerStyle = {
+    font: { bold: true },
+    fill: { fgColor: { rgb: "FFFF00" } }, // Yellow background color
+  };
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  XLSX.writeFile(workbook, filename);
+};
 
 const PHCEmployees = () => {
   const user = useSelector((state) => state.auth.user);
@@ -21,6 +46,20 @@ const PHCEmployees = () => {
     min_age: "",
     max_age: "",
   });
+
+  const handleReset = () => {
+    setFilters({
+      gender: "",
+      marital_status: "",
+      education_level: "",
+      area_of_expertise: "",
+      name: "",
+      min_age: "",
+      max_age: "",
+    });
+    setCurrentPage(0);
+    refetchEmpData();
+  };
 
   const [currentPage, setCurrentPage] = useState(0);
   const employeesPerPage = 10;
@@ -123,7 +162,39 @@ const PHCEmployees = () => {
     }
   };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (filters.min_age && filters.max_age) {
+      const updatedFilters = {
+        ...filters,
+        age_range: `${filters.min_age}-${filters.max_age}`,
+      };
+      setFilters(updatedFilters);
+    }
+    filterPhcEmployeesRefetch();
+  };
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const currentEmployees = filterPhcEmployees
+    ? filterPhcEmployees.slice(
+        currentPage * employeesPerPage,
+        (currentPage + 1) * employeesPerPage
+      )
+    : phcEmployees
+    ? phcEmployees.slice(
+        currentPage * employeesPerPage,
+        (currentPage + 1) * employeesPerPage
+      )
+    : [];
+
+  if (phcEmployeesLoading) return <Loading />;
+  if (phcEmployeesError) return <Error message={phcEmployeesError.message} />;
+  if (filterPhcEmployeesError)
+    return <Error message={filterPhcEmployeesError.message} />;
+
   const styles = {
     containerStyles: {
       minHeight: "60vh",
@@ -168,12 +239,30 @@ const PHCEmployees = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="space"></div>
+                  {isFetching ? (
+                    <Loading />
+                  ) : (
+                    <button type="submit" className="btn btn-primary">
+                      <i class="fa fa-filter" aria-hidden="true"></i> Apply
+                      Filters
+                    </button>
+                  )}
+                  {!isFetching && (
+                    <button
+                      type="submit"
+                      className="btn btn-warning"
+                      onClick={handleReset}
+                    >
+                      <i class="fa fa-refresh" aria-hidden="true"></i>
+                      {"  "}
+                      Reset Filter
+                    </button>
+                  )}
                 </form>
               </div>
             </div>
           </div>
-
-          {JSON.stringify(phcEmployees)}
 
           <div className="col-md-12">
             <div className="box">
@@ -203,9 +292,103 @@ const PHCEmployees = () => {
                         <th className="bb-2"></th>
                       </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                      {currentEmployees.map((employee) => (
+                        <tr key={employee.id}>
+                          <td style={{ cursor: "pointer" }}>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              style={{ color: "black", fontWeight: "bold" }}
+                            >
+                              {employee.first_name}
+                            </Link>
+                          </td>
+                          <td style={{ cursor: "pointer" }}>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              style={{ color: "black", fontWeight: "bold" }}
+                            >
+                              {employee.last_name}
+                            </Link>
+                          </td>
+                          <td>{employee.gender}</td>
+                          <td>
+                            <span
+                              className="badge badge-secondary"
+                              style={{
+                                textTransform: "uppercase",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {employee.department}
+                            </span>
+                          </td>
+                          <td>{employee.date_of_birth}</td>
+                          <td>{employee.nationality}</td>
+                          <td>
+                            <span
+                              className="badge badge-primary"
+                              style={{
+                                textTransform: "uppercase",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {employee.occupation}
+                            </span>
+                          </td>
+                          <td>{employee.marital_status}</td>
+                          <td>{employee.phone_number}</td>
+                          <td
+                            style={{
+                              maxWidth: "150px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {employee.email}
+                          </td>
+                          <td>
+                            <span
+                              className="badge badge-warning"
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                updateCertificateStatus(employee.id)
+                              }
+                            >
+                              {employee.status}
+                            </span>
+                          </td>
+                          <td>
+                            <Link
+                              to={`/applicant/detail/${employee.id}`}
+                              className="waves-effect waves-light btn btn-primary-light btn-circle"
+                            >
+                              <i class="fa fa-eye" aria-hidden="true"></i>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
+                <ReactPaginate
+                  previousLabel={"previous"}
+                  nextLabel={"next"}
+                  breakLabel={"..."}
+                  breakClassName={"break-me"}
+                  pageCount={
+                    filterPhcEmployees
+                      ? Math.ceil(filterPhcEmployees.length / employeesPerPage)
+                      : Math.ceil(phcEmployees.length / employeesPerPage)
+                  }
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName={"pagination"}
+                  subContainerClassName={"pages pagination"}
+                  activeClassName={"active"}
+                />
               </div>
             </div>
           </div>

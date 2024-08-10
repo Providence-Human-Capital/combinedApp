@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Papa from "papaparse";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { parse, format } from "date-fns";
 import BreadCrumb from "../../components/BreadCrumb";
 import useStaffingCompanies from "../Hr/hooks/useStaffingCompanies";
 import { API } from "../../../config";
+import useCompanies from "../Hr/hooks/useCompanies";
 
 const StaffingEmployeeUpload = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -18,7 +19,8 @@ const StaffingEmployeeUpload = () => {
   const [errorMessages, setErrorMessages] = useState([]);
   const dispatch = useDispatch();
 
-  const { data: companies, error, isLoading } = useStaffingCompanies();
+  // const { data: companies, error, isLoading } = useStaffingCompanies();
+  const { data: companies, error, isLoading } = useCompanies();
 
   const validationSchema = Yup.object().shape({
     // company: Yup.string().required("Select The Staffing Solutions Company"),
@@ -26,6 +28,7 @@ const StaffingEmployeeUpload = () => {
     fileInput: Yup.mixed().required("CSV FILE FOR DATA FORM IS REQUIRED"),
     status: Yup.string().required("Select Employees Employment Status"),
 
+    company_type: Yup.string().required("Please select the company Type"),
     date_format: Yup.string().required("Please Select a Date format"),
   });
 
@@ -79,17 +82,27 @@ const StaffingEmployeeUpload = () => {
     });
   };
 
-  const handleEmployeeUpload = async () => {
+  const handleEmployeeUpload = async (companyType) => {
     setIsUploading(true);
-    console.log("CSV DATA", csvData);
+
+    const url =
+      companyType === "regular"
+        ? `${API}/api/employees/csv/upload`
+        : companyType === "staffing"
+        ? `${API}/api/staffing/csv/upload`
+        : null;
+
+    if (!url) {
+      console.error("Invalid company type");
+      setIsUploading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        `${API}/api/staffing/csv/upload`,
-        csvData
-      );
+      const response = await axios.post(url, csvData);
       setSuccessfulUploads(response.data.successfulUploads);
     } catch (error) {
-      console.error("Failed to upload employees", error);
+      console.error(`Failed to upload employees for ${companyType}`, error);
     } finally {
       setIsUploading(false);
     }
@@ -112,7 +125,7 @@ const StaffingEmployeeUpload = () => {
               company: "",
               fileInput: null,
               status: "",
-
+              company_type: "staffing",
               date_format: "date_1",
             }}
             validationSchema={validationSchema}
@@ -154,6 +167,28 @@ const StaffingEmployeeUpload = () => {
                           <Field
                             as="select"
                             className="form-select"
+                            id="company_type"
+                            name="company_type"
+                          >
+                            <option value=""></option>
+                            <option value="staffing">STAFFING SOLUTIONS</option>
+                            <option value="regular">REGULAR COMPANY</option>
+                          </Field>
+                          <label
+                            htmlFor="company_type"
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            SELECT COMPANY TYPE (STAFFING / REGULAR)
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-3 ">
+                        <div className="form-floating">
+                          <Field
+                            as="select"
+                            className="form-select"
                             id="date_format"
                             name="date_format"
                           >
@@ -161,9 +196,12 @@ const StaffingEmployeeUpload = () => {
                             <option value="date_1">YYYY-MM-DD</option>
                             <option value="date_2">YYYY-DD-MM</option>
                           </Field>
-                          <label htmlFor="date_format" style={{
-                            fontWeight: "bold",
-                          }}>
+                          <label
+                            htmlFor="date_format"
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
                             SELECT DATE FORMAT (YYYY-MM-DD/YYYY-DD-MM)
                           </label>
                         </div>
@@ -211,6 +249,7 @@ const StaffingEmployeeUpload = () => {
                           >
                             <option value=""></option>
                             <option value="New">NEW</option>
+                            <option value="Active">ACTIVE (EMPLOYEED)</option>
                             <option
                               value="Deployed"
                               style={{
@@ -282,7 +321,9 @@ const StaffingEmployeeUpload = () => {
                         <button
                           type="button"
                           className="btn btn-success ml-3"
-                          onClick={handleEmployeeUpload}
+                          onClick={() =>
+                            handleEmployeeUpload(values.company_type)
+                          }
                           disabled={isUploading}
                         >
                           <i class="fa fa-cloud-upload" aria-hidden="true"></i>{" "}

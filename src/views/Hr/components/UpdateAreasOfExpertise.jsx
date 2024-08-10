@@ -143,7 +143,7 @@ const areaOfSpecialization = [
   "SHEQ",
   "LIFEGUARD",
   "SORTER",
-  "FITNESS TRAINER"
+  "FITNESS TRAINER",
 ];
 
 const customStyles = {
@@ -180,8 +180,6 @@ const customStyles = {
 };
 
 const UpdateAreasOfExpertise = ({ employeeId, specializations }) => {
- 
-
   const navigate = useNavigate();
   const [selectHeight, setSelectHeight] = useState("56px");
   const [isUpdating, setIsUpdating] = useState(false);
@@ -231,7 +229,9 @@ const UpdateAreasOfExpertise = ({ employeeId, specializations }) => {
     >
       {({ setFieldValue, isSubmitting }) => (
         <Form>
-          <div>
+          <div style={{
+            margin: "2rem"
+          }}>
             <h4 style={{ textTransform: "uppercase", fontWeight: "bold" }}>
               Update Areas of Expertise
             </h4>
@@ -287,6 +287,12 @@ const UpdateAreasOfExpertise = ({ employeeId, specializations }) => {
                 disabled={isSubmitting}
                 className="btn btn-primary"
               >
+                <i
+                  className="ti-check"
+                  style={{
+                    fontSize: "20px",
+                  }}
+                ></i> {" "}
                 UPDATE AREA OF EXPERTISES
               </button>
             )}
