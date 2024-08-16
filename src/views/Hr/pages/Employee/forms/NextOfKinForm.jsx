@@ -163,10 +163,12 @@ const NextOfKinForm = ({ employeeId, onSuccess }) => {
                         <option value="MOTHER">MOTHER</option>
                         <option value="SON">SON</option>
                         <option value="DAUGHTER">DAUGHTER</option>
+                        <option value="BROTHER">BROTHER</option>
                         <option value="WIFE">WIFE</option>
                         <option value="HUSBAND">HUSBAND</option>
                         <option value="SISTER">SISTER</option>
                         <option value="FRIEND">FRIEND</option>
+                        <option value="GRAND PARENT">GRAND PARENT</option>
                         <option value="EXTENDED FAMILY">EXTENDED FAMILY</option>
                         <option value="OTHER">OTHER</option>
                       </Field>

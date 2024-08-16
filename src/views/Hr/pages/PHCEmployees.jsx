@@ -10,6 +10,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading.jsx/Loading";
+import Error from "../../../components/Error/Error";
 
 const exportToExcel = (data, filename) => {
   const worksheet = XLSX.utils.json_to_sheet(data);

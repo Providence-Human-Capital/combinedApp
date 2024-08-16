@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { authActions } from "../store/auth";
+import { API } from "../../config";
 
 const NavigationBar = () => {
   const [isSideBarCollapsed, setSidebarCollapsed] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -14,10 +16,53 @@ const NavigationBar = () => {
     setSidebarCollapsed(!isSideBarCollapsed);
   };
 
-  const signUserOut = () => {
-    dispatch(authActions.setLogout());
-    navigate("/login");
+  const signUserOut = async () => {
+
+    
+    try {
+      // Send the logout request to the server
+      const response = await fetch(`${API}/api/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Include the user's token
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+  
+      // If logout is successful, clear the user's authentication state
+      dispatch(authActions.setLogout());
+  
+      // Navigate the user to the login page
+      navigate("/login");
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
+  let timeout;
+
+  const resetTimeout = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(signUserOut, 1000 * 60 * 1); // 15 minutes of inactivity
+  };
+  
+  useEffect(() => {
+    window.addEventListener('mousemove', resetTimeout);
+    window.addEventListener('keydown', resetTimeout);
+  
+    resetTimeout(); // Start the timer
+  
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimeout);
+      window.removeEventListener('keydown', resetTimeout);
+    };
+  }, []);
+
+  
 
   const isAdminOrPensions = user?.role === "admin" || user?.role === "pensions";
   const isAdminOrHealth = user?.role === "admin" || user?.role === "health";

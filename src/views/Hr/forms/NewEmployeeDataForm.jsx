@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useEffect, useRef, useState } from "react";
+import {useFormikContext, Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { useDropzone } from "react-dropzone";
@@ -59,6 +59,13 @@ const NewEmployeeDataForm = () => {
     nationality: "",
     marital_status: "",
     address: "",
+
+    house_number: "",
+    street_name: "",
+    location: "",
+    city: "",
+    country: "",
+
     phone_number: "",
     gender: "",
     email: "",
@@ -73,7 +80,7 @@ const NewEmployeeDataForm = () => {
     ref_contact: "",
     ref_emp: "",
     ref_relation: "",
-    ref_type: "",
+    ref_type: "Referrer",
     from_company: "",
     from_position: "",
   };
@@ -85,7 +92,15 @@ const NewEmployeeDataForm = () => {
     date_of_birth: Yup.date().required("Enter Your Date Of Birth").nullable(),
     nationality: Yup.string().required("Nationality Is Required"),
     marital_status: Yup.string().required("Select Your Marital Status"),
-    address: Yup.string().required("Residential Address is Required"),
+    address: Yup.string().nullable(),
+
+
+    house_number: Yup.string().required("House number is Required"),
+    street_name: Yup.string().required("Street Name is Required"),
+    location: Yup.string().required("Loacation is Required"),
+    city: Yup.string().required("City is Requred"),
+    country: Yup.string().required("Please Select A Country"),
+
     phone_number: Yup.string().required("Enter Your Phone number"),
     email: Yup.string(),
     gender: Yup.string().required("Please Select Your Gender"),
@@ -119,6 +134,12 @@ const NewEmployeeDataForm = () => {
 
     file: Yup.mixed().nullable(),
   });
+
+
+  // Access Formik context
+  
+
+  
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setIsLoading(true);
@@ -206,7 +227,7 @@ const NewEmployeeDataForm = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to save information!",
+        text: `Failed to save information ${error} `,
         timer: 4000,
         confirmButtonColor: "#e60000",
       });
@@ -299,11 +320,16 @@ const NewEmployeeDataForm = () => {
                     //   margin: "10px 0",
                     // }}
                   >
-                    How Job Application Works <span style={{
-                      cursor: "pointer",
-                      color: "#2C4894",
-                      fontWeight: "bold",
-                    }}>Click here for Help !</span>
+                    How Job Application Works{" "}
+                    <span
+                      style={{
+                        cursor: "pointer",
+                        color: "#2C4894",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Click here for Help !
+                    </span>
                   </a>
                 </div>
 
@@ -658,13 +684,231 @@ const NewEmployeeDataForm = () => {
                           </div>
                         </div>
                         <div className="space"></div>
+
                         <div className="row">
-                          <div className="col-md-12 col-12 mb-4">
+                          <div className="col-md-3 col-12 mb-4">
+                            <div className="form-floating">
+                              <Field
+                                type="text"
+                                id="house_number"
+                                name="house_number"
+                                className={`form-control ${
+                                  touched.house_number && errors.house_number
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              />
+                              <label
+                                htmlFor="house_number"
+                                style={{
+                                  color: "#2C4894",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                HOUSE NUMBER
+                              </label>
+                              <ErrorMessage
+                                name="house_number"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-3 col-12 mb-4">
+                            <div className="form-floating">
+                              <Field
+                                type="text"
+                                id="street_name"
+                                name="street_name"
+                                className={`form-control ${
+                                  touched.street_name && errors.street_name
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              />
+                              <label
+                                htmlFor="street_name"
+                                style={{
+                                  color: "#2C4894",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                STREET NAME
+                              </label>
+                              <ErrorMessage
+                                name="street_name"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-3 col-12 mb-4">
+                            <div className="form-floating">
+                              <Field
+                                type="text"
+                                id="location"
+                                name="location"
+                                className={`form-control ${
+                                  touched.location && errors.location
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              />
+                              <label
+                                htmlFor="location"
+                                style={{
+                                  color: "#2C4894",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                LOCATION/SUBURB
+                              </label>
+                              <ErrorMessage
+                                name="location"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-3 col-12 mb-4">
+                            <div className="form-floating">
+                              <Field
+                                type="text"
+                                id="city"
+                                name="city"
+                                className={`form-control ${
+                                  touched.city && errors.city
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              />
+                              <label
+                                htmlFor="city"
+                                style={{
+                                  color: "#2C4894",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                CITY
+                              </label>
+                              <ErrorMessage
+                                name="city"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space"></div>
+                        <div className="row">
+                          <div className="col-md-3 col-12 mb-4">
+                            <div className="form-floating">
+                              <Field
+                                as="select"
+                                name="country"
+                                className={`form-select ${
+                                  touched.country && errors.country
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              >
+                                <option value="">COUNTRY</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Angola">Angola</option>
+                                <option value="Benin">Benin</option>
+                                <option value="Botswana">Botswana</option>
+                                <option value="Burkina Faso">
+                                  Burkina Faso
+                                </option>
+                                <option value="Burundi">Burundi</option>
+                                <option value="Cabo Verde">Cabo Verde</option>
+                                <option value="Cameroon">Cameroon</option>
+                                <option value="Central African Republic">
+                                  Central African Republic
+                                </option>
+                                <option value="Chad">Chad</option>
+                                <option value="Comoros">Comoros</option>
+                                <option value="Congo (Brazzaville)">
+                                  Congo (Brazzaville)
+                                </option>
+                                <option value="Congo (Kinshasa)">
+                                  Congo (Kinshasa)
+                                </option>
+                                <option value="Djibouti">Djibouti</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="Equatorial Guinea">
+                                  Equatorial Guinea
+                                </option>
+                                <option value="Eritrea">Eritrea</option>
+                                <option value="Eswatini">Eswatini</option>
+                                <option value="Ethiopia">Ethiopia</option>
+                                <option value="Gabon">Gabon</option>
+                                <option value="Gambia">Gambia</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Guinea">Guinea</option>
+                                <option value="Guinea-Bissau">
+                                  Guinea-Bissau
+                                </option>
+                                <option value="Ivory Coast">Ivory Coast</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Lesotho">Lesotho</option>
+                                <option value="Liberia">Liberia</option>
+                                <option value="Libya">Libya</option>
+                                <option value="Madagascar">Madagascar</option>
+                                <option value="Malawi">Malawi</option>
+                                <option value="Mali">Mali</option>
+                                <option value="Mauritania">Mauritania</option>
+                                <option value="Mauritius">Mauritius</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="São Tomé and Príncipe">
+                                  São Tomé and Príncipe
+                                </option>
+                                <option value="Senegal">Senegal</option>
+                                <option value="Seychelles">Seychelles</option>
+                                <option value="Sierra Leone">
+                                  Sierra Leone
+                                </option>
+                                <option value="Somalia">Somalia</option>
+                                <option value="South Africa">
+                                  South Africa
+                                </option>
+                                <option value="South Sudan">South Sudan</option>
+                                <option value="Sudan">Sudan</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="Togo">Togo</option>
+                                <option value="Tunisia">Tunisia</option>
+                                <option value="Uganda">Uganda</option>
+                                <option value="Zambia">Zambia</option>
+                              </Field>
+                              <label
+                                htmlFor="country"
+                                style={{
+                                  textTransform: "uppercase",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                SELECT COUNTRY
+                              </label>
+                              <ErrorMessage
+                                name="country"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-9 col-12 mb-4">
                             <div className="form-floating">
                               <Field
                                 type="text"
                                 id="address"
                                 name="address"
+                                
                                 className={`form-control ${
                                   touched.address && errors.address
                                     ? "error-input"
@@ -688,6 +932,8 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                         </div>
+                        <div className="space"></div>
+
                         <div className="space"></div>
                         <div className="row">
                           <div className="col-md-6 col-12 mb-4">
@@ -995,8 +1241,8 @@ const NewEmployeeDataForm = () => {
                                     color: "#2C4894",
                                   }}
                                 >
-                                  PROVIDE REFFERER INFORMATION (Who Referred
-                                  you to Providence Human Capital)
+                                  PROVIDE REFFERER INFORMATION (Who Referred you
+                                  to Providence Human Capital)
                                 </h6>
 
                                 <div className="col-md-4 col-12 mb-4">
@@ -1115,6 +1361,7 @@ const NewEmployeeDataForm = () => {
                                       <option value="MOTHER">MOTHER</option>
                                       <option value="SON">SON</option>
                                       <option value="DAUGHTER">DAUGHTER</option>
+                                      <option value="BROTHER">BROTHER</option>
                                       <option value="WIFE">WIFE</option>
                                       <option value="HUSBAND">HUSBAND</option>
                                       <option value="SISTER">SISTER</option>
@@ -1123,6 +1370,28 @@ const NewEmployeeDataForm = () => {
                                         EXTENDED FAMILY
                                       </option>
                                       <option value="OTHER">OTHER</option>
+                                      <option value="PARTNER">PARTNER</option>
+                                      <option value="GRANDFATHER">
+                                        GRANDFATHER
+                                      </option>
+                                      <option value="GRANDMOTHER">
+                                        GRANDMOTHER
+                                      </option>
+                                      <option value="GRANDSON">GRANDSON</option>
+                                      <option value="GRANDDAUGHTER">
+                                        GRANDDAUGHTER
+                                      </option>
+                                      <option value="UNCLE">UNCLE</option>
+                                      <option value="AUNT">AUNT</option>
+                                      <option value="NEPHEW">NEPHEW</option>
+                                      <option value="NIECE">NIECE</option>
+                                      <option value="COUSIN">COUSIN</option>
+                                      <option value="COLLEAGUE">
+                                        COLLEAGUE
+                                      </option>
+                                      <option value="NEIGHBOR">NEIGHBOR</option>
+                                      <option value="GUARDIAN">GUARDIAN</option>
+                                      <option value="MENTOR">MENTOR</option>
                                     </Field>
                                     <label
                                       htmlFor="education_level"
@@ -1201,7 +1470,6 @@ const NewEmployeeDataForm = () => {
                             <strong
                               style={{
                                 color: "#0E9645",
-                               
                               }}
                             >
                               National ID, Educational Qualifications, Drivers
@@ -1219,7 +1487,6 @@ const NewEmployeeDataForm = () => {
                           </div>
                         </div>
 
-                        
                         <div className="space"></div>
                         <div>
                           {isLoading ? (

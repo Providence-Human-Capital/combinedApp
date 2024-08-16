@@ -142,6 +142,8 @@ const PreviousEmploymentForm = ({ employeeId }) => {
                       className="form-select"
                       name="duration_my"
                     >
+
+                      <option value=""></option>
                       <option value="MONTH(S)">MONTH(S)</option>
                       <option value="YEAR(S)">YEAR(S)</option>
                     </Field>
