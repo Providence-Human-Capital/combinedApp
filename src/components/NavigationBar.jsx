@@ -46,7 +46,7 @@ const NavigationBar = () => {
 
   const resetTimeout = () => {
     clearTimeout(timeout);
-    timeout = setTimeout(signUserOut, 1000 * 60 * 1); // 15 minutes of inactivity
+    timeout = setTimeout(signUserOut, 1000 * 60 * 7); // 15 minutes of inactivity
   };
   
   useEffect(() => {

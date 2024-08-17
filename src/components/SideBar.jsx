@@ -5,11 +5,14 @@ import { Link, NavLink } from "react-router-dom";
 const SideBar = () => {
   const user = useSelector((state) => state.auth.user);
 
-  const isAdminOrPensions = user.role === "admin" || user.role === "pensions";
-  const isAdminOrHealth = user.role === "admin" || user.role === "health";
-  const isAdminOrHr = user.role === "admin" || user.role === "hr";
-  const isAdminOrReception = user.role === "admin" || user.role === "reception";
-  const isAdminOrNurse = user.role === "admin" || user.role === "nurse";
+  const isAdminOrPensions = user?.role === "admin" || user?.role === "pensions";
+  const isAdminOrHealth = user?.role === "admin" || user?.role === "health";
+  const isAdminOrHr = user?.role === "admin" || user?.role === "hr";
+  const isAdminOrReception =
+    user?.role === "admin" || user?.role === "reception";
+  const isAdminOrNurse = user?.role === "admin" || user?.role === "nurse";
+
+  const isStaffing = user?.role === "admin" || user?.role === "staffing";
 
   const styles = {
     pageHeight: {
@@ -176,26 +179,41 @@ const SideBar = () => {
                           className="ti-user"
                           style={{
                             fontSize: "20px",
-                            color: "#007a41",
+                            color: "red",
                             fontWeight: "bold",
                           }}
                         ></i>
-                        <span  style={{
+                        <span
+                          style={{
                             textTransform: "uppercase",
-                            color: "#007a41",
+                            color: "red",
                             fontWeight: "bold",
-                          }}> Applicants </span>
+                          }}
+                        >
+                          {" "}
+                          Applicants{" "}
+                        </span>
                       </NavLink>
                     </li>
                     <li id="aside-bar">
                       <NavLink to={"/trained/applicants"}>
                         <i
-                          className="ti-user"
+                          className="ti-check-box"
                           style={{
                             fontSize: "20px",
+                            color: "#007a41",
+                            fontWeight: "bold",
                           }}
                         ></i>
-                        <span>Verified Applicants</span>
+                        <span
+                          style={{
+                            textTransform: "uppercase",
+                            color: "#007a41",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Verified Applicants
+                        </span>
                       </NavLink>
                     </li>
 

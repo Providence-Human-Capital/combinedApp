@@ -113,16 +113,7 @@ const NewEmployeeDataForm = () => {
     area_of_expertise: Yup.string().nullable(),
     work_experience: Yup.string().nullable(),
 
-    // ref_name: Yup.string().required(
-    //   "Enter the full name of the person you referred this employee to Providence Human Capital"
-    // ),
-    // ref_contact: Yup.string().required("Enter the Referrer Contact Number"),
-    // ref_emp: Yup.string().required(
-    //   "Enter the Referrer Place Of Employment (Where he/she works or Worked)"
-    // ),
-    // ref_relation: Yup.string().required(
-    //   "Whats How Are You Related To the person Who Referred you to the Job"
-    // ),
+   
 
     ref_name: Yup.string().nullable(),
     ref_contact: Yup.string().nullable(),
@@ -180,6 +171,15 @@ const NewEmployeeDataForm = () => {
     values.national_id = values.national_id.toUpperCase();
     values.address = values.address.toUpperCase();
     values.bank_name = values.bank_name.toUpperCase();
+
+
+    values.house_number = values.house_number.toUpperCase();
+    values.street_name = values.street_name.toUpperCase();
+    values.location = values.location.toUpperCase();
+    values.city = values.city.toUpperCase();
+    values.country = values.country.toUpperCase();
+
+    
     values.date_of_birth = formattedDate;
 
     console.log("Values", values);
@@ -683,6 +683,7 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                         </div>
+
                         <div className="space"></div>
 
                         <div className="row">

@@ -97,7 +97,7 @@ const Login = () => {
                   <div className="logo-lg">
                     <span className="light-logo">
                       <img
-                        src="assets/images/providence.png"
+                        src="assets/images/PHC_Logo.png"
                         alt="logo"
                         style={styles.logoStyles}
                       />
@@ -109,7 +109,7 @@ const Login = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    SIGNIN TO SYSTEM
+                    SIGNIN TO HRMS
                   </p>
                 </div>
                 {error && (

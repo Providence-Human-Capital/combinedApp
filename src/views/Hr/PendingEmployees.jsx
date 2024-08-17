@@ -13,6 +13,7 @@ import ReactPaginate from "react-paginate";
 import * as XLSX from "xlsx";
 import EmployeeExpertise from "./components/EmployeeExpertise";
 import useStaffingCompanies from "./hooks/useStaffingCompanies";
+import useCompanies from "./hooks/useCompanies";
 
 const exportToExcel = (data, filename) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
@@ -33,7 +34,6 @@ const exportToExcel = (data, filename) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
   XLSX.writeFile(workbook, filename);
 };
-
 
 const PendingEmployees = () => {
   const user = useSelector((state) => state.auth.user);
@@ -75,7 +75,7 @@ const PendingEmployees = () => {
     data: companies,
     error: companiesError,
     isLoading: companiesLoading,
-  } = useStaffingCompanies();
+  } = useCompanies();
 
   const fetchFilteredEmployees = async (filters) => {
     try {
@@ -267,18 +267,28 @@ const PendingEmployees = () => {
         <div class="form-floating">
           <select id="status-select" class="form-select">
             <option value="New">NEW</option>
-            <option value="Pending">PENDING DEPLOYEMENT</option>
+            <option value="Pending">PENDING DEPLOYMENT</option>
             <option value="Attachment">ON ATTACHMENT</option>
-            <option value="Deployed">DEPLOY</option>
+            <option value="Active">DEPLOY</option>
             <option value="Terminated">TERMINATED</option>
           </select>
-          <label htmlFor="status-select">STATUS</label>
+          <label for="status-select">STATUS</label>
         </div>
-        <div id="company-select-container" class="form-floating sep" style="display: none;">
-          <select id="company-select" class="form-select">
-            ${companyOptions}
-          </select>
-          <label htmlFor="company-select">COMPANY SELECT</label>
+        <div id="company-select-container" style="display: none;">
+          <div class="form-floating sep">
+            <select id="company-select" class="form-select">
+              ${companyOptions}
+            </select>
+            <label for="company-select">COMPANY SELECT</label>
+          </div>
+          <div class="form-floating mt-4">
+            <input type="text" id="occupation" class="form-control" required>
+            <label for="occupation">DEPLOYMENT POSITION</label>
+          </div>
+          <div class="form-floating mt-4">
+            <input type="text" id="department" class="form-control" required>
+            <label for="department">DEPARTMENT</label>
+          </div>
         </div>
         <p><strong>NB</strong>: Select A Company Where You Are Deploying To!</p>
       `,
@@ -293,7 +303,7 @@ const PendingEmployees = () => {
         );
 
         statusSelectElement.addEventListener("change", () => {
-          if (statusSelectElement.value === "Deployed") {
+          if (statusSelectElement.value === "Active") {
             companySelectContainer.style.display = "block";
           } else {
             companySelectContainer.style.display = "none";
@@ -304,16 +314,43 @@ const PendingEmployees = () => {
         const statusSelectElement = document.getElementById("status-select");
         const selectedStatus = statusSelectElement.value;
 
+        const occupationSelect = document.getElementById("occupation");
+        const occupationDeploy = occupationSelect.value;
+
+        const departmentSelect = document.getElementById("department");
+        const departmentDeploy = departmentSelect.value;
+
         const companySelectElement = document.getElementById("company-select");
         const selectedCompany = companySelectElement
           ? companySelectElement.value
           : null;
 
-        return { selectedStatus, selectedCompany };
+        // Validation
+        if (
+          selectedStatus === "Active" &&
+          (!selectedCompany || !occupationDeploy || !departmentDeploy)
+        ) {
+          Swal.showValidationMessage(
+            "Please fill in all required fields for deployment."
+          );
+          return false;
+        }
+
+        return {
+          selectedStatus,
+          selectedCompany,
+          occupationDeploy,
+          departmentDeploy,
+        };
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const { selectedStatus, selectedCompany } = result.value;
+        const {
+          selectedStatus,
+          selectedCompany,
+          occupationDeploy,
+          departmentDeploy,
+        } = result.value;
 
         try {
           await axios.post(
@@ -321,6 +358,8 @@ const PendingEmployees = () => {
             {
               status: selectedStatus,
               company_id: selectedCompany,
+              department: departmentDeploy,
+              occupation: occupationDeploy,
             },
             {
               headers: {

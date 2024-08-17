@@ -31,24 +31,32 @@ import {
   getAllPatients,
 } from "./services/api";
 import { companyActions } from "./store/company";
-
+import Clinics from "./views/Clinics/Clinics";
+import AddClinic from "./views/Clinics/pages/AddClinic";
+import EditClinic from "./views/Clinics/pages/EditClinic";
 import { clinicActions } from "./store/clinic";
 import { patientsActions } from "./store/patients";
 import { QueryClient, QueryClientProvider } from "react-query";
+import HealthDashboard from "./views/Dashboard/HealthDashboard";
 import { ReactQueryDevtools } from "react-query/devtools";
-
+import HealthReports from "./views/Health/Crud/HealthReports";
+import PatientDetailedPage from "./views/Health/PatientDetailedPage";
+import MedicalsCertificates from "./views/Health/Medicals/MedicalsCertificates";
 import NewEmployeeDataForm from "./views/Hr/forms/NewEmployeeDataForm";
 import PendingEmployees from "./views/Hr/PendingEmployees";
 import EmployeeBeneficiaryForm from "./views/Hr/forms/EmployeeBeneficiaryForm";
 import EmployeeTerminationForm from "./views/Hr/forms/EmployeeTerminationForm";
+import HealthStaff from "./views/HealthStaff/HealthStaff";
 import AddStaffingEmployee from "./views/Hr/forms/AddStaffingEmployee";
 import ApplicantsDetailedPage from "./views/Hr/pages/ApplicantsDetailedPage";
 import StaffingSolutionsDeployed from "./views/Hr/pages/StaffingSolutionsDeployed";
 import UploadEmployees from "./views/Hr/forms/UploadEmployees";
+import UpdateEmployeeInformation from "./views/Hr/forms/UpdateEmployeeInformation";
 import EmployeeUpdate from "./views/Hr/forms/EmployeeUpdate";
 import Attachments from "./views/Hr/pages/Attachments";
 import TerminatedEmployees from "./views/Hr/pages/TerminatedEmployees";
-
+import Drugs from "./views/Drugs/Drugs";
+import OrderForm from "./views/Drugs/forms/OrderForm";
 import LeaveManagement from "./views/LeaveManagement/LeaveManagement";
 import HrReports from "./views/HrReports/HrReports";
 import TrainedEmployees from "./views/Hr/TrainedEmployees";
@@ -129,9 +137,17 @@ const WrapperComponent = () => {
         <Route path="/documents" element={<DocumentUpload />} />
         <Route path="*" element={<Navigate to={"/dashboard"} />} />
 
+
         <Route exact path="/" element={<HomeInit />}>
           <Route element={<PrivateRoutes />}>
             <Route exact path="/dashboard" element={<Dashboard />} />
+            <Route
+              exact
+              path="/health/dashboard"
+              element={<HealthDashboard />}
+            />
+            <Route exact path="/visitors" element={<Visitors />} />
+            <Route exact path="/orders" element={<Orders />} />
 
             <Route exact path="/employees" element={<Employees />} />
             <Route exact path="/attachees" element={<Attachments />} />
@@ -171,7 +187,10 @@ const WrapperComponent = () => {
             />
 
             <Route exact path="/reports" element={<Reports />} />
-
+            <Route exact path="/providence/drugs" element={<Drugs />} />
+            <Route exact path="/order/drugs" element={<OrderForm />} />
+            <Route exact path="/clinic" element={<AddStatsForm />} />
+            {/* <Route exact path="/add/stats/" element={<AddStatsForm />} /> */}
             <Route
               path="/print/beneficiary/document/:clientId"
               element={<PrintBeneficiaryForm />}
@@ -180,6 +199,12 @@ const WrapperComponent = () => {
             <Route path="/company/add" element={<AddCompany />} />
             <Route path="/company/edit/:companyId" element={<EditCompany />} />
 
+            <Route path="/clinics" element={<Clinics />} />
+            <Route path="/clinic/add" element={<AddClinic />} />
+            <Route path="/clinic/edit/:clinicId" element={<EditClinic />} />
+            <Route path="/health/reports" element={<HealthReports />} />
+            <Route path="/health/staff" element={<HealthStaff />} />
+            
             <Route path="/leave/management" element={<LeaveManagement />} />
             <Route path="/hr/reports" element={<HrReports />} />
             <Route path="/admin/ops" element={<AdminOps />} />
@@ -192,9 +217,19 @@ const WrapperComponent = () => {
             <Route path="/phc/employees" element={<PHCEmployees />} />
 
             <Route
+              path="/patient/profile/:patientId"
+              element={<PatientDetailedPage />}
+            />
+            <Route
               path="/employee/info/:employeeId"
               element={<UpdateEmpDetails />}
             />
+            <Route
+              path="/medicals/certificates"
+              element={<MedicalsCertificates />}
+            />
+
+            
           </Route>
         </Route>
       </Routes>

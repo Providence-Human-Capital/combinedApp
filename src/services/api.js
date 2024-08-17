@@ -211,6 +211,7 @@ export const areaOfSpecialization = [
   "SECURITY",
   "SPORTS & RECREATION",
   "STORES & WAREHOUSE",
+  "WAREHOUSE CLERK",
   "STRATEGIC MANAGEMENT",
   "STUDENT LOANS",
   "TENDERS",
@@ -342,5 +343,10 @@ export const areaOfSpecialization = [
   "SAMPLER",
   "CALL CENTRE",
   "MUSIC",
-  "COMPUTER SCIENCE"
+  "COMPUTER SCIENCE",
+  "THEOLOGY",
+  "MANAGEMENT",
+  "SHOP MANAGER",
+  "STOCK CONTROL",
+  "BUTCHERY",
 ];
