@@ -89,7 +89,7 @@ const PHCEmployees = () => {
     try {
       setIsFetching(true);
       const response = await axios.post(
-        `${API}/api/phc/employees/${74}`,
+        `${API}/api/employees/filters/${74}`,
         filters
       );
       if (response.status === 200) {

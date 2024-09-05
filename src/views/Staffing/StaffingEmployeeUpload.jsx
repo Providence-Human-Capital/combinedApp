@@ -20,13 +20,14 @@ const StaffingEmployeeUpload = () => {
   const dispatch = useDispatch();
 
   // const { data: companies, error, isLoading } = useStaffingCompanies();
-  const { data: companies, error, isLoading } = useCompanies();
+  const { data: companies, error, isLoading } = useStaffingCompanies();
 
   const validationSchema = Yup.object().shape({
-    // company: Yup.string().required("Select The Staffing Solutions Company"),
+
     company: Yup.string().nullable(),
     fileInput: Yup.mixed().required("CSV FILE FOR DATA FORM IS REQUIRED"),
     status: Yup.string().required("Select Employees Employment Status"),
+    
 
     company_type: Yup.string().required("Please select the company Type"),
     date_format: Yup.string().required("Please Select a Date format"),

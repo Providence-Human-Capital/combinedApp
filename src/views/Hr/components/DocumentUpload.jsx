@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const fileTypes = [
   "National ID",
@@ -42,7 +43,7 @@ const FileUploadField = ({
 
   return (
     <div style={{ marginBottom: "20px" }}>
-        <div className="space"></div>
+      <div className="space"></div>
       <div className="form-floating">
         {!fileUpload.type && (
           <>
@@ -144,10 +145,6 @@ const FileUploadField = ({
 const DocumentUpload = forwardRef(({ employeeId, onFilesChange }, ref) => {
   const [fileUploads, setFileUploads] = useState([{ type: "", file: null }]);
 
-  //   useImperativeHandle(ref, () => ({
-  //     handleUpload,
-  //   }));
-
   useEffect(() => {
     if (onFilesChange) {
       onFilesChange(fileUploads);
@@ -165,8 +162,22 @@ const DocumentUpload = forwardRef(({ employeeId, onFilesChange }, ref) => {
   };
 
   const handleFileChange = (index, acceptedFiles) => {
+    const file = acceptedFiles[0];
+
+    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+
+    if (file.size > 2 * 1024 * 1024) { // 2MB size limit
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `File size should not exceed 2MB, Your file is too large (${fileSizeInMB}MB)`,
+        timer: 5000,
+        confirmButtonColor: "#e60000",
+      });
+      return;
+    }
     const newFileUploads = [...fileUploads];
-    newFileUploads[index].file = acceptedFiles[0];
+    newFileUploads[index].file = file;
     setFileUploads(newFileUploads);
   };
 
@@ -175,38 +186,6 @@ const DocumentUpload = forwardRef(({ employeeId, onFilesChange }, ref) => {
     newFileUploads.splice(index, 1);
     setFileUploads(newFileUploads);
   };
-
-  //   const handleUpload = async () => {
-  //     if (fileUploads.some((fu) => !fu.type || !fu.file)) {
-  //       alert("Please select a file type and upload a file for each entry!");
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append("employee_id", employeeId);
-
-  //     fileUploads.forEach((upload, index) => {
-  //       formData.append(`files[${index}][type]`, upload.type);
-  //       formData.append(`files[${index}][file]`, upload.file);
-  //     });
-
-  //     // try {
-  //     //   const response = await axios.post("/api/documents", formData, {
-  //     //     headers: {
-  //     //       "Content-Type": "multipart/form-data",
-  //     //     },
-  //     //   });
-
-  //     //   if (response.status === 200) {
-  //     //     alert("Files uploaded successfully!");
-  //     //     if (triggerUpload) triggerUpload();
-  //     //   }
-  //     // } catch (error) {
-  //     //   console.error("Error uploading files:", error);
-  //     //   alert("Failed to upload files.");
-  //     // }
-  //     console.log('file upload starting................')
-  //   };
 
   const availableFileTypes = fileTypes.filter(
     (type) => !fileUploads.some((upload) => upload.type === type)

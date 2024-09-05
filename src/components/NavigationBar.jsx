@@ -17,29 +17,34 @@ const NavigationBar = () => {
   };
 
   const signUserOut = async () => {
-
-    
     try {
       // Send the logout request to the server
       const response = await fetch(`${API}/api/logout`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Include the user's token
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the user's token
         },
       });
-  
+
       if (!response.ok) {
-        throw new Error('Logout failed');
+        throw new Error("Logout failed");
       }
-  
+
       // If logout is successful, clear the user's authentication state
       dispatch(authActions.setLogout());
-  
+
       // Navigate the user to the login page
       navigate("/login");
+
+      console.log("STATUS", response.status);
+      
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
+      dispatch(authActions.setLogout());
+
+      // Navigate the user to the login page
+      navigate("/login");
     }
   };
   let timeout;
@@ -48,21 +53,19 @@ const NavigationBar = () => {
     clearTimeout(timeout);
     timeout = setTimeout(signUserOut, 1000 * 60 * 7); // 15 minutes of inactivity
   };
-  
+
   useEffect(() => {
-    window.addEventListener('mousemove', resetTimeout);
-    window.addEventListener('keydown', resetTimeout);
-  
+    window.addEventListener("mousemove", resetTimeout);
+    window.addEventListener("keydown", resetTimeout);
+
     resetTimeout(); // Start the timer
-  
+
     return () => {
       clearTimeout(timeout);
-      window.removeEventListener('mousemove', resetTimeout);
-      window.removeEventListener('keydown', resetTimeout);
+      window.removeEventListener("mousemove", resetTimeout);
+      window.removeEventListener("keydown", resetTimeout);
     };
   }, []);
-
-  
 
   const isAdminOrPensions = user?.role === "admin" || user?.role === "pensions";
   const isAdminOrHealth = user?.role === "admin" || user?.role === "health";
@@ -70,6 +73,8 @@ const NavigationBar = () => {
   const isAdminOrReception =
     user?.role === "admin" || user?.role === "reception";
   const isAdminOrNurse = user?.role === "admin" || user?.role === "nurse";
+
+  const isStaffing = user?.role === "staffing";
 
   return (
     <>
@@ -92,14 +97,6 @@ const NavigationBar = () => {
 
             <div className="logo-lg">
               <span className="light-logo">
-                {/* { isAdminOrHr &&  <img
-                  src="/assets/images/ss.png"
-                  alt="logo"
-                  style={{
-                    height: "6rem",
-                  }}
-                />}
-                 */}
                 {isAdminOrHealth && (
                   <img
                     src="/assets/images/PHC_Logo.png"
@@ -110,16 +107,15 @@ const NavigationBar = () => {
                   />
                 )}
 
-                {/* {
-                  isAdminOrPensions &&
+                {isStaffing && (
                   <img
-                    src="/assets/images/MINERVABC.png"
+                    src="/assets/images/ss.png"
                     alt="logo"
                     style={{
-                      height: "6rem",
+                      height: "6.1rem",
                     }}
                   />
-                } */}
+                )}
               </span>
             </div>
           </Link>
@@ -285,7 +281,7 @@ const NavigationBar = () => {
                 </a>
                 <ul className="dropdown-menu animated flipInX">
                   <li className="user-body">
-                    <a className="dropdown-item" href="#">
+                    <a className="dropdown-item">
                       <i className="ti-user text-muted me-2"></i> Profile
                     </a>
 

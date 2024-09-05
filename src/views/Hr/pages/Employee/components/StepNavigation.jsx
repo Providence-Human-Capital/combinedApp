@@ -4,7 +4,8 @@ import {
   faHistory,
   faBank,
   faAnchor,
-  faFileArrowUp
+  faFileArrowUp,
+  faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./StepNavigation.css";
@@ -141,6 +142,31 @@ const StepNavigation = ({ currentStep, setCurrentStep }) => {
               onClick={() => handleStepClick(5)}
             >
              Employee Documents
+            </span>
+          </li>
+          <li
+            className={`step-wizard-item ${
+              currentStep === 6 ? "current-item" : ""
+            }`}
+          >
+            <span className="progress-count">
+              <FontAwesomeIcon
+                icon={faInfoCircle}
+                className={`progress-icon ${
+                  currentStep === 6 ? "current-icon" : ""
+                }`}
+              />
+            </span>
+
+            <span
+              className="progress-label"
+              style={{
+                cursor: "pointer",
+                textTransform: "uppercase",
+              }}
+              onClick={() => handleStepClick(6)}
+            >
+             REFENCE INFORMATION
             </span>
           </li>
         </ul>

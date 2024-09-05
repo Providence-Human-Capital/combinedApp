@@ -25,6 +25,19 @@
   margin-right: 1rem;
 }
 
+
+@media print {
+  .profile-printout {
+    /* Style for the first page */
+    margin-top: 0;
+  }
+
+  /* Every page after the first */
+  .profile-printout + div {
+    margin-top: 4rem;
+  }
+}
+
 .form-control,
 .form-select {
   border-color: var(--border-color);

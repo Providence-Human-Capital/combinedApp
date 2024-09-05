@@ -161,14 +161,12 @@ const AddStaffingEmployee = () => {
     values.city = values.city.toUpperCase();
     values.country = values.country.toUpperCase();
 
-
     values.ref_name = values.ref_name.toUpperCase();
     values.ref_contact = values.ref_contact.toUpperCase();
     values.ref_emp = values.ref_emp.toUpperCase();
     values.ref_relation = values.ref_relation.toUpperCase();
     values.from_company = values.from_company.toUpperCase();
     values.from_position = values.from_position.toUpperCase();
-    
 
     values.date_of_birth = formattedDate;
 
@@ -222,7 +220,24 @@ const AddStaffingEmployee = () => {
   };
 
   const onDrop = (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    const file = acceptedFiles[0];
+  
+    if (file) {
+      const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > 2 * 1024 * 1024) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `File size should not exceed 2MB. Your file is too large (${fileSizeInMB}MB)`,
+          timer: 5000,
+          confirmButtonColor: "#e60000",
+        });
+        return; // Exit the function if the file size is too large
+      }
+  
+      setFile(file); // Set the file only if it's within the size limit
+    }
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -491,258 +506,245 @@ const AddStaffingEmployee = () => {
                       </div>
                     </div>
 
+                    <div className="space"></div>
 
-                 <div className="space"></div>
-
-                        <div className="row">
-                          <div className="col-md-3 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                type="text"
-                                id="house_number"
-                                name="house_number"
-                                className={`form-control ${
-                                  touched.house_number && errors.house_number
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              />
-                              <label
-                                htmlFor="house_number"
-                                style={{
-                                  color: "#2C4894",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                HOUSE NUMBER
-                              </label>
-                              <ErrorMessage
-                                name="house_number"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-3 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                type="text"
-                                id="street_name"
-                                name="street_name"
-                                className={`form-control ${
-                                  touched.street_name && errors.street_name
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              />
-                              <label
-                                htmlFor="street_name"
-                                style={{
-                                  color: "#2C4894",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                STREET NAME
-                              </label>
-                              <ErrorMessage
-                                name="street_name"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-3 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                type="text"
-                                id="location"
-                                name="location"
-                                className={`form-control ${
-                                  touched.location && errors.location
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              />
-                              <label
-                                htmlFor="location"
-                                style={{
-                                  color: "#2C4894",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                LOCATION/SUBURB
-                              </label>
-                              <ErrorMessage
-                                name="location"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-3 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                type="text"
-                                id="city"
-                                name="city"
-                                className={`form-control ${
-                                  touched.city && errors.city
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              />
-                              <label
-                                htmlFor="city"
-                                style={{
-                                  color: "#2C4894",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                CITY
-                              </label>
-                              <ErrorMessage
-                                name="city"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
+                    <div className="row">
+                      <div className="col-md-3 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            type="text"
+                            id="house_number"
+                            name="house_number"
+                            className={`form-control ${
+                              touched.house_number && errors.house_number
+                                ? "error-input"
+                                : ""
+                            }`}
+                          />
+                          <label
+                            htmlFor="house_number"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            HOUSE NUMBER
+                          </label>
+                          <ErrorMessage
+                            name="house_number"
+                            component="div"
+                            className="text-danger"
+                          />
                         </div>
-                        <div className="space"></div>
-                        <div className="row">
-                          <div className="col-md-3 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                as="select"
-                                name="country"
-                                className={`form-select ${
-                                  touched.country && errors.country
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              >
-                                <option value="">COUNTRY</option>
-                                <option value="Zimbabwe">Zimbabwe</option>
-                                <option value="Algeria">Algeria</option>
-                                <option value="Angola">Angola</option>
-                                <option value="Benin">Benin</option>
-                                <option value="Botswana">Botswana</option>
-                                <option value="Burkina Faso">
-                                  Burkina Faso
-                                </option>
-                                <option value="Burundi">Burundi</option>
-                                <option value="Cabo Verde">Cabo Verde</option>
-                                <option value="Cameroon">Cameroon</option>
-                                <option value="Central African Republic">
-                                  Central African Republic
-                                </option>
-                                <option value="Chad">Chad</option>
-                                <option value="Comoros">Comoros</option>
-                                <option value="Congo (Brazzaville)">
-                                  Congo (Brazzaville)
-                                </option>
-                                <option value="Congo (Kinshasa)">
-                                  Congo (Kinshasa)
-                                </option>
-                                <option value="Djibouti">Djibouti</option>
-                                <option value="Egypt">Egypt</option>
-                                <option value="Equatorial Guinea">
-                                  Equatorial Guinea
-                                </option>
-                                <option value="Eritrea">Eritrea</option>
-                                <option value="Eswatini">Eswatini</option>
-                                <option value="Ethiopia">Ethiopia</option>
-                                <option value="Gabon">Gabon</option>
-                                <option value="Gambia">Gambia</option>
-                                <option value="Ghana">Ghana</option>
-                                <option value="Guinea">Guinea</option>
-                                <option value="Guinea-Bissau">
-                                  Guinea-Bissau
-                                </option>
-                                <option value="Ivory Coast">Ivory Coast</option>
-                                <option value="Kenya">Kenya</option>
-                                <option value="Lesotho">Lesotho</option>
-                                <option value="Liberia">Liberia</option>
-                                <option value="Libya">Libya</option>
-                                <option value="Madagascar">Madagascar</option>
-                                <option value="Malawi">Malawi</option>
-                                <option value="Mali">Mali</option>
-                                <option value="Mauritania">Mauritania</option>
-                                <option value="Mauritius">Mauritius</option>
-                                <option value="Morocco">Morocco</option>
-                                <option value="Mozambique">Mozambique</option>
-                                <option value="Namibia">Namibia</option>
-                                <option value="Niger">Niger</option>
-                                <option value="Nigeria">Nigeria</option>
-                                <option value="Rwanda">Rwanda</option>
-                                <option value="São Tomé and Príncipe">
-                                  São Tomé and Príncipe
-                                </option>
-                                <option value="Senegal">Senegal</option>
-                                <option value="Seychelles">Seychelles</option>
-                                <option value="Sierra Leone">
-                                  Sierra Leone
-                                </option>
-                                <option value="Somalia">Somalia</option>
-                                <option value="South Africa">
-                                  South Africa
-                                </option>
-                                <option value="South Sudan">South Sudan</option>
-                                <option value="Sudan">Sudan</option>
-                                <option value="Tanzania">Tanzania</option>
-                                <option value="Togo">Togo</option>
-                                <option value="Tunisia">Tunisia</option>
-                                <option value="Uganda">Uganda</option>
-                                <option value="Zambia">Zambia</option>
-                              </Field>
-                              <label
-                                htmlFor="country"
-                                style={{
-                                  textTransform: "uppercase",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                SELECT COUNTRY
-                              </label>
-                              <ErrorMessage
-                                name="country"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-9 col-12 mb-4">
-                            <div className="form-floating">
-                              <Field
-                                type="text"
-                                id="address"
-                                name="address"
-                                
-                                className={`form-control ${
-                                  touched.address && errors.address
-                                    ? "error-input"
-                                    : ""
-                                }`}
-                              />
-                              <label
-                                htmlFor="address"
-                                style={{
-                                  color: "#2C4894",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                ADDRESS
-                              </label>
-                              <ErrorMessage
-                                name="address"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-                          </div>
+                      </div>
+                      <div className="col-md-3 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            type="text"
+                            id="street_name"
+                            name="street_name"
+                            className={`form-control ${
+                              touched.street_name && errors.street_name
+                                ? "error-input"
+                                : ""
+                            }`}
+                          />
+                          <label
+                            htmlFor="street_name"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            STREET NAME
+                          </label>
+                          <ErrorMessage
+                            name="street_name"
+                            component="div"
+                            className="text-danger"
+                          />
                         </div>
-                        <div className="space"></div>
-
+                      </div>
+                      <div className="col-md-3 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            type="text"
+                            id="location"
+                            name="location"
+                            className={`form-control ${
+                              touched.location && errors.location
+                                ? "error-input"
+                                : ""
+                            }`}
+                          />
+                          <label
+                            htmlFor="location"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            LOCATION/SUBURB
+                          </label>
+                          <ErrorMessage
+                            name="location"
+                            component="div"
+                            className="text-danger"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-3 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            type="text"
+                            id="city"
+                            name="city"
+                            className={`form-control ${
+                              touched.city && errors.city ? "error-input" : ""
+                            }`}
+                          />
+                          <label
+                            htmlFor="city"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            CITY
+                          </label>
+                          <ErrorMessage
+                            name="city"
+                            component="div"
+                            className="text-danger"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space"></div>
+                    <div className="row">
+                      <div className="col-md-3 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            as="select"
+                            name="country"
+                            className={`form-select ${
+                              touched.country && errors.country
+                                ? "error-input"
+                                : ""
+                            }`}
+                          >
+                            <option value="">COUNTRY</option>
+                            <option value="Zimbabwe">Zimbabwe</option>
+                            <option value="Algeria">Algeria</option>
+                            <option value="Angola">Angola</option>
+                            <option value="Benin">Benin</option>
+                            <option value="Botswana">Botswana</option>
+                            <option value="Burkina Faso">Burkina Faso</option>
+                            <option value="Burundi">Burundi</option>
+                            <option value="Cabo Verde">Cabo Verde</option>
+                            <option value="Cameroon">Cameroon</option>
+                            <option value="Central African Republic">
+                              Central African Republic
+                            </option>
+                            <option value="Chad">Chad</option>
+                            <option value="Comoros">Comoros</option>
+                            <option value="Congo (Brazzaville)">
+                              Congo (Brazzaville)
+                            </option>
+                            <option value="Congo (Kinshasa)">
+                              Congo (Kinshasa)
+                            </option>
+                            <option value="Djibouti">Djibouti</option>
+                            <option value="Egypt">Egypt</option>
+                            <option value="Equatorial Guinea">
+                              Equatorial Guinea
+                            </option>
+                            <option value="Eritrea">Eritrea</option>
+                            <option value="Eswatini">Eswatini</option>
+                            <option value="Ethiopia">Ethiopia</option>
+                            <option value="Gabon">Gabon</option>
+                            <option value="Gambia">Gambia</option>
+                            <option value="Ghana">Ghana</option>
+                            <option value="Guinea">Guinea</option>
+                            <option value="Guinea-Bissau">Guinea-Bissau</option>
+                            <option value="Ivory Coast">Ivory Coast</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="Lesotho">Lesotho</option>
+                            <option value="Liberia">Liberia</option>
+                            <option value="Libya">Libya</option>
+                            <option value="Madagascar">Madagascar</option>
+                            <option value="Malawi">Malawi</option>
+                            <option value="Mali">Mali</option>
+                            <option value="Mauritania">Mauritania</option>
+                            <option value="Mauritius">Mauritius</option>
+                            <option value="Morocco">Morocco</option>
+                            <option value="Mozambique">Mozambique</option>
+                            <option value="Namibia">Namibia</option>
+                            <option value="Niger">Niger</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="Rwanda">Rwanda</option>
+                            <option value="São Tomé and Príncipe">
+                              São Tomé and Príncipe
+                            </option>
+                            <option value="Senegal">Senegal</option>
+                            <option value="Seychelles">Seychelles</option>
+                            <option value="Sierra Leone">Sierra Leone</option>
+                            <option value="Somalia">Somalia</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="South Sudan">South Sudan</option>
+                            <option value="Sudan">Sudan</option>
+                            <option value="Tanzania">Tanzania</option>
+                            <option value="Togo">Togo</option>
+                            <option value="Tunisia">Tunisia</option>
+                            <option value="Uganda">Uganda</option>
+                            <option value="Zambia">Zambia</option>
+                          </Field>
+                          <label
+                            htmlFor="country"
+                            style={{
+                              textTransform: "uppercase",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            SELECT COUNTRY
+                          </label>
+                          <ErrorMessage
+                            name="country"
+                            component="div"
+                            className="text-danger"
+                          />
+                        </div>
+                      </div>
+                      {/* <div className="col-md-9 col-12 mb-4">
+                        <div className="form-floating">
+                          <Field
+                            type="text"
+                            id="address"
+                            name="address"
+                            className={`form-control ${
+                              touched.address && errors.address
+                                ? "error-input"
+                                : ""
+                            }`}
+                          />
+                          <label
+                            htmlFor="address"
+                            style={{
+                              color: "#2C4894",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            ADDRESS
+                          </label>
+                          <ErrorMessage
+                            name="address"
+                            component="div"
+                            className="text-danger"
+                          />
+                        </div>
+                      </div> */}
+                    </div>
+                    <div className="space"></div>
 
                     <div className="row">
                       <div className="col-md-6 col-12 mb-4">

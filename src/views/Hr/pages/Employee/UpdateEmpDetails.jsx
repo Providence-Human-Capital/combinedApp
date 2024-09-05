@@ -14,6 +14,7 @@ import EmpHistoryCard from "./components/EmpHistoryCard";
 import BankInfoCard from "./components/BankInfoCard";
 import MiscCard from "./components/MiscCard";
 import EmployeeDocumentsForm from "./forms/EmployeeDocumentsForm";
+import UpdateRefferenceInformationForm from "./forms/UpdateRefferenceInformationForm";
 
 const UpdateEmpDetails = () => {
   const { employeeId } = useParams();
@@ -55,6 +56,9 @@ const UpdateEmpDetails = () => {
       break;
     case 5:
       employeeInfoForms = <EmployeeDocumentsForm employeeId={employeeId} />;
+      break;
+    case 6:
+      employeeInfoForms = <UpdateRefferenceInformationForm employeeId={employeeId} />
       break;
     default:
       employeeInfoForms = null;

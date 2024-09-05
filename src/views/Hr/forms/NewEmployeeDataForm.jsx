@@ -122,6 +122,7 @@ const NewEmployeeDataForm = () => {
     ref_type: Yup.string().nullable().required("Select a reference type"),
     from_company: Yup.string().nullable(),
     from_position: Yup.string().nullable(),
+    
 
     file: Yup.mixed().nullable(),
   });
@@ -179,7 +180,7 @@ const NewEmployeeDataForm = () => {
     values.city = values.city.toUpperCase();
     values.country = values.country.toUpperCase();
 
-    
+
     values.date_of_birth = formattedDate;
 
     console.log("Values", values);
@@ -214,7 +215,7 @@ const NewEmployeeDataForm = () => {
         icon: "success",
         title: "Success",
         text: "Information Successfully Saved",
-        timer: 4000,
+        timer: 1000,
         confirmButtonColor: "#007a41",
       });
 
@@ -235,7 +236,21 @@ const NewEmployeeDataForm = () => {
   };
 
   const onDrop = (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    const file = acceptedFiles[0];
+    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    // Check if the file size is greater than 2MB (2 * 1024 * 1024 bytes)
+    if (file.size > 2 * 1024 * 1024) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `File size should not exceed 2MB, Your file is too large (${fileSizeInMB}MB)`,
+        timer: 5000,
+        confirmButtonColor: "#e60000",
+      });
+      return;
+    }
+  
+    setFile(file);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -915,6 +930,8 @@ const NewEmployeeDataForm = () => {
                                     ? "error-input"
                                     : ""
                                 }`}
+
+                                disabled
                               />
                               <label
                                 htmlFor="address"
@@ -1155,11 +1172,7 @@ const NewEmployeeDataForm = () => {
 
                           {values.ref_type === "Transfer" && (
                             <>
-                              {/* <div>
-                            <label htmlFor="from_company">From Company</label>
-                            <Field name="from_company" />
-                            <ErrorMessage name="from_company" component="div" />
-                          </div> */}
+                            
                               <div className="row">
                                 <div className="col-md-4 col-12 mb-4">
                                   <div className="form-floating">

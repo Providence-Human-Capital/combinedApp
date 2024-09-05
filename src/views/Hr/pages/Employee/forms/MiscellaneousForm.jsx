@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { API } from "../../../../../../config";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -29,13 +30,13 @@ const MiscellaneousForm = ({ employeeId }) => {
   };
 
   const mutation = useMutation((newData) =>
-    axios.post("/api/miscellaneous-details", newData)
+    axios.post(`${API}/api/misc`, newData)
   );
 
   return (
     <Formik
       initialValues={{
-        employee_id: "",
+        employee_id: employeeId || "",
         staffing_employee_id: "",
         misc_type: "",
         misc_details: "",
@@ -46,12 +47,45 @@ const MiscellaneousForm = ({ employeeId }) => {
           onSettled: () => {
             setSubmitting(false);
           },
-        });
+        }); 
       }}
     >
       {({ isSubmitting }) => (
         <Form>
           <div className="box">
+            {mutation.isError && (
+              <div className="alert alert-danger alert-dismissible m-4">
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+                <h4>
+                  <i className="icon fa fa-ban"></i> ERROR!
+                </h4>
+                {mutation.error.message}
+              </div>
+            )}
+            {mutation.isSuccess && (
+              <>
+                <div className="alert alert-primary alert-dismissible m-4">
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                  <h4>
+                    <i className="icon fa fa-check"></i> SUCCESS!
+                  </h4>
+                  <p style={{
+                    color: "#fff",
+                    fontWeight: "400"
+                  }}>Miscellaneous details added successfully!</p>
+                </div>
+              </>
+            )}
             <div className="box-header no-border">
               <h4
                 className="box-title"
@@ -128,21 +162,27 @@ const MiscellaneousForm = ({ employeeId }) => {
                   style={{
                     width: "fit-content",
                   }}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || mutation.isLoading}
                 >
-                  <i
-                    className="ti-check"
-                    style={{
-                      marginRight: "10px",
-                    }}
-                  ></i>{" "}
-                  Submit
+                {mutation.isLoading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <>
+                      <i
+                        className="ti-check"
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      ></i>{" "}
+                      Add Next Of Kin
+                    </>
+                  )}
                 </button>
               </div>
-              {mutation.isError && <p>Error: {mutation.error.message}</p>}
-              {mutation.isSuccess && (
-                <p>Miscellaneous details added successfully!</p>
-              )}
             </div>
           </div>
         </Form>

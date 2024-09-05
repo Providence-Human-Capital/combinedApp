@@ -10,7 +10,6 @@ import { authActions } from "../../store/auth";
 import Loading from "../../components/Loading.jsx/Loading";
 
 const Login = () => {
-
   const styles = {
     logoStyles: {
       height: "80px",
@@ -61,7 +60,13 @@ const Login = () => {
           timer: 4000,
           confirmButtonColor: "#007a41",
         });
-        navigate("/dashboard");
+        if (data.user.role === "admin") {
+          navigate("/dashboard");
+        } else if (data.user.role === "staffing") {
+          navigate("/staffing/dashboard");
+        }
+
+        
         dispatch(
           authActions.setLogin({
             user: data.user,

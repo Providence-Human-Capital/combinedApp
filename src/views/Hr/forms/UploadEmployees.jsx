@@ -8,6 +8,7 @@ import useStaffingCompanies from "../hooks/useStaffingCompanies";
 import { API } from "../../../../config";
 import axios from "axios";
 import { parse, format } from "date-fns";
+import useCompanies from "../hooks/useCompanies";
 
 const UploadEmployees = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -18,13 +19,15 @@ const UploadEmployees = () => {
   const [errorMessages, setErrorMessages] = useState([]);
   const dispatch = useDispatch();
 
-  const { data: companies, error, isLoading } = useStaffingCompanies();
+  const { data: companies, error, isLoading } = useCompanies();
 
   const validationSchema = Yup.object().shape({
-    // company: Yup.string().required("Select The Staffing Solutions Company"),
     company: Yup.string().nullable(),
     fileInput: Yup.mixed().required("CSV FILE FOR DATA FORM IS REQUIRED"),
     status: Yup.string().required("Select Employees Employment Status"),
+
+    company_type: Yup.string().required("Please select the company Type"),
+    date_format: Yup.string().required("Please Select a Date format"),
   });
 
   const handleSubmit = (values, {}) => {
@@ -47,15 +50,35 @@ const UploadEmployees = () => {
             const [month, day, year] = dataItem[5].split("/");
             const paddedMonth = month.length === 1 ? `0${month}` : month;
             const paddedDay = day.length === 1 ? `0${day}` : day;
-            formattedDate = `${year}-${paddedMonth}-${paddedDay}`;
-            // formattedDate = `${year}-${paddedDay}-${paddedMonth}`;
-            //Cheat Fix
-          } // Rearrange to yyyy-MM-dd
+            if (values.date_format === "date_1") {
+              formattedDate = `${year}-${paddedMonth}-${paddedDay}`;
+            } else if (values.date_format === "date_2") {
+              formattedDate = `${year}-${paddedDay}-${paddedMonth}`;
+            }
+            
+          } 
+
+          let formattedDateOfEngagement  = "";
+          if (dataItem[3]) {
+            const [month, day, year] = dataItem[3].split("/");
+            const paddedMonth = month.length === 1 ? `0${month}` : month;
+            const paddedDay = day.length === 1 ? `0${day}` : day;
+            if (values.date_format === "date_1") {
+              formattedDateOfEngagement = `${year}-${paddedMonth}-${paddedDay}`;
+            } else if (values.date_format === "date_2") {
+              formattedDateOfEngagement = `${year}-${paddedDay}-${paddedMonth}`;
+            }
+            
+          } 
+
+
+
           return {
             first_name: dataItem[1],
             company_id: values.company,
             last_name: dataItem[0],
             employee_code: dataItem[2],
+            date_of_engagement: formattedDateOfEngagement,
             national_id: dataItem[4],
             date_of_birth: formattedDate,
             gender: dataItem[6] === "M" ? "MALE" : "FEMALE",
@@ -66,6 +89,13 @@ const UploadEmployees = () => {
             phone_number: dataItem[11],
             address: `${dataItem[12]} ${dataItem[13]} ${dataItem[14]}`,
             occupation: dataItem[15],
+
+            street_name: dataItem[12],
+            location: dataItem[13],
+            city: dataItem[14],
+
+            cost_centre: dataItem[16],
+            department: dataItem[16],
             status: values.status,
           };
         });
@@ -77,7 +107,7 @@ const UploadEmployees = () => {
 
   const handleEmployeeUpload = async () => {
     setIsUploading(true);
-    console.log("CSV DATA", csvData)
+    console.log("CSV DATA", csvData);
     try {
       const response = await axios.post(
         `${API}/api/employees/csv/upload`,
@@ -93,7 +123,7 @@ const UploadEmployees = () => {
 
   const reloadOnNewUpload = () => {
     location.reload();
-  }
+  };
 
   return (
     <>
@@ -105,6 +135,8 @@ const UploadEmployees = () => {
               company: "",
               fileInput: null,
               status: "",
+              company_type: "regular",
+              date_format: "date_1",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -114,14 +146,20 @@ const UploadEmployees = () => {
                 <div className="card p-4 mt-5">
                   <div className="row g-3">
                     <div className="col-12 mb-4">
-                      <button className="btn btn-secondary" onClick={reloadOnNewUpload}><i class="fa fa-refresh" aria-hidden="true"></i> {"  "}RELOAD FOR NEW UPLOAD</button>
+                      <button
+                        className="btn btn-secondary"
+                        onClick={reloadOnNewUpload}
+                      >
+                        <i class="fa fa-refresh" aria-hidden="true"></i> {"  "}
+                        RELOAD FOR NEW UPLOAD
+                      </button>
                       <h2
                         style={{
                           textTransform: "uppercase",
                           fontWeight: "bold",
                         }}
                       >
-                        Uploading Staffing Solutions Employees
+                        Uploading  Employees
                       </h2>
                       <span className="text-muted">
                         Please make sure that you upload the csv files
@@ -133,6 +171,53 @@ const UploadEmployees = () => {
                         make sure the file that you are uploading is a CSV file
                       </h4>
                     </div>
+                    <div className="row">
+                      <div className="col-md-3 ">
+                        <div className="form-floating">
+                          <Field
+                            as="select"
+                            className="form-select"
+                            id="company_type"
+                            name="company_type"
+                          >
+                            <option value=""></option>
+                            <option value="staffing">STAFFING SOLUTIONS</option>
+                            <option value="regular">REGULAR COMPANY</option>
+                          </Field>
+                          <label
+                            htmlFor="company_type"
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            SELECT COMPANY TYPE (STAFFING / REGULAR)
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-3 ">
+                        <div className="form-floating">
+                          <Field
+                            as="select"
+                            className="form-select"
+                            id="date_format"
+                            name="date_format"
+                          >
+                            <option value=""></option>
+                            <option value="date_1">YYYY-MM-DD</option>
+                            <option value="date_2">YYYY-DD-MM</option>
+                          </Field>
+                          <label
+                            htmlFor="date_format"
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            SELECT DATE FORMAT (YYYY-MM-DD/YYYY-DD-MM)
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space"></div>
                     <div className="row">
                       <div className="col-lg-4 col-md-12">
                         <div className="form-floating">
@@ -174,21 +259,37 @@ const UploadEmployees = () => {
                           >
                             <option value=""></option>
                             <option value="New">NEW</option>
-                            <option value="Deployed" style={{
-                                textTransform: "uppercase"
-                            }}>Deployed</option>
-                            <option value="Pending" style={{
+                            <option value="Active">ACTIVE (EMPLOYEED)</option>
+                            <option
+                              value="Deployed"
+                              style={{
                                 textTransform: "uppercase",
-                                
-                            }}> 
-                            <span className="badge badge-primary">Pending</span>
+                              }}
+                            >
+                              Deployed
                             </option>
-                            <option value="Pending" style={{
-                                textTransform: "uppercase"
-                            }}>Terminated</option>
+                            <option
+                              value="Pending"
+                              style={{
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              <span className="badge badge-primary">
+                                Pending
+                              </span>
+                            </option>
+                            <option
+                              value="Pending"
+                              style={{
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              Terminated
+                            </option>
                           </Field>
-                          <label htmlFor="status">SELECT THE STATUS OF UPLOAD</label>
-                        
+                          <label htmlFor="status">
+                            SELECT THE STATUS OF UPLOAD
+                          </label>
                         </div>
                       </div>
                     </div>
@@ -223,15 +324,19 @@ const UploadEmployees = () => {
                           type="submit"
                           className="btn btn-primary"
                           disabled={isSubmitting || isUploading}
-                        ><i class="fa fa-exchange" aria-hidden="true"></i> {" "}
+                        >
+                          <i class="fa fa-exchange" aria-hidden="true"></i>{" "}
                           Parse CSV
                         </button>
                         <button
                           type="button"
                           className="btn btn-success ml-3"
-                          onClick={handleEmployeeUpload}
+                          onClick={() =>
+                            handleEmployeeUpload(values.company_type)
+                          }
                           disabled={isUploading}
-                        ><i class="fa fa-cloud-upload" aria-hidden="true"></i> {" "}
+                        >
+                          <i class="fa fa-cloud-upload" aria-hidden="true"></i>{" "}
                           {isUploading ? "Uploading..." : "Upload Employees"}
                         </button>
                       </div>

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
+import useBankInformation from "../../../hooks/useBankInformation";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -22,6 +23,29 @@ const validationSchema = Yup.object({
 });
 
 const BankInformationForm = ({ employeeId }) => {
+  const initialValues = {
+    employee_id: employeeId || "", // Set employeeId here
+    staffing_employee_id: "",
+    zig_bank_name: "",
+    zig_branch: "",
+    zig_account_number: "",
+    usd_bank_name: "",
+    usd_branch: "",
+    usd_account_number: "",
+  };
+
+  const { data, error, isLoading } = useBankInformation(employeeId);
+
+  const [formValues, setFormValues] = useState(initialValues);
+
+  useEffect(() => {
+    if (data) {
+      setFormValues({ ...initialValues, ...data });
+    }
+    console.log("BANK INFORMATION", data);
+  }, [data]);
+
+
   const mutation = useMutation((newData) =>
     axios.post(`${API}/api/bank-information`, newData)
   );
@@ -41,16 +65,8 @@ const BankInformationForm = ({ employeeId }) => {
       </div>
       <div className="box-body">
         <Formik
-          initialValues={{
-            employee_id: employeeId || "", // Set employeeId here
-            staffing_employee_id: "",
-            zig_bank_name: "",
-            zig_branch: "",
-            zig_account_number: "",
-            usd_bank_name: "",
-            usd_branch: "",
-            usd_account_number: "",
-          }}
+          initialValues={formValues}
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             mutation.mutate(values, {

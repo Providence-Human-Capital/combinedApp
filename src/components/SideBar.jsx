@@ -12,7 +12,7 @@ const SideBar = () => {
     user?.role === "admin" || user?.role === "reception";
   const isAdminOrNurse = user?.role === "admin" || user?.role === "nurse";
 
-  const isStaffing = user?.role === "admin" || user?.role === "staffing";
+  const isStaffing = user?.role === "staffing";
 
   const styles = {
     pageHeight: {
@@ -88,12 +88,27 @@ const SideBar = () => {
           <div className="multinav">
             <div className="multinav-scroll" style={styles.pageHeight}>
               <ul className="sidebar-menu" data-widget="tree">
+                {isStaffing && (
+                  <>
+                    <li id="aside-bar">
+                      <NavLink to={"/staffing/dashboard"}>
+                        <i
+                          className="ti-menu"
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <span>Dashboard</span>
+                      </NavLink>
+                    </li>
+                  </>
+                )}
                 {isAdminOrHr && (
                   <>
                     <li id="aside-bar">
                       <NavLink to={"/dashboard"}>
                         <i
-                          className="ti-pie-chart"
+                          className="ti-menu"
                           style={{
                             fontSize: "20px",
                           }}
@@ -179,14 +194,14 @@ const SideBar = () => {
                           className="ti-user"
                           style={{
                             fontSize: "20px",
-                            color: "red",
+                            color: "#124538",
                             fontWeight: "bold",
                           }}
                         ></i>
                         <span
                           style={{
                             textTransform: "uppercase",
-                            color: "red",
+                            color: "#124538",
                             fontWeight: "bold",
                           }}
                         >

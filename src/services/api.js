@@ -179,6 +179,7 @@ export const fetchAttachmentEmployees = async () => {
 
 export const areaOfSpecialization = [
   "GENERAL WORK",
+  "OTHER",
   "ADMIN AND OFFICE",
   "AGRICULTURE, FARMING",
   "APPRENTICESHIP",
@@ -349,4 +350,8 @@ export const areaOfSpecialization = [
   "SHOP MANAGER",
   "STOCK CONTROL",
   "BUTCHERY",
+  "LABOUR LAW",
+  "FUMMIGATOR",
+  "SALE REPRESENTATIVE",
+  
 ];

@@ -10,8 +10,7 @@ import {
 import HomeInit from "./HomeInit";
 import Login from "./views/Auth/Login";
 import Dashboard from "./views/Dashboard/Dashboard";
-import Visitors from "./views/Visitor/Visitors";
-import Orders from "./views/Orders/Orders";
+
 import Employees from "./views/Employees/Employees";
 import Terminations from "./views/Terminations/Terminations";
 import DataFormPrintPage from "./views/Hr/DataFormPrintPage";
@@ -19,8 +18,7 @@ import CvViewPage from "./views/Hr/CvViewPage";
 import Reports from "./views/Reports/Reports";
 import PrintBeneficiaryForm from "./views/Terminations/components/PrintBeneficiaryForm";
 import { useDispatch, useSelector } from "react-redux";
-import ClinicStats from "./views/Health/ClinicStats";
-import AddStatsForm from "./views/Health/Crud/AddStatsForm";
+
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Companies from "./views/Companies/Companies";
 import AddCompany from "./views/Companies/pages/AddCompany";
@@ -59,6 +57,9 @@ import StaffingEmployeeUpload from "./views/Staffing/StaffingEmployeeUpload";
 import DeployedApplicants from "./views/Hr/pages/DeployedApplicants";
 import UpdateEmpDetails from "./views/Hr/pages/Employee/UpdateEmpDetails";
 import PHCEmployees from "./views/Hr/pages/PHCEmployees";
+import StaffingUserDashboard from "./views/Hr/pages/UserManagement/views/StaffingUserDashboard";
+import { useQueries } from 'react-query';
+
 
 const queryClient = new QueryClient();
 function App() {
@@ -73,7 +74,10 @@ function App() {
 }
 
 const WrapperComponent = () => {
+
   const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const userRole = useSelector((state) => state.auth.user?.role);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -106,6 +110,18 @@ const WrapperComponent = () => {
     fetchData();
   }, []);
 
+
+  const getDashboardRoute = () => {
+    switch (userRole) {
+      case "admin":
+        return "/dashboard";
+      case "staffing":
+        return "/staffing/dashboard";
+      default:
+        return "/dashboard"; // Default route if no role matches
+    }
+  };
+
   return (
     <>
       <Routes>
@@ -114,7 +130,7 @@ const WrapperComponent = () => {
           path="/"
           element={
             isAuthenticated ? (
-              <Navigate to={"/dashboard"} />
+              <Navigate to={getDashboardRoute()} />
             ) : (
               <Navigate to={"/login"} />
             )
@@ -132,6 +148,7 @@ const WrapperComponent = () => {
         <Route exact path="/" element={<HomeInit />}>
           <Route element={<PrivateRoutes />}>
             <Route exact path="/dashboard" element={<Dashboard />} />
+            <Route exact path="/staffing/dashboard" element={<StaffingUserDashboard />} />
 
             <Route exact path="/employees" element={<Employees />} />
             <Route exact path="/attachees" element={<Attachments />} />

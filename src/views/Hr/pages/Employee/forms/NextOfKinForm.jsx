@@ -1,9 +1,10 @@
-import React from "react";
-import { useMutation } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
+import useNextOfKin from "../../../hooks/useNextOfKin";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -17,6 +18,27 @@ const validationSchema = Yup.object({
 });
 
 const NextOfKinForm = ({ employeeId, onSuccess }) => {
+  const initialValues = {
+    employee_id: employeeId || "", // Set employeeId here
+    staffing_employee_id: "",
+    first_name: "",
+    last_name: "",
+    physical_address: "",
+    phone_number: "",
+    relation: "",
+  };
+
+  const { data, error, isLoading, refetch } = useNextOfKin(employeeId);
+
+  const [formValues, setFormValues] = useState(initialValues);
+
+  useEffect(() => {
+    if (data) {
+      setFormValues({ ...initialValues, ...data });
+    }
+    console.log("NEXT OF KIN FORM", data);
+  }, [data]);
+
   const mutation = useMutation((newData) =>
     axios.post(`${API}/api/next-of-kin`, newData)
   );
@@ -44,15 +66,8 @@ const NextOfKinForm = ({ employeeId, onSuccess }) => {
         </div>
         <div className="card-body">
           <Formik
-            initialValues={{
-              employee_id: employeeId || "", // Set employeeId here
-              staffing_employee_id: "",
-              first_name: "",
-              last_name: "",
-              physical_address: "",
-              phone_number: "",
-              relation: "",
-            }}
+            initialValues={formValues}
+            enableReinitialize
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
               mutation.mutate(values, {
@@ -66,6 +81,34 @@ const NextOfKinForm = ({ employeeId, onSuccess }) => {
             {({ isSubmitting }) => (
               <Form>
                 <div className="row">
+                  {mutation.isError && (
+                    <div className="alert alert-danger alert-dismissible m-4">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                      ></button>
+                      <h4>
+                        <i className="icon fa fa-ban"></i> ERROR!
+                      </h4>
+                      {mutation.error.message}
+                    </div>
+                  )}
+                  {mutation.isSuccess && (
+                    <div className="alert alert-primary alert-dismissible m-4">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                      ></button>
+                      <h4>
+                        <i className="icon fa fa-check"></i> SUCCESS!
+                      </h4>
+                      Next of Kin added successfully!
+                    </div>
+                  )}
                   <div className="col-md-4 col-12 mb-4">
                     <div className="form-floating">
                       <Field
@@ -218,36 +261,6 @@ const NextOfKinForm = ({ employeeId, onSuccess }) => {
             )}
           </Formik>
           <div className="space"></div>
-
-          {mutation.isError && (
-            <div className="alert alert-danger alert-dismissible">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-              <h4>
-                <i className="icon fa fa-ban"></i> ERROR!
-              </h4>
-              {mutation.error.message}
-            </div>
-          )}
-
-          {mutation.isSuccess && (
-            <div className="alert alert-primary alert-dismissible">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-              <h4>
-                <i className="icon fa fa-check"></i> SUCCESS!
-              </h4>
-              Next of Kin added successfully!
-            </div>
-          )}
         </div>
       </div>
     </div>

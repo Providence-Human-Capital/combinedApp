@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, forwardRef } from "react";
 import BreadCrumb from "../../../components/BreadCrumb";
 import { Link, useParams } from "react-router-dom";
 import useEmployee from "../hooks/useEmployee";
@@ -18,6 +18,8 @@ import axios from "axios";
 import NextOfKinCard from "./Employee/components/NextOfKinCard";
 import EmpHistoryCard from "./Employee/components/EmpHistoryCard";
 import BankInfoCard from "./Employee/components/BankInfoCard";
+import { useReactToPrint } from "react-to-print";
+import ProfilePrintout from "../printouts/ProfilePrintout";
 
 export const formatDate = (dateString, options) => {
   const date = new Date(dateString);
@@ -37,6 +39,14 @@ export const options = {
 
 const workerVersion = "3.12.0";
 
+const Profile = forwardRef(({ employee, profileImg, employeeId  }, ref) => {
+  return (
+    <div className="profile-printout" ref={ref}>
+      <ProfilePrintout employee={employee} profileImg={profileImg} employeeId={employeeId}  />
+    </div>
+  );
+});
+
 const ApplicantsDetailedPage = () => {
   const { applicantId } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
@@ -46,6 +56,12 @@ const ApplicantsDetailedPage = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const companies = useSelector((state) => state.company.companies) || [];
+
+  const printPersonsProfile = useRef();
+
+  const handlePrintPersonsProfile = useReactToPrint({
+    content: () => printPersonsProfile.current,
+  });
 
   const uploadProfileImage = async ({ applicantId, formData }) => {
     const { data } = await axios.post(
@@ -153,7 +169,7 @@ const ApplicantsDetailedPage = () => {
         (company) => `<option value="${company.id}">${company.name}</option>`
       )
       .join("");
-  
+
     Swal.fire({
       title: `UPDATE THE EMPLOYMENT STATUS`,
       width: "700px",
@@ -195,7 +211,7 @@ const ApplicantsDetailedPage = () => {
         const companySelectContainer = document.getElementById(
           "company-select-container"
         );
-  
+
         statusSelectElement.addEventListener("change", () => {
           if (statusSelectElement.value === "Active") {
             companySelectContainer.style.display = "block";
@@ -207,18 +223,18 @@ const ApplicantsDetailedPage = () => {
       preConfirm: () => {
         const statusSelectElement = document.getElementById("status-select");
         const selectedStatus = statusSelectElement.value;
-  
+
         const occupationSelect = document.getElementById("occupation");
         const occupationDeploy = occupationSelect.value;
-  
+
         const departmentSelect = document.getElementById("department");
         const departmentDeploy = departmentSelect.value;
-  
+
         const companySelectElement = document.getElementById("company-select");
         const selectedCompany = companySelectElement
           ? companySelectElement.value
           : null;
-  
+
         // Validation
         if (
           selectedStatus === "Active" &&
@@ -229,7 +245,7 @@ const ApplicantsDetailedPage = () => {
           );
           return false;
         }
-  
+
         return {
           selectedStatus,
           selectedCompany,
@@ -245,7 +261,7 @@ const ApplicantsDetailedPage = () => {
           occupationDeploy,
           departmentDeploy,
         } = result.value;
-  
+
         try {
           await axios.post(
             `${API}/api/employee/change/status/${applicantId}`,
@@ -262,13 +278,13 @@ const ApplicantsDetailedPage = () => {
               },
             }
           );
-  
+
           Swal.fire({
             title: "Status Updated",
             text: "The status has been updated successfully.",
             icon: "success",
           });
-  
+
           refetchEmployee();
         } catch (error) {
           Swal.fire({
@@ -280,7 +296,6 @@ const ApplicantsDetailedPage = () => {
       }
     });
   };
-  
 
   const handleViewProfileImage = () => {
     Swal.fire({
@@ -322,28 +337,52 @@ const ApplicantsDetailedPage = () => {
         activeTab={"Staffing Solutions"}
       />
 
+      <div
+        className="row"
+        style={{
+          display: "none",
+        }}
+      >
+        <Profile  employee={employee} profileImg={profileImage}  ref={printPersonsProfile} employeeId={employee.id} />
+      </div>
+
       <section className="content">
         <div className="row">
           <div className="col-xl-8 col-12">
             <div className="d-md-flex align-items-center justify-content-between mb-20">
               <div>
-                <Link to={`/employee/update/${employee.id}`}>
-                  <button
-                    className="btn btn-secondary"
-                    style={{
-                      marginRight: "10px",
-                    }}
-                  >
-                    {" "}
-                    <i
-                      className="ti-pencil-alt2"
+                <>
+                  <Link to={`/employee/update/${employee.id}`}>
+                    <button
+                      className="btn btn-secondary"
                       style={{
                         marginRight: "10px",
                       }}
+                    >
+                      {" "}
+                      <i
+                        className="ti-pencil-alt2"
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      ></i>{" "}
+                      Edit Employee
+                    </button>
+                  </Link>
+
+                  <button className="btn btn-primary m-2"
+                  onClick={handlePrintPersonsProfile}
+                  >
+                    <i
+                      className="ti-files"
+                      style={{
+                        marginRight: "10px",
+                      }}
+                      
                     ></i>{" "}
-                    Edit Employee
+                    PRINT PROFILE
                   </button>
-                </Link>
+                </>
 
                 {employee.file_path && (
                   <>
@@ -418,7 +457,7 @@ const ApplicantsDetailedPage = () => {
                   minHeight: "350px !important",
                 }}
               >
-                <img src="https://providence-human-capital.github.io/images/6308.jpg" />
+                <img src="https://providence-human-capital.github.io/images/dash.jpg" />
               </div>
               <div className="box-body wed-up position-relative">
                 <div className="d-md-flex align-items-center">
@@ -605,6 +644,7 @@ const ApplicantsDetailedPage = () => {
                       <>
                         {employee.documents.map((doc) => (
                           <>
+                            {/* {JSON.stringify(employee.documents)} */}
                             <div class="col-md-4">
                               <div
                                 class="card"
@@ -635,6 +675,22 @@ const ApplicantsDetailedPage = () => {
                                     ></i>
                                     View {doc?.type}
                                   </a>
+                                  <div
+                                    style={{
+                                      margin: "10px",
+                                    }}
+                                  >
+                                    <p>
+                                      <span
+                                        style={{
+                                          textTransform: "uppercase",
+                                        }}
+                                      >
+                                        File Description:
+                                      </span>
+                                      {doc?.file_description}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
