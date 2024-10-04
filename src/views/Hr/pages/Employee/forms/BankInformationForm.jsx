@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
     .max(255, "Maximum 255 characters"),
 });
 
-const BankInformationForm = ({ employeeId }) => {
+const BankInformationForm = ({ employeeId, handlePrev, handleNext }) => {
   const initialValues = {
     employee_id: employeeId || "", // Set employeeId here
     staffing_employee_id: "",
@@ -45,9 +45,33 @@ const BankInformationForm = ({ employeeId }) => {
     console.log("BANK INFORMATION", data);
   }, [data]);
 
+  const mutation = useMutation(
+    (newData) => axios.post(`${API}/api/bank-information`, newData),
+    {
+      onSuccess: (response) => {
+        // Perform any actions needed after successful submission
+        console.log("Bank Information saved successfully", response);
 
-  const mutation = useMutation((newData) =>
-    axios.post(`${API}/api/bank-information`, newData)
+        Swal.fire({
+          icon: "success",
+          title: "Bank Information Added",
+          text: "Bank Information saved successfully",
+          timer: 4000,
+          confirmButtonColor: "#007a41",
+        });
+
+        // Trigger the handleNext function
+        handleNext();
+
+        // Call any success callback passed in
+        if (onSuccess) {
+          onSuccess();
+        }
+      },
+      onError: (error) => {
+        console.error("Error saving Next of Kin:", error);
+      },
+    }
   );
 
   return (

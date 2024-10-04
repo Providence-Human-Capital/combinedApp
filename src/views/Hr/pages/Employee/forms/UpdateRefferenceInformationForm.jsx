@@ -6,9 +6,12 @@ import * as Yup from "yup";
 import Swal from "sweetalert2";
 import useEmployee from "../../../hooks/useEmployee";
 import { API } from "../../../../../../config";
+import { useNavigate } from "react-router-dom";
 
 const UpdateRefferenceInformationForm = ({ employeeId }) => {
   const { data: employee, error, isLoading } = useEmployee(employeeId);
+
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     ref_name: Yup.string().nullable(),
@@ -46,6 +49,8 @@ const UpdateRefferenceInformationForm = ({ employeeId }) => {
         icon: "success",
         confirmButtonText: "OK",
       });
+
+      navigate(`/applicant/detail/${employeeId}`);
     },
     onError: (error) => {
       Swal.fire({

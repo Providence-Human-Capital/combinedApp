@@ -132,6 +132,9 @@ const PendingEmployees = () => {
     return deployeedEmp.map((emp) => ({
       "FIRST NAME": emp.first_name,
       "LAST NAME": emp.last_name,
+      "REFERRER NAME": emp.ref_name || "",
+      "REFERRER PLACE OF EMPLOYEMENT": emp.ref_emp || "",
+      "REFERRER CONTACT": emp.ref_contact || "",
       "DATE OF BIRTH": emp.date_of_birth,
       GENDER: emp.gender,
       "NATIONAL ID": emp.national_id,

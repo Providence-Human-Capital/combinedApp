@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {useFormikContext, Formik, Form, Field, ErrorMessage } from "formik";
+import { useFormikContext, Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { useDropzone } from "react-dropzone";
@@ -74,6 +74,7 @@ const NewEmployeeDataForm = () => {
     education_level: "",
     work_experience: "",
     area_of_expertise: "",
+    expertie: "",
     occupation: "",
 
     ref_name: "",
@@ -94,7 +95,6 @@ const NewEmployeeDataForm = () => {
     marital_status: Yup.string().required("Select Your Marital Status"),
     address: Yup.string().nullable(),
 
-
     house_number: Yup.string().required("House number is Required"),
     street_name: Yup.string().required("Street Name is Required"),
     location: Yup.string().required("Loacation is Required"),
@@ -111,9 +111,10 @@ const NewEmployeeDataForm = () => {
     ),
     occupation: Yup.string().nullable(),
     area_of_expertise: Yup.string().nullable(),
-    work_experience: Yup.string().nullable(),
 
-   
+    expertie: Yup.string().nullable(),
+
+    work_experience: Yup.string().nullable(),
 
     ref_name: Yup.string().nullable(),
     ref_contact: Yup.string().nullable(),
@@ -122,16 +123,11 @@ const NewEmployeeDataForm = () => {
     ref_type: Yup.string().nullable().required("Select a reference type"),
     from_company: Yup.string().nullable(),
     from_position: Yup.string().nullable(),
-    
 
     file: Yup.mixed().nullable(),
   });
 
-
   // Access Formik context
-  
-
-  
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setIsLoading(true);
@@ -173,13 +169,11 @@ const NewEmployeeDataForm = () => {
     values.address = values.address.toUpperCase();
     values.bank_name = values.bank_name.toUpperCase();
 
-
     values.house_number = values.house_number.toUpperCase();
     values.street_name = values.street_name.toUpperCase();
     values.location = values.location.toUpperCase();
     values.city = values.city.toUpperCase();
     values.country = values.country.toUpperCase();
-
 
     values.date_of_birth = formattedDate;
 
@@ -249,7 +243,7 @@ const NewEmployeeDataForm = () => {
       });
       return;
     }
-  
+
     setFile(file);
   };
 
@@ -279,12 +273,15 @@ const NewEmployeeDataForm = () => {
                 style={{ width: "100%", height: "100%", position: "relative" }}
               >
                 <img
-                  src="https://providence-human-capital.github.io/images/im4.png"
+                  src="https://providence-human-capital.github.io/images/hcwelcome.png"
                   alt="logo"
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "contain",
+                    objectFit: "cover", // Change to 'cover' to fill the container
+                    position: "absolute", // Ensure the image covers the entire container
+                    top: 0,
+                    left: 0,
                   }}
                 />
               </div>
@@ -301,7 +298,7 @@ const NewEmployeeDataForm = () => {
                   >
                     <span
                       style={{
-                        color: "#0E9645",
+                        color: "#404048",
 
                         fontWeight: "bold",
                       }}
@@ -318,7 +315,7 @@ const NewEmployeeDataForm = () => {
                         fontFamily: "Playwrite NO, cursive",
                       }}
                     >
-                      Staffing Solutions
+                      (Staffing Solutions)
                     </span>
                   </h4>
                 </div>
@@ -343,7 +340,7 @@ const NewEmployeeDataForm = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      Click here for Help !
+                      Click here for Info !
                     </span>
                   </a>
                 </div>
@@ -377,8 +374,8 @@ const NewEmployeeDataForm = () => {
                       >
                         1- Self Referral:
                       </strong>{" "}
-                      This means that the applicants doesn't know anyone within
-                      Providence Human Capital or Innscor Africa hence they can
+                      This means that the applicants don't know anyone within
+                      Providence Human Capital or Innscor Africa; hence they can
                       go and select the <strong>Reference Type</strong> as{" "}
                       <strong>Self</strong>
                     </label>
@@ -437,6 +434,69 @@ const NewEmployeeDataForm = () => {
                       Educational qualifications to Driver's License and Police
                       clearances.
                     </label>
+
+                    {/* Privacy Notice Section */}
+                    <div
+                      style={{
+                        marginTop: "2rem",
+                        backgroundColor: "#e3f2fd",
+                        padding: "15px",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <h3 style={{ fontSize: "22px", color: "#1976d2" }}>
+                        Privacy Notice
+                      </h3>
+                      <p>
+                        At Providence Human Capital, we are committed to
+                        protecting your privacy. We collect the following
+                        information to assess your application:
+                      </p>
+                      <ul
+                        style={{ listStyleType: "disc", paddingLeft: "20px" }}
+                      >
+                        <li>First Name</li>
+                        <li>Last Name</li>
+                        <li>National ID</li>
+                        <li>Date of Birth</li>
+                        <li>Nationality</li>
+                        <li>Marital Status</li>
+                        <li>
+                          Address (House Number, Street Name, Location, City,
+                          Country)
+                        </li>
+                        <li>Phone Number</li>
+                        <li>Gender</li>
+                        <li>Email</li>
+                        <li>Passport Sized Photo</li>
+                        <li>
+                          Document (National ID, Educational Qualifications,
+                          Drivers License, Affidavit, Birth Certificates,
+                          Medical Certificates e.t.c)
+                        </li>
+
+                        <li>Education Level</li>
+                        <li>Work Experience</li>
+                        <li>Area of Expertise</li>
+                        <li>Occupation</li>
+                        <li>Referrer Name</li>
+                        <li>Referrer Contact</li>
+                        <li>Referrer Employer</li>
+                        <li>Referrer Relation</li>
+                      </ul>
+                      <p>
+                        This information will be used solely for the purpose of
+                        evaluating your application and will not be shared with
+                        third parties without your consent.
+                      </p>
+                      <p>
+                        If you have any questions about this privacy notice,
+                        please contact us at{" "}
+                        <span style={{
+                          fontWeight: "bold"
+                        }}>admin@providencehumancapital.com</span>
+                      </p>
+                    </div>
                   </div>
                 )}
                 <div className="box-body">
@@ -924,13 +984,11 @@ const NewEmployeeDataForm = () => {
                                 type="text"
                                 id="address"
                                 name="address"
-                                
                                 className={`form-control ${
                                   touched.address && errors.address
                                     ? "error-input"
                                     : ""
                                 }`}
-
                                 disabled
                               />
                               <label
@@ -1082,6 +1140,36 @@ const NewEmployeeDataForm = () => {
                             </div>
                           </div>
                           <AreaOfExpertiseSelect />
+
+                          <div className="col-md-4 col-12 mb-4">
+                            <label
+                              htmlFor="expertie"
+                              style={{
+                                color: "#2C4894",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              OTHER (EXPERTIES)
+                            </label>
+                            <div className="form-floating">
+                              <Field
+                                type="text"
+                                id="expertie"
+                                name="expertie"
+                                className={`form-control ${
+                                  touched.expertie && errors.expertie
+                                    ? "error-input"
+                                    : ""
+                                }`}
+                              />
+
+                              <ErrorMessage
+                                name="expertie"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+                          </div>
                         </div>
                         <div className="space"></div>
                         <div className="row">
@@ -1121,7 +1209,7 @@ const NewEmployeeDataForm = () => {
                         <div
                           className="card card-body"
                           style={{
-                            backgroundColor: "#ACE1AF",
+                            backgroundColor: "#404048",
                           }}
                         >
                           <div className="row">
@@ -1130,6 +1218,8 @@ const NewEmployeeDataForm = () => {
                                 htmlFor="ref_type"
                                 style={{
                                   textTransform: "uppercase",
+                                  color: "#fff",
+                                  fontWeight: "bold",
                                 }}
                               >
                                 Reference Type
@@ -1172,7 +1262,6 @@ const NewEmployeeDataForm = () => {
 
                           {values.ref_type === "Transfer" && (
                             <>
-                            
                               <div className="row">
                                 <div className="col-md-4 col-12 mb-4">
                                   <div className="form-floating">
@@ -1252,7 +1341,7 @@ const NewEmployeeDataForm = () => {
                                 <h6
                                   style={{
                                     fontWeight: "bold",
-                                    color: "#2C4894",
+                                    color: "#fff",
                                   }}
                                 >
                                   PROVIDE REFFERER INFORMATION (Who Referred you
@@ -1352,7 +1441,7 @@ const NewEmployeeDataForm = () => {
                                   <label
                                     htmlFor="ref_relation"
                                     style={{
-                                      color: "#2C4894",
+                                      color: "#fff",
                                       fontWeight: "bold",
                                     }}
                                   >
@@ -1511,8 +1600,8 @@ const NewEmployeeDataForm = () => {
                               className="btn btn-primary"
                               style={{
                                 color: "#fff",
-                                backgroundColor: "#0E9645",
-                                border: "1px solid #0E9645",
+                                backgroundColor: "#404048",
+                                border: "1px solid #404048",
                               }}
                             >
                               <i

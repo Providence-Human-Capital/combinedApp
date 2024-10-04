@@ -26,6 +26,39 @@
 }
 
 
+.greeting-card {
+  text-align: center;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.greeting-card h1 {
+  font-size: 2.5rem;
+  color: #007a41;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.greeting-card p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.current-time {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.current-time h2 {
+  margin: 0;
+  color: #007a41;
+  font-weight: bold;
+}
+
+
+
 @media print {
   .profile-printout {
     /* Style for the first page */

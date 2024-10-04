@@ -42,23 +42,36 @@ const UpdateEmpDetails = () => {
   switch (currentStep) {
     case 1:
       employeeInfoForms = (
-        <NextOfKinForm employeeId={employeeId} onSuccess={triggerRefetch} />
+        <NextOfKinForm
+          employeeId={employeeId}
+          onSuccess={triggerRefetch}
+          handleNext={handleNext}
+        />
       );
       break;
     case 2:
-      employeeInfoForms = <PreviousEmploymentForm employeeId={employeeId} />;
+      employeeInfoForms = (
+        <PreviousEmploymentForm
+          employeeId={employeeId}
+          handleNext={handleNext}
+        />
+      );
       break;
     case 3:
-      employeeInfoForms = <BankInformationForm employeeId={employeeId} />;
+      employeeInfoForms = (
+        <BankInformationForm employeeId={employeeId} handleNext={handleNext} />
+      );
       break;
     case 4:
-      employeeInfoForms = <MiscellaneousForm employeeId={employeeId} />;
+      employeeInfoForms = <MiscellaneousForm employeeId={employeeId} handleNext={handleNext}/>;
       break;
     case 5:
-      employeeInfoForms = <EmployeeDocumentsForm employeeId={employeeId} />;
+      employeeInfoForms = <EmployeeDocumentsForm employeeId={employeeId} handleNext={handleNext} />;
       break;
     case 6:
-      employeeInfoForms = <UpdateRefferenceInformationForm employeeId={employeeId} />
+      employeeInfoForms = (
+        <UpdateRefferenceInformationForm employeeId={employeeId} />
+      );
       break;
     default:
       employeeInfoForms = null;
@@ -72,7 +85,7 @@ const UpdateEmpDetails = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("currentStep", currentStep);
+    localStorage.setItem("currentStep", 1);
   }, [currentStep]);
 
   return (

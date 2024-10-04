@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import axios from "axios";
 import Loading from "../../../../../components/Loading.jsx/Loading";
 import { API } from "../../../../../../config";
+import { FaTrash } from "react-icons/fa"; // Import delete icon
+import Swal from "sweetalert2";
 
 const EmpHistoryCard = ({ employeeId }) => {
   const currentStep = localStorage.getItem("currentStep");
@@ -11,7 +13,6 @@ const EmpHistoryCard = ({ employeeId }) => {
     const { data } = await axios.get(
       `${API}/api/employees/${employeeId}/employment-history`
     );
-    console.log("EMPLOYMENT HISTORY", data);
     return data.data;
   };
 
@@ -20,7 +21,43 @@ const EmpHistoryCard = ({ employeeId }) => {
     fetchEmploymentHistory
   );
 
-  // Refetch data when `currentStep` changes
+  const deleteMutation = useMutation(
+    (employmentHistoryId) =>
+      axios.delete(
+        `${API}/api/employees/${employmentHistoryId}/employment-history`
+      ),
+    {
+      onSuccess: () => {
+        refetch(); // Refetch the data after deletion
+      },
+    }
+  );
+
+  // Handle delete action
+  // Import SweetAlert2
+
+  const handleDelete = (employmentHistoryId) => {
+    // Show confirmation dialog using SweetAlert2
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This record will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If confirmed, delete the employment history record
+        deleteMutation.mutate(employmentHistoryId);
+
+        // Show success message after deletion
+        Swal.fire("Deleted!", "The record has been deleted.", "success");
+      }
+    });
+  };
+
   useEffect(() => {
     refetch();
   }, [currentStep, refetch]);
@@ -110,11 +147,19 @@ const EmpHistoryCard = ({ employeeId }) => {
                   paddingTop: "10px",
                   marginTop: "10px",
                   fontSize: "0.875rem",
+                  marginBottom: "10px",
                   color: "#6c757d",
                 }}
               >
                 Date of Engagement: {new Date(item.created_at).toLocaleString()}
               </div>
+              {/* Delete Icon */}
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDelete(item.id)} // Call the delete handler
+              >
+                <FaTrash /> Delete
+              </button>
             </div>
           </div>
         ))}

@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
 import useNextOfKin from "../../../hooks/useNextOfKin";
+import Swal from "sweetalert2";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -17,7 +18,7 @@ const validationSchema = Yup.object({
   relation: Yup.string().nullable(),
 });
 
-const NextOfKinForm = ({ employeeId, onSuccess }) => {
+const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
   const initialValues = {
     employee_id: employeeId || "", // Set employeeId here
     staffing_employee_id: "",
@@ -39,8 +40,33 @@ const NextOfKinForm = ({ employeeId, onSuccess }) => {
     console.log("NEXT OF KIN FORM", data);
   }, [data]);
 
-  const mutation = useMutation((newData) =>
-    axios.post(`${API}/api/next-of-kin`, newData)
+  const mutation = useMutation(
+    (newData) => axios.post(`${API}/api/next-of-kin`, newData),
+    {
+      onSuccess: (response) => {
+        // Perform any actions needed after successful submission
+        console.log("Next of Kin saved successfully", response);
+
+        Swal.fire({
+          icon: "success",
+          title: "Next Of Added",
+          text: "Next of Kin saved successfully",
+          timer: 4000,
+          confirmButtonColor: "#007a41",
+        });
+
+        // Trigger the handleNext function
+        handleNext();
+
+        // Call any success callback passed in
+        if (onSuccess) {
+          onSuccess();
+        }
+      },
+      onError: (error) => {
+        console.error("Error saving Next of Kin:", error);
+      },
+    }
   );
 
   return (

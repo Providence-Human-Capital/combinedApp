@@ -4,6 +4,7 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
+import Swal from "sweetalert2";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -13,7 +14,7 @@ const validationSchema = Yup.object({
   misc_details: Yup.string().nullable().max(1000, "Maximum 1000 characters"),
 });
 
-const MiscellaneousForm = ({ employeeId }) => {
+const MiscellaneousForm = ({ employeeId, handlePrev, handleNext }) => {
   const styles = {
     textarea: {
       height: "100px",
@@ -30,7 +31,32 @@ const MiscellaneousForm = ({ employeeId }) => {
   };
 
   const mutation = useMutation((newData) =>
-    axios.post(`${API}/api/misc`, newData)
+    axios.post(`${API}/api/misc`, newData),
+  {
+    onSuccess: (response) => {
+      // Perform any actions needed after successful submission
+      console.log("Misc Information saved successfully", response);
+
+      Swal.fire({
+        icon: "success",
+        title: "Misc ",
+        text: "Misc Information saved successfully",
+        timer: 4000,
+        confirmButtonColor: "#007a41",
+      });
+
+      // Trigger the handleNext function
+      handleNext();
+
+      // Call any success callback passed in
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+    onError: (error) => {
+      console.error("Error saving Misc:", error);
+    },
+  }
   );
 
   return (

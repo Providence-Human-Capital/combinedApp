@@ -10,6 +10,7 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQueryClient } from "react-query";
 import "./css/ImageContainer.css";
 
+import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 import styles from "./employee-css/styles.module.css";
 import Qualifications from "../components/Qualifications";
 import { useSelector } from "react-redux";
@@ -39,10 +40,14 @@ export const options = {
 
 const workerVersion = "3.12.0";
 
-const Profile = forwardRef(({ employee, profileImg, employeeId  }, ref) => {
+const Profile = forwardRef(({ employee, profileImg, employeeId }, ref) => {
   return (
     <div className="profile-printout" ref={ref}>
-      <ProfilePrintout employee={employee} profileImg={profileImg} employeeId={employeeId}  />
+      <ProfilePrintout
+        employee={employee}
+        profileImg={profileImg}
+        employeeId={employeeId}
+      />
     </div>
   );
 });
@@ -54,6 +59,92 @@ const ApplicantsDetailedPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [profileImage, setProfileImage] = useState(null);
+
+  const [editingDocId, setEditingDocId] = useState(null);
+  const [newDescription, setNewDescription] = useState("");
+
+  const handleEditClick = (doc) => {
+    setEditingDocId(doc.id);
+    setNewDescription(doc.file_description || "");
+  };
+
+  const handleSaveDescription = async (docId, newDescription) => {
+    try {
+      // Log to see if newDescription has a value
+      console.log("Updating description:", newDescription);
+
+      // Make the PUT request to update the description
+      const response = await fetch(
+        `${API}/api/documents/${docId}/description`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ file_description: newDescription }),
+        }
+      );
+
+      // Check if the response is okay
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Failed to update file description"
+        );
+      }
+
+      // Parse the JSON response
+      const data = await response.json();
+
+      // Log the response data for debugging
+      console.log("Response data:", data);
+
+      // Update the documents state with the new description
+      // const updatedDocuments = documents.map((doc) =>
+      //   doc.id === docId ? { ...doc, file_description: newDescription } : doc
+      // );
+
+      // setDocuments(updatedDocuments);
+      setEditingDocId(null); // Exit editing mode
+      Swal.fire("Success!", "File description updated.", "success");
+    } catch (error) {
+      console.error("Error updating description:", error);
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  const handleDeleteClick = (docId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Make the DELETE request to remove the document
+          const response = await fetch(`${API}/api/documents/${docId}`, {
+            method: "DELETE",
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to delete the document");
+          }
+
+          // Update the documents state by removing the deleted document
+          // const updatedDocuments = documents.filter((doc) => doc.id !== docId);
+          // setDocuments(updatedDocuments);
+
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        } catch (error) {
+          Swal.fire("Error", error.message, "error");
+        }
+      }
+    });
+  };
 
   const companies = useSelector((state) => state.company.companies) || [];
 
@@ -343,7 +434,12 @@ const ApplicantsDetailedPage = () => {
           display: "none",
         }}
       >
-        <Profile  employee={employee} profileImg={profileImage}  ref={printPersonsProfile} employeeId={employee.id} />
+        <Profile
+          employee={employee}
+          profileImg={profileImage}
+          ref={printPersonsProfile}
+          employeeId={employee.id}
+        />
       </div>
 
       <section className="content">
@@ -370,15 +466,15 @@ const ApplicantsDetailedPage = () => {
                     </button>
                   </Link>
 
-                  <button className="btn btn-primary m-2"
-                  onClick={handlePrintPersonsProfile}
+                  <button
+                    className="btn btn-primary m-2"
+                    onClick={handlePrintPersonsProfile}
                   >
                     <i
                       className="ti-files"
                       style={{
                         marginRight: "10px",
                       }}
-                      
                     ></i>{" "}
                     PRINT PROFILE
                   </button>
@@ -638,63 +734,125 @@ const ApplicantsDetailedPage = () => {
                     Documentation
                   </h4>
                 </div>
+
                 <div className="box-body">
                   <div className="row">
                     {employee.documents.length > 0 && (
                       <>
                         {employee.documents.map((doc) => (
-                          <>
-                            {/* {JSON.stringify(employee.documents)} */}
-                            <div class="col-md-4">
-                              <div
-                                class="card"
-                                style={{
-                                  backgroundColor: "#96FABC",
-                                }}
-                              >
-                                <div class="card-body">
-                                  <h5
-                                    class="card-title"
+                          <div className="col-md-4" key={doc.id}>
+                            <div
+                              className="card"
+                              style={{
+                                backgroundColor: "#96FABC",
+                              }}
+                            >
+                              <div className="card-body">
+                                <h5
+                                  className="card-title"
+                                  style={{
+                                    textTransform: "uppercase",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {doc?.type}
+                                </h5>
+                                <a
+                                  href={`${API}/api/storage/${doc?.file_path}`}
+                                  className="btn btn-primary"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <i
+                                    className="ti-eye"
                                     style={{
-                                      textTransform: "uppercase",
-                                      fontWeight: "bold",
+                                      marginRight: "10px",
                                     }}
-                                  >
-                                    {doc?.type}
-                                  </h5>
-                                  <a
-                                    href={`${API}/api/storage/${doc?.file_path}`}
-                                    class="btn btn-primary"
-                                    target="_blank"
-                                  >
-                                    <i
-                                      className="ti-eye"
-                                      style={{
-                                        marginRight: "10px",
-                                      }}
-                                    ></i>
-                                    View {doc?.type}
-                                  </a>
-                                  <div
-                                    style={{
-                                      margin: "10px",
-                                    }}
-                                  >
+                                  ></i>
+                                  View {doc?.type}
+                                </a>
+
+                                <div
+                                  style={{
+                                    marginTop: "10px",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <div>
                                     <p>
                                       <span
                                         style={{
                                           textTransform: "uppercase",
+                                          fontWeight: "bold",
                                         }}
                                       >
                                         File Description:
                                       </span>
-                                      {doc?.file_description}
+                                      {editingDocId === doc.id ? (
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          value={newDescription}
+                                          onChange={(e) =>
+                                            setNewDescription(e.target.value)
+                                          }
+                                          style={{
+                                            marginLeft: "10px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <span style={{ marginLeft: "10px" }}>
+                                          {doc?.file_description}
+                                        </span>
+                                      )}
                                     </p>
+                                  </div>
+
+                                  <div style={{ display: "flex", gap: "10px" }}>
+                                    {editingDocId === doc.id ? (
+                                      <FontAwesomeIcon
+                                        icon={faSave}
+                                        style={{
+                                          cursor: "pointer",
+                                          color: "green",
+                                        }}
+                                        onClick={() =>
+                                          handleSaveDescription(
+                                            doc.id,
+                                            newDescription
+                                          )
+                                        } // Fix: Pass newDescription as well
+                                      />
+                                    ) : (
+                                      <FontAwesomeIcon
+                                        icon={faEdit}
+                                        style={{
+                                          cursor: "pointer",
+                                          color: "blue",
+                                          fontSize: "20px",
+                                          margin: "10px"
+                                        }}
+                                        onClick={() => handleEditClick(doc)}
+                                      />
+                                    )}
+
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      style={{
+                                        cursor: "pointer",
+                                        color: "red",
+                                        fontSize: "20px",
+                                         margin: "10px"
+                                      }}
+                                      onClick={() => handleDeleteClick(doc.id)}
+                                    />
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         ))}
                       </>
                     )}

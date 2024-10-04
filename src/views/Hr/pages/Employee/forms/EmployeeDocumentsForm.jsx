@@ -136,7 +136,7 @@ const FileUploadField = ({
   );
 };
 
-const EmployeeDocumentsForm = ({ employeeId, triggerUpload }) => {
+const EmployeeDocumentsForm = ({ employeeId, triggerUpload, handlePrev, handleNext }) => {
   const [fileUploads, setFileUploads] = useState([{ type: "", file: null }]);
 
   const [success, setSuccess] = useState(null);
@@ -194,6 +194,7 @@ const EmployeeDocumentsForm = ({ employeeId, triggerUpload }) => {
         // alert("Files uploaded successfully!");
         setSuccess("Files uploaded successfully!");
         setIsLoading(false);
+        handleNext()
         if (triggerUpload) triggerUpload();
       }
     } catch (error) {

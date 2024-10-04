@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "./healh-components/OverviewCard";
@@ -21,6 +21,40 @@ const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
+  const [greeting, setGreeting] = useState("");
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    // Function to update the greeting based on the current hour
+    const updateGreeting = () => {
+      const currentHour = new Date().getHours();
+
+      if (currentHour < 12) {
+        setGreeting("Good Morning");
+      } else if (currentHour < 18) {
+        setGreeting("Good Afternoon");
+      } else {
+        setGreeting("Good Evening");
+      }
+    };
+
+    // Function to update the current time every second
+    const updateTime = () => {
+      setCurrentTime(new Date());
+    };
+
+    // Call the updateGreeting function initially
+    updateGreeting();
+
+    // Set interval to update the time every second
+    const timeInterval = setInterval(() => {
+      updateTime();
+    }, 1000);
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(timeInterval);
+  }, []);
+
   const {
     data: overviewData,
     isLoading,
@@ -38,6 +72,41 @@ const Dashboard = () => {
   return (
     <>
       <section className="content">
+        <div className="greeting-card">
+          <h1
+            style={{
+              background: "linear-gradient(to right, blue, green)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            {greeting}{" "}
+            <span
+              style={{
+                textTransform: "capitalize",
+              }}
+            >
+              {" "}
+              {user?.name}
+            </span>
+          </h1>
+          <p>Welcome to your dashboard!</p>
+          <div className="current-time">
+            <h2
+              style={{
+                background: "linear-gradient(to right, blue, green)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {currentTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </h2>
+          </div>
+        </div>
+
         <div class="box-body">
           <ul class="nav nav-pills mb-20">
             <li class=" nav-item">

@@ -16,6 +16,10 @@ const Login = () => {
     },
     pageH: {
       height: "100vh !important",
+      backgroundImage: "url('https://source.unsplash.com/random')", // Add background image here
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      overflow: "hidden",
       overflow: "hidden",
     },
   };
@@ -64,6 +68,8 @@ const Login = () => {
           navigate("/dashboard");
         } else if (data.user.role === "staffing") {
           navigate("/staffing/dashboard");
+        } else if (data.user.role === "hr") {
+          navigate("/dashboard");
         }
 
         
@@ -114,7 +120,7 @@ const Login = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    SIGNIN TO HRMS
+                    SIGNIN TO DATABASE
                   </p>
                 </div>
                 {error && (

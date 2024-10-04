@@ -281,12 +281,16 @@ const NavigationBar = () => {
                 </a>
                 <ul className="dropdown-menu animated flipInX">
                   <li className="user-body">
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" style={{
+                      cursor: "pointer",
+                    }}>
                       <i className="ti-user text-muted me-2"></i> Profile
                     </a>
 
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" onClick={() => signUserOut()}>
+                    <a className="dropdown-item" style={{
+                      cursor: "pointer",
+                    }} onClick={() => signUserOut()}>
                       <i className="ti-lock text-muted me-2"></i> Logout
                     </a>
                   </li>

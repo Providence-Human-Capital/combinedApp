@@ -4,6 +4,7 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
+import Swal from "sweetalert2";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -22,9 +23,28 @@ const validationSchema = Yup.object({
     .max(1000, "Maximum 1000 characters"),
 });
 
-const PreviousEmploymentForm = ({ employeeId }) => {
-  const mutation = useMutation((newData) =>
-    axios.post(`${API}/api/employment-history`, newData)
+const PreviousEmploymentForm = ({ employeeId, handlePrev, handleNext }) => {
+  const mutation = useMutation(
+    (newData) => axios.post(`${API}/api/employment-history`, newData),
+    {
+      onSuccess: (response) => {
+        console.log("Employment history saved successfully", response);
+
+        Swal.fire({
+          icon: "success",
+          title: "Employment History Added",
+          text: "Employment history saved successfully",
+          timer: 4000,
+          confirmButtonColor: "#007a41",
+        });
+
+        // Trigger handleNext to move to the next step
+        handleNext();
+      },
+      onError: (error) => {
+        console.error("Error saving employment history:", error);
+      },
+    }
   );
 
   return (
@@ -142,7 +162,6 @@ const PreviousEmploymentForm = ({ employeeId }) => {
                       className="form-select"
                       name="duration_my"
                     >
-
                       <option value=""></option>
                       <option value="MONTH(S)">MONTH(S)</option>
                       <option value="YEAR(S)">YEAR(S)</option>
