@@ -130,12 +130,13 @@ const PendingEmployees = () => {
 
   const flattenDeployedEmployeesForReport = (deployeedEmp) => {
     return deployeedEmp.map((emp) => ({
+      "DATE OF ENTRY": new Date(emp.created_at).toLocaleDateString('en-GB'), // Format to DD/MM/YYYY
       "FIRST NAME": emp.first_name,
       "LAST NAME": emp.last_name,
-      "REFERRER NAME": emp.ref_name || "",
-      "REFERRER PLACE OF EMPLOYEMENT": emp.ref_emp || "",
-      "REFERRER CONTACT": emp.ref_contact || "",
-      "DATE OF BIRTH": emp.date_of_birth,
+      "REFERRER NAME": emp.ref_name || "ONLINE APPLICATION",
+      "REFERRER PLACE OF EMPLOYEMENT": emp.ref_emp || "ONLINE APPLICATION",
+      "REFERRER CONTACT": emp.ref_contact || "ONLINE APPLICATION",
+      "DATE OF BIRTH": new Date(emp.date_of_birth).toLocaleDateString('en-GB'), // Assuming similar format
       GENDER: emp.gender,
       "NATIONAL ID": emp.national_id,
       NATIONALITY: emp.nationality,
@@ -147,6 +148,7 @@ const PendingEmployees = () => {
       EMAIL: emp.email,
     }));
   };
+  
 
   const exportData = flattenDeployedEmployeesForReport(filteredEmployees || []);
   const handleExportToExcel = () => {
@@ -418,6 +420,7 @@ const PendingEmployees = () => {
     <>
       <BreadCrumb title={"Applicants"} activeTab={"Job Applications"} />
       <section className="content">
+        
         <div className="row">
           <div className="col-md-12">
             <div className="card">
@@ -667,6 +670,7 @@ const PendingEmployees = () => {
                       </tr>
                     </thead>
                     <tbody>
+                    
                       {currentEmployees.map((employee) => (
                         <tr key={employee.id}>
                           <td style={{ cursor: "pointer" }}>

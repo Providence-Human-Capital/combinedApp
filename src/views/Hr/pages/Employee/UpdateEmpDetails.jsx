@@ -27,6 +27,7 @@ const UpdateEmpDetails = () => {
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
+    // triggerRefetch()
   };
 
   const handlePrev = () => {
@@ -34,7 +35,10 @@ const UpdateEmpDetails = () => {
   };
 
   const triggerRefetch = () => {
+    // alert('Refetching Triggered ...............')
+
     setRefetchTrigger((prev) => !prev); // Toggle refetch trigger
+    console.log("Refetch State: .......", refetchTrigger);
   };
 
   let employeeInfoForms;
@@ -46,6 +50,7 @@ const UpdateEmpDetails = () => {
           employeeId={employeeId}
           onSuccess={triggerRefetch}
           handleNext={handleNext}
+          triggerRefetch={triggerRefetch}
         />
       );
       break;
@@ -54,19 +59,31 @@ const UpdateEmpDetails = () => {
         <PreviousEmploymentForm
           employeeId={employeeId}
           handleNext={handleNext}
+          triggerRefetch={triggerRefetch}
         />
       );
       break;
     case 3:
       employeeInfoForms = (
-        <BankInformationForm employeeId={employeeId} handleNext={handleNext} />
+        <BankInformationForm
+          employeeId={employeeId}
+          handleNext={handleNext}
+          triggerRefetch={triggerRefetch}
+        />
       );
       break;
     case 4:
-      employeeInfoForms = <MiscellaneousForm employeeId={employeeId} handleNext={handleNext}/>;
+      employeeInfoForms = (
+        <MiscellaneousForm employeeId={employeeId} handleNext={handleNext} />
+      );
       break;
     case 5:
-      employeeInfoForms = <EmployeeDocumentsForm employeeId={employeeId} handleNext={handleNext} />;
+      employeeInfoForms = (
+        <EmployeeDocumentsForm
+          employeeId={employeeId}
+          handleNext={handleNext}
+        />
+      );
       break;
     case 6:
       employeeInfoForms = (
@@ -92,14 +109,23 @@ const UpdateEmpDetails = () => {
     <>
       <div className="d-flex align-items-center">
         <Link
-          to={`/eapplicant/detail/${employeeId}`}
+          to={`/applicant/detail/${employeeId}`}
           style={{
             marginLeft: "40px",
           }}
         >
           <FontAwesomeIcon icon={faHome} />{" "}
+          <span
+            className=""
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            {" "}
+            GO TO PROFILE{" "}
+          </span>
         </Link>
-        <BreadCrumb title={"UPDATE EMPLOYEE INFORMATION"} activeTab={"..."} />
+        <BreadCrumb title={""} activeTab={"UPDATE INFORMATION"} />
       </div>
       <section className="content">
         <div className="row">
@@ -122,8 +148,14 @@ const UpdateEmpDetails = () => {
               employeeId={employeeId}
               refetchTrigger={refetchTrigger}
             />
-            <EmpHistoryCard employeeId={employeeId} />
-            <BankInfoCard employeeId={employeeId} />
+            <EmpHistoryCard
+              employeeId={employeeId}
+              refetchTrigger={refetchTrigger}
+            />
+            <BankInfoCard
+              employeeId={employeeId}
+              refetchTrigger={refetchTrigger}
+            />
             {/* <MiscCard employeeId={employeeId} /> */}
           </div>
         </div>

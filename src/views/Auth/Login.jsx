@@ -20,7 +20,6 @@ const Login = () => {
       backgroundSize: "cover",
       backgroundPosition: "center",
       overflow: "hidden",
-      overflow: "hidden",
     },
   };
 

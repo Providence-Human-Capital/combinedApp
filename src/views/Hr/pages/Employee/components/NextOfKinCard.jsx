@@ -20,7 +20,8 @@ const NextOfKinCard = ({ employeeId, refetchTrigger }) => {
   // Refetch data when `currentStep` changes
   useEffect(() => {
     refetch();
-  }, [currentStep, refetch]);
+
+  }, [currentStep, refetchTrigger, refetch]);
 
   if (isLoading)
     return (

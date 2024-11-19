@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
     .max(1000, "Maximum 1000 characters"),
 });
 
-const PreviousEmploymentForm = ({ employeeId, handlePrev, handleNext }) => {
+const PreviousEmploymentForm = ({ employeeId, handlePrev, handleNext, triggerRefetch }) => {
   const mutation = useMutation(
     (newData) => axios.post(`${API}/api/employment-history`, newData),
     {
@@ -40,6 +40,7 @@ const PreviousEmploymentForm = ({ employeeId, handlePrev, handleNext }) => {
 
         // Trigger handleNext to move to the next step
         handleNext();
+        triggerRefetch()
       },
       onError: (error) => {
         console.error("Error saving employment history:", error);

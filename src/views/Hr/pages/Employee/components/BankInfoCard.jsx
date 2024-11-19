@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import Loading from "../../../../../components/Loading.jsx/Loading";
@@ -6,7 +6,7 @@ import { API } from "../../../../../../config";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const BankInfoCard = ({ employeeId }) => {
+const BankInfoCard = ({ employeeId, refetchTrigger }) => {
   const fetchBankInformation = async () => {
     const { data } = await axios.get(
       `${API}/api/employees/${employeeId}/bank-information`
@@ -15,10 +15,18 @@ const BankInfoCard = ({ employeeId }) => {
     console.log("Bank Information", data);
     return data.data;
   };
-  const { data, error, isLoading } = useQuery(
+  const { data, error, isLoading, refetch } = useQuery(
     "bankInformation",
     fetchBankInformation
   );
+
+
+  useEffect(() => {
+    // alert('Triggered Employee Refetching Please wait...');
+    refetch();
+
+  }, [refetchTrigger, refetch]);
+
 
   if (isLoading)
     return (

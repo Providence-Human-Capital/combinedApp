@@ -6,7 +6,7 @@ import { API } from "../../../../../../config";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
 import Swal from "sweetalert2";
 
-const EmpHistoryCard = ({ employeeId }) => {
+const EmpHistoryCard = ({ employeeId, refetchTrigger }) => {
   const currentStep = localStorage.getItem("currentStep");
 
   const fetchEmploymentHistory = async () => {
@@ -59,8 +59,9 @@ const EmpHistoryCard = ({ employeeId }) => {
   };
 
   useEffect(() => {
+    // alert('Triggered Employee Refetching Please wait...');
     refetch();
-  }, [currentStep, refetch]);
+  }, [currentStep, refetchTrigger, refetch]);
 
   if (isLoading)
     return (

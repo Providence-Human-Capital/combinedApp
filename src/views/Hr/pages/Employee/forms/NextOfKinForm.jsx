@@ -4,7 +4,6 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
-import useNextOfKin from "../../../hooks/useNextOfKin";
 import Swal from "sweetalert2";
 
 // Validation schema using Yup
@@ -18,7 +17,24 @@ const validationSchema = Yup.object({
   relation: Yup.string().nullable(),
 });
 
-const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
+const fetchEmployeeData = async (applicantId) => {
+  try {
+    const response = await fetch(`${API}/api/employee/${applicantId}`);
+    const data = await response.json();
+    return data.data; // Assuming 'data.data' contains the employee data
+  } catch (error) {
+    console.error("Error occurred while fetching employee data:", error);
+    throw error;
+  }
+};
+
+const NextOfKinForm = ({
+  employeeId,
+  onSuccess,
+  handlePrev,
+  handleNext,
+  triggerRefetch,
+}) => {
   const initialValues = {
     employee_id: employeeId || "", // Set employeeId here
     staffing_employee_id: "",
@@ -29,39 +45,37 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
     relation: "",
   };
 
-  const { data, error, isLoading, refetch } = useNextOfKin(employeeId);
-
   const [formValues, setFormValues] = useState(initialValues);
+  const [useApplicantAddress, setUseApplicantAddress] = useState(false); // Track if we use the applicant address
 
+  // Fetch the next of kin data for the employee
+  const { data, error, isLoading, refetch } = useQuery(
+    ["nextOfKin", employeeId],
+    () => fetchEmployeeData(employeeId)
+  );
+
+  // Effect to update form values when data is fetched
   useEffect(() => {
     if (data) {
-      setFormValues({ ...initialValues, ...data });
+      setFormValues((prevValues) => ({ ...prevValues, ...data }));
     }
-    console.log("NEXT OF KIN FORM", data);
   }, [data]);
 
+  // Mutation for saving Next of Kin
   const mutation = useMutation(
     (newData) => axios.post(`${API}/api/next-of-kin`, newData),
     {
       onSuccess: (response) => {
-        // Perform any actions needed after successful submission
-        console.log("Next of Kin saved successfully", response);
-
         Swal.fire({
           icon: "success",
-          title: "Next Of Added",
+          title: "Next Of Kin Added",
           text: "Next of Kin saved successfully",
           timer: 4000,
           confirmButtonColor: "#007a41",
         });
-
-        // Trigger the handleNext function
         handleNext();
-
-        // Call any success callback passed in
-        if (onSuccess) {
-          onSuccess();
-        }
+        triggerRefetch();
+        if (onSuccess) onSuccess();
       },
       onError: (error) => {
         console.error("Error saving Next of Kin:", error);
@@ -69,6 +83,21 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
     }
   );
 
+  // Handle 'Use Applicant Address' button click
+  const handleUseApplicantAddress = async () => {
+    try {
+      const employeeData = await fetchEmployeeData(employeeId);
+      if (employeeData) {
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          physical_address: employeeData.address, // Assuming the applicant's address is in 'employeeData.address'
+        }));
+        setUseApplicantAddress(true); // Flag that we are using the applicant's address
+      }
+    } catch (error) {
+      console.error("Error fetching applicant address:", error);
+    }
+  };
   return (
     <div className="step-form">
       <div className="card">
@@ -98,43 +127,12 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
             onSubmit={(values, { setSubmitting }) => {
               mutation.mutate(values, {
                 onSettled: () => setSubmitting(false),
-                onSuccess: () => {
-                  onSuccess(); // Trigger refetch
-                },
               });
             }}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, values, setFieldValue }) => (
               <Form>
                 <div className="row">
-                  {mutation.isError && (
-                    <div className="alert alert-danger alert-dismissible m-4">
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                      ></button>
-                      <h4>
-                        <i className="icon fa fa-ban"></i> ERROR!
-                      </h4>
-                      {mutation.error.message}
-                    </div>
-                  )}
-                  {mutation.isSuccess && (
-                    <div className="alert alert-primary alert-dismissible m-4">
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                      ></button>
-                      <h4>
-                        <i className="icon fa fa-check"></i> SUCCESS!
-                      </h4>
-                      Next of Kin added successfully!
-                    </div>
-                  )}
                   <div className="col-md-4 col-12 mb-4">
                     <div className="form-floating">
                       <Field
@@ -176,13 +174,34 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
                     </div>
                   </div>
                 </div>
+
+                {/* Button to use applicant's address */}
+                <button
+                  type="button"
+                  className="btn btn-warning mb-3"
+                  onClick={handleUseApplicantAddress}
+                >
+                  <i class="fa fa-thumb-tack" aria-hidden="true"></i> {"  "}
+                  USE APPLICANT ADDRESS
+                </button>
+
                 <div className="row">
                   <div className="col-md-12 col-12 mb-4">
                     <div className="form-floating">
+                      {/* <Field
+                        type="text"
+                        className="form-control"
+                        name="physical_address"
+                        value={formValues.physical_address}
+                      /> */}
                       <Field
                         type="text"
                         className="form-control"
                         name="physical_address"
+                        value={values.physical_address} // Editable field
+                        onChange={(e) =>
+                          setFieldValue("physical_address", e.target.value)
+                        } // Allow manual editing
                       />
                       <label htmlFor="physical_address">Physical Address</label>
                       <ErrorMessage
@@ -193,6 +212,7 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
                     </div>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="col-md-6 col-12 mb-4">
                     <div className="form-floating">
@@ -286,7 +306,6 @@ const NextOfKinForm = ({ employeeId, onSuccess, handlePrev, handleNext }) => {
               </Form>
             )}
           </Formik>
-          <div className="space"></div>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { API } from "../../../../../../config";
 import useBankInformation from "../../../hooks/useBankInformation";
+import Swal from "sweetalert2";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -22,7 +23,7 @@ const validationSchema = Yup.object({
     .max(255, "Maximum 255 characters"),
 });
 
-const BankInformationForm = ({ employeeId, handlePrev, handleNext }) => {
+const BankInformationForm = ({ employeeId, handlePrev, handleNext, triggerRefetch }) => {
   const initialValues = {
     employee_id: employeeId || "", // Set employeeId here
     staffing_employee_id: "",
@@ -62,7 +63,7 @@ const BankInformationForm = ({ employeeId, handlePrev, handleNext }) => {
 
         // Trigger the handleNext function
         handleNext();
-
+        triggerRefetch()
         // Call any success callback passed in
         if (onSuccess) {
           onSuccess();
